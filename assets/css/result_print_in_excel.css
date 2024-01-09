@@ -1,0 +1,42 @@
+@media print {
+  body {
+    width: 100%; 
+    height: auto; 
+    overflow: visible; 
+    zoom: 0.6;
+  }
+
+    center.excel_result_box{
+        width: 100% !important;
+        height: auto;
+        /* transform: scale(0.5) !important;         */
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        padding: 10px;
+        
+      
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 5px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      
+      caption {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+@page {
+    size: A4 landscape ;
+    margin:0; 
+    padding : 0 ;
+}
+
+}
