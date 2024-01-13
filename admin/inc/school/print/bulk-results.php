@@ -69,7 +69,7 @@ $end_date   = $exam->end_date;
             $psychomotor          = WLSM_Config::sanitize_psychomotor( $exam->psychomotor );
             ?>
             <?php require WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/print/partials/result2.php'; ?>
-            <div class="page-break"></div>
+            <!-- <div class="page-break"></div> -->
         <?php
         }
 
@@ -96,9 +96,6 @@ $end_date   = $exam->end_date;
 			return $rankedStudents;
 		}
 
-		// echo "<pre>";
-		// print_r($new_result_array);
-		// echo "</pre>";
 		
 		
 		$rankedStudents = student_ranks($new_result_array);

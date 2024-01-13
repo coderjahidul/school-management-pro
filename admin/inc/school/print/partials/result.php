@@ -395,21 +395,13 @@ $school_result_url      = $settings_url['result_url'];
 						}
 						
 						
-						$student_rank = WLSM_M_Staff_Examination::calculate_exam_ranks($school_id, $exam_id, $total_failde_subject, array(), $result->admit_card_id , $result->note);
-						// $all_failed_subject = WLSM_M_Staff_Examination::count_student_rank($count_letter_grade_f, $count_letter_grade_bangla_f, $count_letter_grade_english_f);
-						// print_r($all_failed_subject);
-
-						// echo "Jahidul: " . $jahidul++;
-						
-						// Print the result
+						// $student_rank = WLSM_M_Staff_Examination::calculate_exam_ranks($school_id, $exam_id, $total_failde_subject, array(), $result->admit_card_id , $result->note);
 
 						$students_ranks = array_filter($rankedStudents, function ($subArray) use ($result) {
 							return $subArray['id'] == $result->admit_card_id;
 						});
 						$students_rank = reset($students_ranks);
-						// echo "<pre>";
-						// print_r($singleArray['rank']);
-						// echo "</pre>";
+						
 						
 						$is_fail = false;
 						$previous_code = null;

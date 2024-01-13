@@ -636,46 +636,43 @@ class WLSM_M_Staff_Examination {
 		return $admit_card;
 	}
 	
-	public static function calculate_exam_ranks($school_id, $exam_id, $total_failde_subject, $exam_results = array(), $admit_card_id = '' , $student_group) {
-		$exam_results = array();
-		if ($school_id && $exam_id) {
-			$exam_results = WLSM_M_Staff_Examination::get_exam_results($student_group, $school_id, $exam_id, 'DESC');
-		}
-		$student_ranks = array();
-		$student_percentages = array();
+	// public static function calculate_exam_ranks($school_id, $exam_id, $exam_results = array(), $admit_card_id = '' , $student_group) {
+	// 	$exam_results = array();
+	// 	if ($school_id && $exam_id) {
+	// 		$exam_results = WLSM_M_Staff_Examination::get_exam_results($student_group, $school_id, $exam_id, 'DESC');
+	// 	}
+	// 	$student_ranks = array();
+	// 	$student_percentages = array();
 		
-		// Check if $total_failde_subject is equal to 0 before calculating percentages
+	// 	// Check if $total_failde_subject is equal to 0 before calculating percentages
 		
-		foreach ($exam_results as $row) {
-			$row->total_failde_subject = $total_failde_subject;
-			$student_percentages[$row->ID] = WLSM_Config::sanitize_percentage($row->total_marks, $row->obtained_marks);
+	// 	foreach ($exam_results as $row) {
+	// 		$student_percentages[$row->ID] = WLSM_Config::sanitize_percentage($row->total_marks, $row->obtained_marks);
 
-		}
+	// 	}
 	
-			// echo "<pre>";
-			// print_r($exam_results);
-			// echo "</pre>";
-			arsort($student_percentages);
+			
+	// 		arsort($student_percentages);
 	
-			$i = 0;
-			$same_value = 0;
-			foreach ($student_percentages as $key => $value) {
+	// 		$i = 0;
+	// 		$same_value = 0;
+	// 		foreach ($student_percentages as $key => $value) {
 
-				if ($same_value != $value) {
-					$same_value = $value;
-					$i++;
-					$student_ranks[$key] = $i;
-				} else {
-					$student_ranks[$key] = $i;
-				}
-			}
+	// 			if ($same_value != $value) {
+	// 				$same_value = $value;
+	// 				$i++;
+	// 				$student_ranks[$key] = $i;
+	// 			} else {
+	// 				$student_ranks[$key] = $i;
+	// 			}
+	// 		}
 	
-		if ($admit_card_id) {
-			return isset($student_ranks[$admit_card_id]) ? $student_ranks[$admit_card_id] : '-';
-		}
+	// 	if ($admit_card_id) {
+	// 		return isset($student_ranks[$admit_card_id]) ? $student_ranks[$admit_card_id] : '-';
+	// 	}
 	
-		return $student_ranks;
-	}
+	// 	return $student_ranks;
+	// }
 	
 	
 

@@ -41,7 +41,7 @@ $school_result_url      = $settings_url['result_url'];
 	}
 </style>
 
-<div class="wlsm-container wlsm" id="wlsm-print-exam-results">
+<div style="display: none;" class="wlsm-container wlsm" id="wlsm-print-exam-results">
 <div class="wlsm-print-exam-results-container" style="border-image-source:url('<?php echo WLSM_PLUGIN_URL . "assets/images/result-border.png"; ?>');">
 
 
@@ -1241,12 +1241,6 @@ $school_result_url      = $settings_url['result_url'];
 					</tbody>
 					</table>
 					<?php endif ?>
-					<?php 
-						$student_rank = WLSM_M_Staff_Examination::calculate_exam_ranks($school_id, $exam_id, $total_failde_subject, array(), $result->admit_card_id , $result->note);
-						// $all_failed_subject = WLSM_M_Staff_Examination::count_student_rank($count_letter_grade_f, $count_letter_grade_bangla_f, $count_letter_grade_english_f);
-						// print_r($all_failed_subject);
-					?>
-					
 				</div>
 			</div>
 		</div>
@@ -1262,3 +1256,4 @@ $new_result = [
 ];
 
 $new_result_array[] = $new_result;
+?>
