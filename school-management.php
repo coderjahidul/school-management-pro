@@ -55,8 +55,12 @@ if( file_exists(__DIR__ . '/custom-functions.php') ){
 	require_once(__DIR__ . '/custom-functions.php');
 }
 
-
-
+if( file_exists(__DIR__ . './includes/codestar-framework/codestar-framework.php') ){
+	require_once(__DIR__ . './includes/codestar-framework/codestar-framework.php');
+}
+if( file_exists(__DIR__ . '/metabox.php') ){
+	require_once(__DIR__ . '/metabox.php');
+}
 
 
 
