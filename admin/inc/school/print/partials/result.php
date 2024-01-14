@@ -1,4 +1,11 @@
 <?php
+
+if($i != 0){
+	echo '<div class="page-break"></div>';
+}
+?>
+
+<?php
 defined( 'ABSPATH' ) || die();
 
 require_once WLSM_PLUGIN_DIR_PATH . 'includes/helpers/WLSM_M_Setting.php';
@@ -1258,3 +1265,7 @@ $school_result_url      = $settings_url['result_url'];
 
 	</div>
 </div>
+
+<?php 
+	$i++;
+?>

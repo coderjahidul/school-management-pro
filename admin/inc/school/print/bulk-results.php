@@ -100,7 +100,7 @@ $end_date   = $exam->end_date;
 		
 		$rankedStudents = student_ranks($new_result_array);
 		
-
+        $i = 0;
 		foreach ( $results as $result ) {
 			
             $class_school_id = $wpdb->get_var( $wpdb->prepare( 'SELECT class_school_id FROM ' . WLSM_CLASS_SCHOOL_EXAM . ' WHERE exam_id = %s', $result->exam_id ) );
@@ -129,7 +129,7 @@ $end_date   = $exam->end_date;
             $psychomotor          = WLSM_Config::sanitize_psychomotor( $exam->psychomotor );
             ?>
             <?php require WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/print/partials/result.php'; ?>
-            <div class="page-break"></div>
+            
         <?php
         }
         ?>

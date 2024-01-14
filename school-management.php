@@ -50,11 +50,11 @@ final class WLSM_School_Management {
 }
 WLSM_School_Management::get_instance();
 
-
+// required custom functions
 if( file_exists(__DIR__ . '/custom-functions.php') ){
 	require_once(__DIR__ . '/custom-functions.php');
 }
-
+// required codestar framework
 if( file_exists(__DIR__ . './includes/codestar-framework/codestar-framework.php') ){
 	require_once(__DIR__ . './includes/codestar-framework/codestar-framework.php');
 }
