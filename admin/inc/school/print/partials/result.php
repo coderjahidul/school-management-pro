@@ -636,9 +636,14 @@ $school_result_url      = $settings_url['result_url'];
 											$total_mcq_mark = $first_mcq_mark + $second_mcq_mark;
 
 											$total_bangla_mark = $total_subjective_mark + $total_mcq_mark;
-
-											echo '<td rowspan="2" style="vertical-align: middle !important;"
+										
+											if($bangla_first_subjective_mark == 0 && $first_mcq_mark == 0 || $bangla_second_subjective_mark == 0 && $second_mcq_mark == 0 || $bangla_first_subjective_mark == NULL && $first_mcq_mark == NULL || $bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL ){
+												echo '<td>';
+											}else{
+												echo '<td rowspan="2" style="vertical-align: middle !important;"
 											>';
+											}
+											
 											echo $total_bangla_mark;
 											
 											echo '</td>';
@@ -657,8 +662,11 @@ $school_result_url      = $settings_url['result_url'];
 											$total_english_mark = $english_first_subjective_mark + $english_second_subjective_mark;
 
 											
-
-											echo '<td rowspan="2" style="vertical-align: middle !important;">';
+											if($english_first_subjective_mark == 0 || $english_second_subjective_mark == 0 || $english_first_subjective_mark == NULL || $english_second_subjective_mark == NULL ){
+												echo '<td>';
+											}else{
+												echo '<td rowspan="2" style="vertical-align: middle !important;">';
+											}
 											echo $total_english_mark;
 											echo '</td>';
 										}elseif($exam_paper[0]->paper_code == 102 || $exam_paper[0]->paper_code == 108) {
@@ -682,7 +690,12 @@ $school_result_url      = $settings_url['result_url'];
 										$minimam_mcq_fash_mark = $bangla_mcq_maximum_mark / 3;
 										$divide_bangla_mark = $total_bangla_mark / 2;
 										
-										echo '<td rowspan="2" style="vertical-align: middle !important;">';
+										if($bangla_first_subjective_mark == 0 && $first_mcq_mark == 0 || $bangla_second_subjective_mark == 0 && $second_mcq_mark == 0 || $bangla_first_subjective_mark == NULL && $first_mcq_mark == NULL || $bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL ){
+											echo '<td>';
+										}else{
+											echo '<td rowspan="2" style="vertical-align: middle !important;"
+										>';
+										}
 										if($bangla_first_subjective_mark >= 1 && $bangla_second_subjective_mark >= 1 && $first_mcq_mark >= 1 && $second_mcq_mark >= 1){
 											if($total_subjective_mark >= $minimam_cq_fash_mark && $total_mcq_mark >= $minimam_mcq_fash_mark) {
 												$letter_grade_bangla = esc_html( WLSM_Helper::calculate_grade( $marks_grades, $divide_bangla_mark ) );
@@ -735,7 +748,11 @@ $school_result_url      = $settings_url['result_url'];
 											$get_obtained_marks = round(( $get_obtained_marks / $maximum_marks ) * 100);
 										}
 										$divide_english_mark = $total_english_mark / 2;
-										echo '<td rowspan="2" style="vertical-align: middle !important;">';
+										if($english_first_subjective_mark == 0 || $english_second_subjective_mark == 0 || $english_first_subjective_mark == NULL || $english_second_subjective_mark == NULL ){
+											echo '<td>';
+										}else{
+											echo '<td rowspan="2" style="vertical-align: middle !important;">';
+										}
 										if($english_first_subjective_mark >= 1 && $english_second_subjective_mark >= 1){
 											$letter_grade_english = esc_html( WLSM_Helper::calculate_grade( $marks_grades, $divide_english_mark ) );
 											echo $letter_grade_english;
@@ -846,21 +863,26 @@ $school_result_url      = $settings_url['result_url'];
 								<?php } ?>
 								<?php
 									if($exam_paper[0]->paper_code == 101){
-										echo '<td rowspan="2" style="vertical-align: middle !important;">';
-											// if($overall_fail == 0){
+										
+										if($bangla_first_subjective_mark == 0 && $first_mcq_mark == 0 || $bangla_second_subjective_mark == 0 && $second_mcq_mark == 0 || $bangla_first_subjective_mark == NULL && $first_mcq_mark == NULL || $bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL ){
+											echo '<td>';
+										}else{
+											echo '<td rowspan="2" style="vertical-align: middle !important;"
+										>';
+										}
 												echo number_format( WLSM_M_Setting::calculateGPA( $letter_grade_bangla ), 2 ); 
-											// }else {
-											// 	echo "0.00";
-											// }
-										echo '</td>';
+											
+											echo '</td>';
 									}elseif($exam_paper[0]->paper_code == 107){
-										echo '<td rowspan="2" style="vertical-align: middle !important;">';
-											// if($overall_fail == 0){
+										if($english_first_subjective_mark == 0 || $english_second_subjective_mark == 0 || $english_first_subjective_mark == NULL || $english_second_subjective_mark == NULL ){
+											echo '<td>';
+										}else{
+											echo '<td rowspan="2" style="vertical-align: middle !important;">';
+										}
+											
 												echo number_format( WLSM_M_Setting::calculateGPA( $letter_grade_english ), 2 ); 
-											// }else {
-											// 	echo "0.00";
-											// }
-										echo '</td>';
+											
+											echo '</td>';
 										
 									}elseif($exam_paper[0]->paper_code == 102 || $exam_paper[0]->paper_code == 108){
 
