@@ -758,7 +758,7 @@ $school_result_url = $settings_url['result_url'];
 
 											$total_bangla_mark = $total_subjective_mark + $total_mcq_mark;
 
-											if ($bangla_first_subjective_mark == 0 && $first_mcq_mark == 0 || $bangla_second_subjective_mark == 0 && $second_mcq_mark == 0 || $bangla_first_subjective_mark == NULL && $first_mcq_mark == NULL || $bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
+											if ($bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
 												echo '<td>';
 											} else {
 												echo '<td rowspan="2" style="vertical-align: middle !important;"
@@ -783,7 +783,7 @@ $school_result_url = $settings_url['result_url'];
 											$total_english_mark = $english_first_subjective_mark + $english_second_subjective_mark;
 
 
-											if ($english_first_subjective_mark == 0 || $english_second_subjective_mark == 0 || $english_first_subjective_mark == NULL || $english_second_subjective_mark == NULL) {
+											if ( $english_second_subjective_mark == NULL) {
 												echo '<td>';
 											} else {
 												echo '<td rowspan="2" style="vertical-align: middle !important;">';
@@ -816,7 +816,7 @@ $school_result_url = $settings_url['result_url'];
 											}
 
 
-											if ($bangla_first_subjective_mark == 0 && $first_mcq_mark == 0 || $bangla_second_subjective_mark == 0 && $second_mcq_mark == 0 || $bangla_first_subjective_mark == NULL && $first_mcq_mark == NULL || $bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
+											if ($bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
 												echo '<td>';
 											} else {
 												echo '<td rowspan="2" style="vertical-align: middle !important;"
@@ -891,7 +891,7 @@ $school_result_url = $settings_url['result_url'];
 											} else {
 												$divide_english_mark = $total_english_mark / 1;
 											}
-											if ($english_first_subjective_mark == 0 || $english_second_subjective_mark == 0 || $english_first_subjective_mark == NULL || $english_second_subjective_mark == NULL) {
+											if ($english_second_subjective_mark == NULL) {
 												echo '<td>';
 											} else {
 												echo '<td rowspan="2" style="vertical-align: middle !important;">';
@@ -1013,7 +1013,7 @@ $school_result_url = $settings_url['result_url'];
 									<?php
 									if ($exam_paper[0]->paper_code == 101) {
 
-										if ($bangla_first_subjective_mark == 0 && $first_mcq_mark == 0 || $bangla_second_subjective_mark == 0 && $second_mcq_mark == 0 || $bangla_first_subjective_mark == NULL && $first_mcq_mark == NULL || $bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
+										if ($bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
 											echo '<td>';
 										} else {
 											echo '<td rowspan="2" style="vertical-align: middle !important;"
@@ -1023,7 +1023,7 @@ $school_result_url = $settings_url['result_url'];
 
 										echo '</td>';
 									} elseif ($exam_paper[0]->paper_code == 107) {
-										if ($english_first_subjective_mark == 0 || $english_second_subjective_mark == 0 || $english_first_subjective_mark == NULL || $english_second_subjective_mark == NULL) {
+										if ($english_second_subjective_mark == NULL) {
 											echo '<td>';
 										} else {
 											echo '<td rowspan="2" style="vertical-align: middle !important;">';
