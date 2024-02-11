@@ -494,11 +494,11 @@ $school_result_url = $settings_url['result_url'];
 							
 								// $all_filter_subject[] = $sub_info ;
 							
-								if ($exam_ontained_mark == "" || $exam_ontained_mark != 0) {
+								// if ($exam_ontained_mark == "" || $exam_ontained_mark != 0) {
 									if ($sub_info[0]->subject_type != "objective") {
 										$all_filter_subject[] = $sub_info;
 									}
-								}
+								// }
 
 
 
@@ -631,41 +631,41 @@ $school_result_url = $settings_url['result_url'];
 										);
 
 
-										if ($get_obtained_marks == null) {
+										// if ($get_obtained_marks == null) {
 
-											$sub_subjects_new = $wpdb->get_results($wpdb->prepare(
-												"SELECT label , code  FROM {$wpdb->prefix}wlsm_subjects WHERE parent_subject = %d AND class_school_id=%d",
-												$exam_paper[0]->subject_id,
-												$class_school_id
-											)
-											);
-											$get_marks = 0;
-											foreach ($sub_subjects_new as $sub_subject) {
-												$new_exam_paper_id = $wpdb->get_var($wpdb->prepare(
-													"SELECT ID  FROM {$wpdb->prefix}wlsm_exam_papers WHERE subject_label =%s AND paper_code = %d AND exam_id = %d",
-													$sub_subject->label,
-													$sub_subject->code,
-													$exam_id
-												)
-												);
+										// 	$sub_subjects_new = $wpdb->get_results($wpdb->prepare(
+										// 		"SELECT label , code  FROM {$wpdb->prefix}wlsm_subjects WHERE parent_subject = %d AND class_school_id=%d",
+										// 		$exam_paper[0]->subject_id,
+										// 		$class_school_id
+										// 	)
+										// 	);
+										// 	$get_marks = 0;
+										// 	foreach ($sub_subjects_new as $sub_subject) {
+										// 		$new_exam_paper_id = $wpdb->get_var($wpdb->prepare(
+										// 			"SELECT ID  FROM {$wpdb->prefix}wlsm_exam_papers WHERE subject_label =%s AND paper_code = %d AND exam_id = %d",
+										// 			$sub_subject->label,
+										// 			$sub_subject->code,
+										// 			$exam_id
+										// 		)
+										// 		);
 
-												$exam_ontained_mark = $wpdb->get_var($wpdb->prepare(
-													"SELECT obtained_marks  FROM {$wpdb->prefix}wlsm_exam_results WHERE exam_paper_id = %d AND admit_card_id = %d ",
-													$new_exam_paper_id,
-													$admit_card_id
-												)
-												);
-												$get_marks = $get_marks + $exam_ontained_mark;
-											}
+										// 		$exam_ontained_mark = $wpdb->get_var($wpdb->prepare(
+										// 			"SELECT obtained_marks  FROM {$wpdb->prefix}wlsm_exam_results WHERE exam_paper_id = %d AND admit_card_id = %d ",
+										// 			$new_exam_paper_id,
+										// 			$admit_card_id
+										// 		)
+										// 		);
+										// 		$get_marks = $get_marks + $exam_ontained_mark;
+										// 	}
 
-											$new_obtained_marks = $get_marks / 2;
+										// 	$new_obtained_marks = $get_marks / 2;
 
 
 
-											echo $new_obtained_marks;
-											$get_obtained_marks = $new_obtained_marks;
-											$total_obtained_marks += WLSM_Config::sanitize_marks($get_obtained_marks);
-										} else {
+										// 	echo $new_obtained_marks;
+										// 	$get_obtained_marks = $new_obtained_marks;
+										// 	$total_obtained_marks += WLSM_Config::sanitize_marks($get_obtained_marks);
+										// } else {
 
 											$written_mark = $get_obtained_marks;
 											echo esc_html($get_obtained_marks);
@@ -673,7 +673,7 @@ $school_result_url = $settings_url['result_url'];
 											$total_obtained_marks += WLSM_Config::sanitize_marks($get_obtained_marks);
 
 
-										}
+										// }
 
 										?>
 									</td>
@@ -690,7 +690,7 @@ $school_result_url = $settings_url['result_url'];
 									
 											$subject_id = reset($main_exam_paper)->ID;
 
-											$mcq_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : 0; // comment uthaisi
+											$mcq_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null; // comment uthaisi
 									
 											$mcq_maximum_marks = $foundObject->maximum_marks;
 
@@ -718,7 +718,7 @@ $school_result_url = $settings_url['result_url'];
 											$subject_id = reset($main_exam_paper)->ID;
 
 											// $practical_mark = $exam_results[$subject_id]->obtained_marks; // commend uthaisi 
-											$practical_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : 0;
+											$practical_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null;
 											$practical_maximum_marks = $foundObject->maximum_marks;
 
 											$total_practical_marks += $practical_mark;
@@ -909,7 +909,7 @@ $school_result_url = $settings_url['result_url'];
 												echo $letter_grade_eng;
 											}
 
-											if ($letter_grade_english === 'F' || $letter_grade_eng === 'F') {
+											if ($letter_grade_eng === 'F') {
 												$count_letter_grade_english_f++;
 											}
 
@@ -948,9 +948,9 @@ $school_result_url = $settings_url['result_url'];
 
 										} else {
 											echo "<td>";
-											if ($get_obtained_marks == 0) {
+											// if ($get_obtained_marks == 0) {
 
-											} else {
+											// } else {
 												$subje_maximam_marks = $maximum_marks + $mcq_maximum_marks + $practical_maximum_marks;
 												$grades_percentage = 100 / $subje_maximam_marks;
 												$subject_totla_marks *= $grades_percentage;
@@ -999,7 +999,7 @@ $school_result_url = $settings_url['result_url'];
 													}
 												}
 
-											}
+											// }
 											if ($letter_grade === 'F') {
 												$count_letter_grade_f++;
 											}
@@ -1142,41 +1142,41 @@ $school_result_url = $settings_url['result_url'];
 									);
 
 
-									if ($get_obtained_marks == null) {
+									// if ($get_obtained_marks == null) {
 
-										$sub_subjects_new = $wpdb->get_results($wpdb->prepare(
-											"SELECT label , code  FROM {$wpdb->prefix}wlsm_subjects WHERE parent_subject = %d AND class_school_id=%d",
-											$subject[0]->subject_id,
-											$class_school_id
-										)
-										);
-										$get_marks = 0;
-										foreach ($sub_subjects_new as $sub_subject) {
-											$new_exam_paper_id = $wpdb->get_var($wpdb->prepare(
-												"SELECT ID  FROM {$wpdb->prefix}wlsm_exam_papers WHERE subject_label =%s AND paper_code = %d AND exam_id = %d",
-												$sub_subject->label,
-												$sub_subject->code,
-												$exam_id
-											)
-											);
+									// 	$sub_subjects_new = $wpdb->get_results($wpdb->prepare(
+									// 		"SELECT label , code  FROM {$wpdb->prefix}wlsm_subjects WHERE parent_subject = %d AND class_school_id=%d",
+									// 		$subject[0]->subject_id,
+									// 		$class_school_id
+									// 	)
+									// 	);
+									// 	$get_marks = 0;
+									// 	foreach ($sub_subjects_new as $sub_subject) {
+									// 		$new_exam_paper_id = $wpdb->get_var($wpdb->prepare(
+									// 			"SELECT ID  FROM {$wpdb->prefix}wlsm_exam_papers WHERE subject_label =%s AND paper_code = %d AND exam_id = %d",
+									// 			$sub_subject->label,
+									// 			$sub_subject->code,
+									// 			$exam_id
+									// 		)
+									// 		);
 
-											$exam_ontained_mark = $wpdb->get_var($wpdb->prepare(
-												"SELECT obtained_marks  FROM {$wpdb->prefix}wlsm_exam_results WHERE exam_paper_id = %d AND admit_card_id = %d ",
-												$new_exam_paper_id,
-												$admit_card_id
-											)
-											);
-											$get_marks = $get_marks + $exam_ontained_mark;
-										}
+									// 		$exam_ontained_mark = $wpdb->get_var($wpdb->prepare(
+									// 			"SELECT obtained_marks  FROM {$wpdb->prefix}wlsm_exam_results WHERE exam_paper_id = %d AND admit_card_id = %d ",
+									// 			$new_exam_paper_id,
+									// 			$admit_card_id
+									// 		)
+									// 		);
+									// 		$get_marks = $get_marks + $exam_ontained_mark;
+									// 	}
 
-										$new_obtained_marks = $get_marks / 2;
+									// 	$new_obtained_marks = $get_marks / 2;
 
 
 
-										echo $new_obtained_marks;
-										$get_obtained_marks = $new_obtained_marks;
-										$optional_total_obtained_marks += WLSM_Config::sanitize_marks($get_obtained_marks);
-									} else {
+									// 	echo $new_obtained_marks;
+									// 	$get_obtained_marks = $new_obtained_marks;
+									// 	$optional_total_obtained_marks += WLSM_Config::sanitize_marks($get_obtained_marks);
+									// } else {
 
 										$written_mark = $get_obtained_marks;
 										echo esc_html($get_obtained_marks);
@@ -1184,7 +1184,7 @@ $school_result_url = $settings_url['result_url'];
 										$optional_total_obtained_marks += WLSM_Config::sanitize_marks($get_obtained_marks);
 
 
-									}
+									// }
 
 									?>
 								</td>
@@ -1199,7 +1199,7 @@ $school_result_url = $settings_url['result_url'];
 									
 										$subject_id = reset($main_exam_paper)->ID;
 
-										$mcq_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : 0; // comment uthaisi
+										$mcq_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null; // comment uthaisi
 									
 										$mcq_maximum_marks = $foundObject->maximum_marks;
 
@@ -1226,7 +1226,7 @@ $school_result_url = $settings_url['result_url'];
 										$subject_id = reset($main_exam_paper)->ID;
 
 										// $practical_mark = $exam_results[$subject_id]->obtained_marks; // commend uthaisi 
-										$practical_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : 0;
+										$practical_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null;
 										$practical_maximum_marks = $foundObject->maximum_marks;
 
 										$optional_total_practical_marks += $practical_mark;
@@ -1288,7 +1288,8 @@ $school_result_url = $settings_url['result_url'];
 							$optional_and_mainsubject_totol_mark = $total_marks + $optional_subject_totla_mark;
 
 							// echo $total_max_marks;
-							$total_failde_subject = $count_letter_grade_f + $count_letter_grade_bangla_f + $count_letter_grade_english_f; ?>
+							$total_failde_subject = $count_letter_grade_f + $count_letter_grade_bangla_f + $count_letter_grade_english_f;
+							?>
 							<tr>
 								<th colspan="3">
 									<?php esc_html_e('Total', 'school-management'); ?>
