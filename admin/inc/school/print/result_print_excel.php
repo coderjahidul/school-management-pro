@@ -55,7 +55,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 	// a loop in the sections to get all the students from that section 
 	$students = [];
 	foreach ($sections as $section) {
-		$student_query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wlsm_student_records WHERE section_id = %d AND note = %s", $section, $class_group);
+		$student_query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wlsm_student_records WHERE section_id = %d AND note = %s ORDER BY roll_number ASC", $section, $class_group);
 
 		$student_records = $wpdb->get_results($student_query);
 
