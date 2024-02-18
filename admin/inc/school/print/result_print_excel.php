@@ -1150,7 +1150,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 											</td>
 											<td>
 												<?php
-												if ($bangla_first_cq_marks >= 1 && $bangla_second_cq_marks >= 1) {
+												if ($bangla_first_cq_marks >= 1 && $bangla_first_mcq_marks >= 1) {
 													if ($bangla_total_cq_marks >= $minimam_cq_fash_marks && $bangla_total_mcq_marks >= $minimam_mcq_fash_marks) {
 														echo number_format(WLSM_M_Setting::calculateGPA($letter_grade_bangla), 2);
 													} else {

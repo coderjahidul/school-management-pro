@@ -804,11 +804,17 @@ $school_result_url = $settings_url['result_url'];
 											if ($maximum_marks == 50) {
 												$get_obtained_marks = round(($get_obtained_marks / $maximum_marks) * 100);
 											}
-											$bangla_cq_maximum_mark = $maximum_marks * 2;
-											$bangla_mcq_maximum_mark = $mcq_maximum_marks * 2;
+											if ($bangla_second_subjective_mark != null) {
+												$bangla_cq_maximum_mark = $maximum_marks * 2;
+												$bangla_mcq_maximum_mark = $mcq_maximum_marks * 2;
+											} else {
+												$bangla_cq_maximum_mark = $maximum_marks * 1;
+												$bangla_mcq_maximum_mark = $mcq_maximum_marks * 1;
+											}
 
 											$minimam_cq_fash_mark = $bangla_cq_maximum_mark / 3;
 											$minimam_mcq_fash_mark = $bangla_mcq_maximum_mark / 3;
+
 											if ($bangla_second_subjective_mark != null) {
 												$divide_bangla_mark = $total_bangla_mark / 2;
 											} else {
