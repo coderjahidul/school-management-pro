@@ -504,38 +504,38 @@ $school_result_url      = $settings_url['result_url'];
 								));
 								
 
-								if($get_obtained_marks == null){
+								// if($get_obtained_marks == null){
 
-									$sub_subjects_new =$wpdb->get_results( $wpdb->prepare(
-										"SELECT label , code  FROM {$wpdb->prefix}wlsm_subjects WHERE parent_subject = %d AND class_school_id=%d",
-										$exam_paper[0]->subject_id ,
-										$class_school_id
-									));
-									$get_marks = 0;
-									foreach($sub_subjects_new as $sub_subject){
-										$new_exam_paper_id =$wpdb->get_var( $wpdb->prepare(
-											"SELECT ID  FROM {$wpdb->prefix}wlsm_exam_papers WHERE subject_label =%s AND paper_code = %d AND exam_id = %d",
-											$sub_subject->label,
-											$sub_subject->code ,
-											$exam_id
-										));
+								// 	$sub_subjects_new =$wpdb->get_results( $wpdb->prepare(
+								// 		"SELECT label , code  FROM {$wpdb->prefix}wlsm_subjects WHERE parent_subject = %d AND class_school_id=%d",
+								// 		$exam_paper[0]->subject_id ,
+								// 		$class_school_id
+								// 	));
+								// 	$get_marks = 0;
+								// 	foreach($sub_subjects_new as $sub_subject){
+								// 		$new_exam_paper_id =$wpdb->get_var( $wpdb->prepare(
+								// 			"SELECT ID  FROM {$wpdb->prefix}wlsm_exam_papers WHERE subject_label =%s AND paper_code = %d AND exam_id = %d",
+								// 			$sub_subject->label,
+								// 			$sub_subject->code ,
+								// 			$exam_id
+								// 		));
 
-										$exam_ontained_mark =$wpdb->get_var( $wpdb->prepare(
-											"SELECT obtained_marks  FROM {$wpdb->prefix}wlsm_exam_results WHERE exam_paper_id = %d AND admit_card_id = %d ",
-											$new_exam_paper_id ,
-											$admit_card_id
-										));
-										$get_marks = $get_marks + $exam_ontained_mark ;
-									}
+								// 		$exam_ontained_mark =$wpdb->get_var( $wpdb->prepare(
+								// 			"SELECT obtained_marks  FROM {$wpdb->prefix}wlsm_exam_results WHERE exam_paper_id = %d AND admit_card_id = %d ",
+								// 			$new_exam_paper_id ,
+								// 			$admit_card_id
+								// 		));
+								// 		$get_marks = $get_marks + $exam_ontained_mark ;
+								// 	}
 								
-									$new_obtained_marks =$get_marks/2 ;
+								// 	$new_obtained_marks =$get_marks/2 ;
 
 								
 									
-									echo $new_obtained_marks;							
-									$get_obtained_marks = $new_obtained_marks ;
-									$total_obtained_marks += WLSM_Config::sanitize_marks( $get_obtained_marks );
-								}else{
+								// 	echo $new_obtained_marks;							
+								// 	$get_obtained_marks = $new_obtained_marks ;
+								// 	$total_obtained_marks += WLSM_Config::sanitize_marks( $get_obtained_marks );
+								// }else{
 								
 									$written_mark = $get_obtained_marks;
 									echo esc_html( $get_obtained_marks ); 
@@ -543,7 +543,7 @@ $school_result_url      = $settings_url['result_url'];
 									$total_obtained_marks += WLSM_Config::sanitize_marks( $get_obtained_marks );
 								
 								
-								}
+								// }
 								
 								?></td>
 								
@@ -558,7 +558,7 @@ $school_result_url      = $settings_url['result_url'];
 					
 									$subject_id = reset($main_exam_paper)->ID;
 
-									$mcq_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : 0; // comment uthaisi
+									$mcq_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null; // comment uthaisi
 									
 									$mcq_maximum_marks = $foundObject->maximum_marks;
 
@@ -584,7 +584,7 @@ $school_result_url      = $settings_url['result_url'];
 									$subject_id = reset($main_exam_paper)->ID;
 
 									// $practical_mark = $exam_results[$subject_id]->obtained_marks; // commend uthaisi 
-									$practical_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : 0;
+									$practical_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null;
 									$practical_maximum_marks = $foundObject->maximum_marks;
 
 									$total_practical_marks += $practical_mark;
@@ -658,109 +658,153 @@ $school_result_url      = $settings_url['result_url'];
 									?>
 								<?php
 									if($exam_paper[0]->paper_code == 101){
-										if( $maximum_marks == 50  ){
-											$get_obtained_marks = round(( $get_obtained_marks / $maximum_marks ) * 100);
+										if ($maximum_marks == 50) {
+											$get_obtained_marks = round(($get_obtained_marks / $maximum_marks) * 100);
 										}
-										$bangla_cq_maximum_mark = $maximum_marks * 2;
-										$bangla_mcq_maximum_mark = $mcq_maximum_marks * 2;
+										if ($bangla_second_subjective_mark != null) {
+											$bangla_cq_maximum_mark = $maximum_marks * 2;
+											$bangla_mcq_maximum_mark = $mcq_maximum_marks * 2;
+										} else {
+											$bangla_cq_maximum_mark = $maximum_marks * 1;
+											$bangla_mcq_maximum_mark = $mcq_maximum_marks * 1;
+										}
 
 										$minimam_cq_fash_mark = $bangla_cq_maximum_mark / 3;
 										$minimam_mcq_fash_mark = $bangla_mcq_maximum_mark / 3;
-										$divide_bangla_mark = $total_bangla_mark / 2;
-										
-										echo '<td rowspan="2" style="vertical-align: middle !important;">';
-										if($bangla_first_subjective_mark >= 1 && $bangla_second_subjective_mark >= 1 && $first_mcq_mark >= 1 && $second_mcq_mark >= 1){
-											if($total_subjective_mark >= $minimam_cq_fash_mark && $total_mcq_mark >= $minimam_mcq_fash_mark) {
-												$letter_grade_bangla = esc_html( WLSM_Helper::calculate_grade( $marks_grades, $divide_bangla_mark ) );
-												echo $letter_grade_bangla;
-												
-											}else {
+
+										if ($bangla_second_subjective_mark != null) {
+											$divide_bangla_mark = $total_bangla_mark / 2;
+										} else {
+											$divide_bangla_mark = $total_bangla_mark / 1;
+										}
+
+
+										if ($bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
+											echo '<td>';
+										} else {
+											echo '<td rowspan="2" style="vertical-align: middle !important;"
+										>';
+										}
+
+										if ($bangla_second_subjective_mark != null) {
+											if ($bangla_first_subjective_mark >= 1 && $bangla_second_subjective_mark >= 1 && $first_mcq_mark >= 1 && $second_mcq_mark >= 1) {
+												if ($total_subjective_mark >= $minimam_cq_fash_mark && $total_mcq_mark >= $minimam_mcq_fash_mark) {
+													$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
+													echo $letter_grade_bangla;
+
+												} else {
+													echo $letter_grade_bangla = "F";
+												}
+											} else {
 												echo $letter_grade_bangla = "F";
 											}
-										}else {
-											echo $letter_grade_bangla = "F";
+										} else {
+											if ($total_subjective_mark >= $minimam_cq_fash_mark && $total_mcq_mark >= $minimam_mcq_fash_mark) {
+												$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
+												echo $letter_grade_bangla;
+
+											} else {
+												echo $letter_grade_bangla = "F";
+											}
 										}
-										if($letter_grade_bangla === 'F'){
+
+
+										if ($letter_grade_bangla === 'F') {
 											$count_letter_grade_bangla_f++;
 										}
 										echo "</td>";
-											
-										
-										$cq_percentage = WLSM_Config::sanitize_percentage( $maximum_marks, $written_mark ) . ",";
-										// echo $cq_percentage;
-										$mcq_percentage = WLSM_Config::sanitize_percentage( $mcq_maximum_marks, $mcq_mark ) . ",";
-										// echo $mcq_percentage;
-										$practical_percentage = WLSM_Config::sanitize_percentage( $practical_maximum_marks, $practical_mark ) . "," . "<br>";
-										// echo $practical_percentage;
 
+
+										$cq_percentage = WLSM_Config::sanitize_percentage($maximum_marks, $written_mark) . ",";
+										// echo $cq_percentage;
+										$mcq_percentage = WLSM_Config::sanitize_percentage($mcq_maximum_marks, $mcq_mark) . ",";
+										// echo $mcq_percentage;
+										$practical_percentage = WLSM_Config::sanitize_percentage($practical_maximum_marks, $practical_mark) . "," . "<br>";
+										// echo $practical_percentage;
+							
 										$overall_fail = 0;
 
-										if((int) $cq_percentage < 33){
+										if ((int) $cq_percentage < 33) {
 											$overall_fail = 1;
 										}
 
-										if((int) $mcq_percentage < 33 && $mcq_mark != null){
+										if ((int) $mcq_percentage < 33 && $mcq_mark != null) {
 											$overall_fail = 1;
 										}
 
-										
 
-										$percentage = WLSM_Config::sanitize_percentage( $maximum_marks, WLSM_Config::sanitize_marks( $get_obtained_marks ) );
+
+										$percentage = WLSM_Config::sanitize_percentage($maximum_marks, WLSM_Config::sanitize_marks($get_obtained_marks));
 										// newly added code 
-										if( $is_fail == false ){
-											if(esc_html(WLSM_Helper::calculate_grade( $marks_grades, $get_obtained_marks ) )  == "F" && $exam_paper[0]->subject_type != "objective"  ){
-												$is_fail =  true ; 
-											}else{
-												$is_fail =  false ;
-											}							
+										if ($is_fail == false) {
+											if (esc_html(WLSM_Helper::calculate_grade($marks_grades, $get_obtained_marks)) == "F" && $exam_paper[0]->subject_type != "objective") {
+												$is_fail = true;
+											} else {
+												$is_fail = false;
+											}
 										}
 										
 
 									}elseif($exam_paper[0]->paper_code == 107){
-										if( $maximum_marks == 50  ){
-											$get_obtained_marks = round(( $get_obtained_marks / $maximum_marks ) * 100);
+										if ($maximum_marks == 50) {
+											$get_obtained_marks = round(($get_obtained_marks / $maximum_marks) * 100);
 										}
-										$divide_english_mark = $total_english_mark / 2;
-										echo '<td rowspan="2" style="vertical-align: middle !important;">';
-										if($english_first_subjective_mark >= 1 && $english_second_subjective_mark >= 1){
-											$letter_grade_english = esc_html( WLSM_Helper::calculate_grade( $marks_grades, $divide_english_mark ) );
-											echo $letter_grade_english;
-										}else {
-											echo $letter_grade_english = "F";
+										if ($english_second_subjective_mark != null) {
+											$divide_english_mark = $total_english_mark / 2;
+										} else {
+											$divide_english_mark = $total_english_mark / 1;
 										}
-										if($letter_grade_english === 'F'){
+										if ($english_second_subjective_mark == NULL) {
+											echo '<td>';
+										} else {
+											echo '<td rowspan="2" style="vertical-align: middle !important;">';
+										}
+										if ($english_second_subjective_mark != null) {
+											if ($english_first_subjective_mark >= 1 && $english_second_subjective_mark >= 1) {
+												$letter_grade_eng = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
+												echo $letter_grade_eng;
+
+											} else {
+												echo $letter_grade_eng = "F";
+											}
+										} else {
+											$letter_grade_eng = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
+											echo $letter_grade_eng;
+										}
+
+										if ($letter_grade_eng === 'F') {
 											$count_letter_grade_english_f++;
 										}
-										
-										echo '</td>';
-										
-										$cq_percentage = WLSM_Config::sanitize_percentage( $maximum_marks, $written_mark ) . ",";
-										// echo $cq_percentage;
-										$mcq_percentage = WLSM_Config::sanitize_percentage( $mcq_maximum_marks, $mcq_mark ) . ",";
-										// echo $mcq_percentage;
-										$practical_percentage = WLSM_Config::sanitize_percentage( $practical_maximum_marks, $practical_mark ) . "," . "<br>";
-										// echo $practical_percentage;
 
+										echo '</td>';
+
+										$cq_percentage = WLSM_Config::sanitize_percentage($maximum_marks, $written_mark) . ",";
+										// echo $cq_percentage;
+										$mcq_percentage = WLSM_Config::sanitize_percentage($mcq_maximum_marks, $mcq_mark) . ",";
+										// echo $mcq_percentage;
+										$practical_percentage = WLSM_Config::sanitize_percentage($practical_maximum_marks, $practical_mark) . "," . "<br>";
+										// echo $practical_percentage;
+							
 										$overall_fail = 0;
 
-										if((int) $cq_percentage < 33){
+										if ((int) $cq_percentage < 33) {
 											$overall_fail = 1;
 										}
 
-										if((int) $mcq_percentage < 33 && $mcq_mark != null){
+										if ((int) $mcq_percentage < 33 && $mcq_mark != null) {
 											$overall_fail = 1;
 										}
 
-										
 
-										$percentage = WLSM_Config::sanitize_percentage( $maximum_marks, WLSM_Config::sanitize_marks( $get_obtained_marks ) );
+
+										$percentage = WLSM_Config::sanitize_percentage($maximum_marks, WLSM_Config::sanitize_marks($get_obtained_marks));
 										// newly added code 
-										if( $is_fail == false ){
-											if(esc_html(WLSM_Helper::calculate_grade( $marks_grades, $get_obtained_marks ) )  == "F" && $exam_paper[0]->subject_type != "objective"  ){
-												$is_fail =  true ; 
-											}else{
-												$is_fail =  false ;
-											}							
+										if ($is_fail == false) {
+											if (esc_html(WLSM_Helper::calculate_grade($marks_grades, $get_obtained_marks)) == "F" && $exam_paper[0]->subject_type != "objective") {
+												$is_fail = true;
+											} else {
+												$is_fail = false;
+											}
 										}
 										
 									}elseif($exam_paper[0]->paper_code == 102 || $exam_paper[0]->paper_code == 108){
@@ -842,7 +886,7 @@ $school_result_url      = $settings_url['result_url'];
 									}elseif($exam_paper[0]->paper_code == 107){
 										echo '<td rowspan="2" style="vertical-align: middle !important;">';
 											// if($overall_fail == 0){
-												echo number_format( WLSM_M_Setting::calculateGPA( $letter_grade_english ), 2 ); 
+												echo number_format( WLSM_M_Setting::calculateGPA( $letter_grade_eng ), 2 ); 
 											// }else {
 											// 	echo "0.00";
 											// }
@@ -1084,7 +1128,12 @@ $school_result_url      = $settings_url['result_url'];
 						
 						
 							// $optional_and_mainsubject_max_mark = $total_max_marks + $optional_max_mark;
-							$optional_and_mainsubject_totol_mark = $total_marks + $optional_subject_totla_mark;
+							if($optional_total_mcq_marks >= 1 && $optional_total_practical_marks >= 1 && $optional_total_obtained_marks >= 1){
+								$optional_and_mainsubject_totol_mark = $total_marks + $optional_subject_totla_mark;
+							}else{
+								$optional_and_mainsubject_totol_mark = $total_marks;
+							}
+							
 						
 						// echo $total_max_marks;
 						$total_failde_subject = $count_letter_grade_f + $count_letter_grade_bangla_f + $count_letter_grade_english_f;?>
