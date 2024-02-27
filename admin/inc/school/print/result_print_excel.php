@@ -70,19 +70,25 @@ $marks_grades = $grade_criteria['marks_grades'];
 	} else {
 		$sections[] = $section_id;
 	}
-
 	// a loop in the sections to get all the students from that section 
 	$students = [];
 	foreach ($sections as $section) {
-		$student_query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wlsm_student_records WHERE section_id = %d AND note = %s ORDER BY roll_number ASC", $section, $class_group);
+		$admit_card_querys = $wpdb->get_results($wpdb->prepare("SELECT student_record_id FROM {$wpdb->prefix}wlsm_admit_cards WHERE exam_id = %d", $exam_id));
+		
+		foreach ($admit_card_querys as $key => $admit_card_query) {
+			$student_id = $admit_card_query->student_record_id;
+			$student_query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wlsm_student_records WHERE section_id = %d AND note = %s AND ID = %d ORDER BY roll_number ASC", $section, $class_group, $student_id);
+			
+			$student_records = $wpdb->get_results($student_query);
+			
+			foreach ($student_records as $key => $single_student) {
+				$students[$single_student->ID]["ID"] = $single_student->ID;
+				$students[$single_student->ID]["name"] = $single_student->name;
+				$students[$single_student->ID]["roll_number"] = $single_student->roll_number;
+				$students[$single_student->ID]["religion"] = $single_student->religion;
 
-		$student_records = $wpdb->get_results($student_query);
-
-		foreach ($student_records as $key => $single_student) {
-			$students[$single_student->ID]["ID"] = $single_student->ID;
-			$students[$single_student->ID]["name"] = $single_student->name;
-			$students[$single_student->ID]["roll_number"] = $single_student->roll_number;
-			$students[$single_student->ID]["religion"] = $single_student->religion;
+				
+			}
 		}
 	}
 
