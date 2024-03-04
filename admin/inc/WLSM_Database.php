@@ -310,6 +310,19 @@ class WLSM_Database
 				) ENGINE=InnoDB " . $charset_collate;
 		dbDelta($sql);
 
+		$wpdb->query($sql);
+
+		$wpdb->query($sql);
+
+		// Check if the column already exists
+		$column_exists = $wpdb->get_var("SHOW COLUMNS FROM " . WLSM_STUDENT_RECORDS . " LIKE 'optional_subject_code'");
+
+		// If the column does not exist, add it
+		if (!$column_exists) {
+			$wpdb->query("ALTER TABLE " . WLSM_STUDENT_RECORDS . " ADD COLUMN optional_subject_code VARCHAR(40) DEFAULT NULL");
+		}
+		
+
 		/* Add parent_user_id column if not exists to student_records table */
 		$row = $wpdb->get_results("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . DB_NAME . "' AND TABLE_NAME = '" . WLSM_STUDENT_RECORDS . "' AND COLUMN_NAME = 'parent_user_id'");
 		if (empty($row)) {
