@@ -29,6 +29,7 @@ class WLSM_Setting {
 		$lessons_menu     = isset( $_POST['lessons_menu'] ) ? (bool) ( $_POST['lessons_menu'] ) : false;
 		$transport_menu   = isset( $_POST['transport_menu'] ) ? (bool) ( $_POST['transport_menu'] ) : false;
 		$examination_menu = isset( $_POST['examination_menu'] ) ? (bool) ( $_POST['examination_menu'] ) : false;
+		$new_curriculum   = isset( $_POST['new_curriculum'] ) ? (bool) ($_POST['new_curriculum']) : false;
 
 		$sessions         = WLSM_M_Session::fetch_sessions();
 		$currency_symbols = WLSM_Helper::currency_symbols();
@@ -60,6 +61,7 @@ class WLSM_Setting {
 		update_option( 'wlsm_transport_menu', $transport_menu );
 		update_option( 'wlsm_lessons_menu', $lessons_menu );
 		update_option( 'wlsm_examination_menu', $examination_menu );
+		update_option( 'wlsm_new_curriculum', $new_curriculum );
 
 		$message = esc_html__( 'General settings saved.', 'school-management' );
 

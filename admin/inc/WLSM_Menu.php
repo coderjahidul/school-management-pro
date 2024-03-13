@@ -320,6 +320,8 @@ class WLSM_Menu {
 							}
 						}
 
+						
+
 						// Accounting - Group.
 						if ( WLSM_M_Role::check_permission( array( 'manage_expenses', 'manage_income', 'manage_invoices', 'manage_fees' ), $permissions ) ) {
 
@@ -436,6 +438,18 @@ class WLSM_Menu {
 							$chapter = add_submenu_page( WLSM_LECTURE, esc_html__( 'Chapter', 'school-management' ), esc_html__( 'Chapter', 'school-management' ), 'read', WLSM_CHAPTER, array( 'WLSM_Menu', 'school_chapter' ) );
 							add_action( 'admin_print_styles-' . $chapter, array( 'WLSM_Menu', 'menu_page_assets' ) );
 						}
+
+						if(!get_option('wlsm_new_curriculum')){
+							// New Eduction Curriculum Group
+							if( WLSM_M_ROLE::check_permission( array( 'manage_new_curriculum'), $permissions)) {
+								$school_staff_group_new_curriculum_menu = add_menu_page(esc_html('New Curriculum', 'school-management'), esc_html('11. New Curriculum', 'school-management'), 'read', WLSM_MENU_STAFF_NEW_CURRICULUM, array( 'WLSM_Menu', 'school_staff_group_new_curriculum'), 'dashicons-welcome-learn-more', 34);
+								// add_action( 'admin_print_styles-' . $school_staff_group_new_curriculum_menu, array('WLSM_Menu', 'menu_page_access'));
+
+								$school_staff_group_new_curriculum_submenu = add_submenu_page(WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__('New Curriculum', 'school-management'), esc_html__('Dashboard', 'school-management'), 'read', WLSM_MENU_STAFF_NEW_CURRICULUM, array( 'WLSM_Menu', 'school_staff_group_new_curriculum'));
+							}
+						}
+
+						
 					}
 				}
 			}
@@ -796,6 +810,11 @@ class WLSM_Menu {
 	// Lecture
 	public static function school_lecture() {
 		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/lectures/route.php';
+	}
+
+	// New Curriculum
+	public static function school_staff_group_new_curriculum(){
+		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/groups/new-curriculum.php';
 	}
 
 	public static function school_chapter() {

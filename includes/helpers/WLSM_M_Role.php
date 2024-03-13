@@ -172,6 +172,7 @@ class WLSM_M_Role {
 			'manage_notices'              => esc_html__( 'Manage Noticeboard', 'school-management' ),
 			'manage_events'               => esc_html__( 'Manage Events', 'school-management' ),
 			'manage_exams'                => esc_html__( 'Manage Exams', 'school-management' ),
+			'manage_new_curriculum'		  => esc_html__( 'Manage New Curriculum', 'school-management' ),
 			'manage_expenses'             => esc_html__( 'Manage Expenses', 'school-management' ),
 			'manage_income'               => esc_html__( 'Manage Income', 'school-management' ),
 			'manage_invoices'             => esc_html__( 'Manage Invoices', 'school-management' ),

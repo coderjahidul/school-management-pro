@@ -168,3 +168,4 @@ define( 'WLSM_MENU_STAFF_EXAMINATION', 'sm-staff-examination' );
 define( 'WLSM_MENU_STAFF_ACCOUNTING', 'sm-staff-accounting' );
 define( 'WLSM_MENU_STAFF_LIBRARY', 'sm-staff-library' );
 define( 'WLSM_MENU_STAFF_TRANSPORT', 'sm-staff-transport' );
+define('WLSM_MENU_STAFF_NEW_CURRICULUM', 'sm-staff-new-curriculum');
