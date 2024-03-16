@@ -429,14 +429,17 @@ class WLSM_Menu {
 
 						if (!get_option('wlsm_lessons_menu')) {
 							// Lessons
-							$school_lectures = add_menu_page( esc_html__( 'Lessons', 'school-management' ), esc_html__( '10. Lessons', 'school-management' ), 'read', WLSM_LECTURE, array( 'WLSM_Menu', 'school_lecture' ), 'dashicons-location-alt', 34 );
-							add_action( 'admin_print_styles-' . $school_lectures, array( 'WLSM_Menu', 'menu_page_assets' ) );
+							if( WLSM_M_ROLE::check_permission( array( 'manage_lessons'), $permissions)){
+								$school_lectures = add_menu_page( esc_html__( 'Lessons', 'school-management' ), esc_html__( '10. Lessons', 'school-management' ), 'read', WLSM_LECTURE, array( 'WLSM_Menu', 'school_lecture' ), 'dashicons-location-alt', 34 );
+								add_action( 'admin_print_styles-' . $school_lectures, array( 'WLSM_Menu', 'menu_page_assets' ) );
 
-							$school_staff = add_submenu_page( WLSM_LECTURE, esc_html__( 'Lessons', 'school-management' ), esc_html__( 'Lessons', 'school-management' ), 'read', WLSM_LECTURE, array( 'WLSM_Menu', 'school_lecture' ) );
-							add_action( 'admin_print_styles-' . $school_staff, array( 'WLSM_Menu', 'menu_page_assets' ) );
+								$school_staff = add_submenu_page( WLSM_LECTURE, esc_html__( 'Lessons', 'school-management' ), esc_html__( 'Lessons', 'school-management' ), 'read', WLSM_LECTURE, array( 'WLSM_Menu', 'school_lecture' ) );
+								add_action( 'admin_print_styles-' . $school_staff, array( 'WLSM_Menu', 'menu_page_assets' ) );
 
-							$chapter = add_submenu_page( WLSM_LECTURE, esc_html__( 'Chapter', 'school-management' ), esc_html__( 'Chapter', 'school-management' ), 'read', WLSM_CHAPTER, array( 'WLSM_Menu', 'school_chapter' ) );
-							add_action( 'admin_print_styles-' . $chapter, array( 'WLSM_Menu', 'menu_page_assets' ) );
+								$chapter = add_submenu_page( WLSM_LECTURE, esc_html__( 'Chapter', 'school-management' ), esc_html__( 'Chapter', 'school-management' ), 'read', WLSM_CHAPTER, array( 'WLSM_Menu', 'school_chapter' ) );
+								add_action( 'admin_print_styles-' . $chapter, array( 'WLSM_Menu', 'menu_page_assets' ) );
+							}
+							
 						}
 
 						if(!get_option('wlsm_new_curriculum')){
