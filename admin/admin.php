@@ -422,7 +422,34 @@ add_action( 'wp_ajax_wlsm-delete-chapter', array( 'WLSM_Lecture', 'delete_chapte
 add_action( 'wp_ajax_wlsm-bulk-action', array( 'WLSM_Bulk_Action', 'bulk_action' ) );
 
 // Examination class subjects fetch Action.
-add_action( 'wp_ajax_wlsm-get-class-exam-subjects', array( 'WLSM_Staff_General', 'get_class_subjects_exam' ) );
+add_action( 'wp_ajax_wlsm-get-class-exam-subjects', array( 'WLSM_Staff_General', 'get_class_subjects_exam' ) );// add User Designation field in user profile
+function add_designation_field_to_user_profile($user){
+    ?>
+    <h3><?php _e("Designation", "blank");?></h3>
+    <table class="form-table">
+        <tr>
+            <th><label for="designation"><?php _e("Designation", "blank");?></label></th>
+            <td><input type="text" name="designation" id="designation" value="<?php echo esc_attr(get_the_author_meta('designation', $user->ID));?>" class="regular-text" /><br/> </td>
+        </tr>
+    </table>
+    <?php
+}
+add_action('show_user_profile', 'add_designation_field_to_user_profile');
+add_action('edit_user_profile', 'add_designation_field_to_user_profile');
+
+// Save User Designation field data in user profile
+function save_designation_field_to_user_profile($user_id){
+    if(current_user_can('edit_user', $user_id)){
+        update_user_meta( $user_id, 'designation', $_POST['designation'] );
+    }
+}
+add_action('personal_options_update', 'save_designation_field_to_user_profile');
+add_action('edit_user_profile_update', 'save_designation_field_to_user_profile');
+
+// Display User Designation field data in user profile
+$user_id = get_current_user_id();
+$designation = get_the_author_meta('designation', $user_id);
+echo 'Designation: ' . $designation;
 
 // zoom api settings 
 
