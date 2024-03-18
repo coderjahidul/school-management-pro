@@ -18,7 +18,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
 			<div class="text-center wlsm-section-heading-block">
 				<span class="wlsm-section-heading">
 					<i class="fas fa-clock"></i>
-					<?php esc_html_e( 'New Curriculum', 'school-management' ); ?>
+					<?php esc_html_e( 'Behavioral Assessment', 'school-management' ); ?>
 				</span>
 			</div>
 		</div>

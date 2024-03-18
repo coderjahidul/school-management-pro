@@ -128,7 +128,7 @@ define( 'WLSM_MENU_STAFF_MEETINGS', 'sm-staff-live-classes' );
 define( 'WLSM_MENU_STAFF_RATTING', 'sm-staff-ratting' );
 
 /* Examination */
-define( 'WLSM_MENU_STAFF_EXAMS', 'sm-staff-exams' );
+define( 'WLSM_MENU_STAFF_EXAMS', 'sm-staff-exams' ); 
 define( 'WLSM_MENU_EXAMS_GROUP', 'sm-exams-group' );
 define( 'WLSM_MENU_STAFF_EXAM_ADMIT_CARDS', 'sm-staff-exam-admit-cards-print' );
 define( 'WLSM_MENU_STAFF_EXAM_ADMIT_CARDS_BULK_PRINT', 'admit-cards-bulk-print' );
@@ -169,3 +169,8 @@ define( 'WLSM_MENU_STAFF_ACCOUNTING', 'sm-staff-accounting' );
 define( 'WLSM_MENU_STAFF_LIBRARY', 'sm-staff-library' );
 define( 'WLSM_MENU_STAFF_TRANSPORT', 'sm-staff-transport' );
 define('WLSM_MENU_STAFF_NEW_CURRICULUM', 'sm-staff-new-curriculum');
+
+/* New Curriculum */
+define( 'WLSM_MENU_STAFF_SUBJECT_BASED_ASSESSMENT', 'sm-staff-subject-based-assessment' );
+define('WLSM_MENU_STAFF_BEHAVIORAL_ASSESSMENT', 'sm-staff-behavioural-assessment');
+
