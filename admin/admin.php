@@ -423,33 +423,49 @@ add_action( 'wp_ajax_wlsm-bulk-action', array( 'WLSM_Bulk_Action', 'bulk_action'
 
 // Examination class subjects fetch Action.
 add_action( 'wp_ajax_wlsm-get-class-exam-subjects', array( 'WLSM_Staff_General', 'get_class_subjects_exam' ) );// add User Designation field in user profile
-function add_designation_field_to_user_profile($user){
+
+
+
+
+
+
+// Hook into user profile fields
+add_action( 'show_user_profile', 'wlsm_display_designation_field' );
+add_action( 'edit_user_profile', 'wlsm_display_designation_field' );
+
+function wlsm_display_designation_field( $user ) {
+    // Get the current user's email
+    $current_user_email = $user->user_email;
+
+    // Custom SQL query to fetch designation based on email address
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'wlsm_admins';
+    $designation = $wpdb->get_var($wpdb->prepare(
+        "SELECT designation FROM $table_name WHERE email = %s",
+        $current_user_email
+    ));
+
     ?>
-    <h3><?php _e("Designation", "blank");?></h3>
+    <h3><?php _e( 'Designation', 'text-domain' ); ?></h3>
     <table class="form-table">
         <tr>
-            <th><label for="designation"><?php _e("Designation", "blank");?></label></th>
-            <td><input type="text" name="designation" id="designation" value="<?php echo esc_attr(get_the_author_meta('designation', $user->ID));?>" class="regular-text" /><br/> </td>
+            <th><label for="designation"><?php _e( 'Designation', 'text-domain' ); ?></label></th>
+            <td>
+                <?php if ($designation) : ?>
+                    <?php echo esc_html( $designation ); ?>
+                <?php else : ?>
+                    <?php _e( 'No designation found.', 'text-domain' ); ?>
+                <?php endif; ?>
+            </td>
         </tr>
     </table>
     <?php
 }
-add_action('show_user_profile', 'add_designation_field_to_user_profile');
-add_action('edit_user_profile', 'add_designation_field_to_user_profile');
 
-// Save User Designation field data in user profile
-function save_designation_field_to_user_profile($user_id){
-    if(current_user_can('edit_user', $user_id)){
-        update_user_meta( $user_id, 'designation', $_POST['designation'] );
-    }
-}
-add_action('personal_options_update', 'save_designation_field_to_user_profile');
-add_action('edit_user_profile_update', 'save_designation_field_to_user_profile');
 
-// Display User Designation field data in user profile
-$user_id = get_current_user_id();
-$designation = get_the_author_meta('designation', $user_id);
-echo 'Designation: ' . $designation;
+
+
+
 
 // zoom api settings 
 

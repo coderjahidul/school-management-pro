@@ -143,6 +143,7 @@ class WLSM_M_Role {
 
 	public static function get_permissions() {
 		return array(
+			'manage_school'				  => esc_html__( 'Manage School', 'school-management' ),
 			'manage_inquiries'            => esc_html__( 'Manage Inquiries', 'school-management' ),
 			'manage_admissions'           => esc_html__( 'Manage Admissions', 'school-management' ),
 			'manage_students'             => esc_html__( 'Manage Students', 'school-management' ),
@@ -173,7 +174,7 @@ class WLSM_M_Role {
 			'manage_events'               => esc_html__( 'Manage Events', 'school-management' ),
 			'manage_exams'                => esc_html__( 'Manage Exams', 'school-management' ),
 			'manage_new_curriculum'		  => esc_html__( 'Manage New Curriculum', 'school-management' ),
-			'manage_lessons'			  => esc_html__( "Manage Lessons", 'school-management' ),
+			'manage_chapter_lessons'	  => esc_html__( "Manage Chapter & Lessons", 'school-management' ),
 			'manage_expenses'             => esc_html__( 'Manage Expenses', 'school-management' ),
 			'manage_income'               => esc_html__( 'Manage Income', 'school-management' ),
 			'manage_invoices'             => esc_html__( 'Manage Invoices', 'school-management' ),

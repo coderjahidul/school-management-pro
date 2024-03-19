@@ -51,12 +51,15 @@ class WLSM_Menu {
 						$permissions = $current_school['permissions'];
 
 						// School - Menu.
-						$school_staff_school_menu = add_menu_page( esc_html__( 'School', 'school-management' ), esc_html__( '1. School Setup', 'school-management' ), 'read', WLSM_MENU_STAFF_SCHOOL, array( 'WLSM_Menu', 'school_staff_dashboard' ), 'dashicons-building', 31 );
-						add_action( 'admin_print_styles-' . $school_staff_school_menu, array( 'WLSM_Menu', 'menu_page_assets' ) );
+						if( WLSM_M_ROLE::check_permission( array( 'manage_school'), $permissions)){
+							$school_staff_school_menu = add_menu_page( esc_html__( 'School', 'school-management' ), esc_html__( '1. School Setup', 'school-management' ), 'read', WLSM_MENU_STAFF_SCHOOL, array( 'WLSM_Menu', 'school_staff_dashboard' ), 'dashicons-building', 31 );
+							add_action( 'admin_print_styles-' . $school_staff_school_menu, array( 'WLSM_Menu', 'menu_page_assets' ) );
 
-						// School - Dashboard.
-						$school_staff_dashboard_submenu = add_submenu_page( WLSM_MENU_STAFF_SCHOOL, esc_html__( 'Dashboard', 'school-management' ), esc_html__( 'Dashboard', 'school-management' ), 'read', WLSM_MENU_STAFF_SCHOOL, array( 'WLSM_Menu', 'school_staff_dashboard' ) );
-						add_action( 'admin_print_styles-' . $school_staff_dashboard_submenu, array( 'WLSM_Menu', 'menu_page_assets' ) );
+							// School - Dashboard.
+							$school_staff_dashboard_submenu = add_submenu_page( WLSM_MENU_STAFF_SCHOOL, esc_html__( 'Dashboard', 'school-management' ), esc_html__( 'Dashboard', 'school-management' ), 'read', WLSM_MENU_STAFF_SCHOOL, array( 'WLSM_Menu', 'school_staff_dashboard' ) );
+							add_action( 'admin_print_styles-' . $school_staff_dashboard_submenu, array( 'WLSM_Menu', 'menu_page_assets' ) );
+						}
+						
 
 						// School - Inquiries.
 						if ( WLSM_M_Role::check_permission( array( 'manage_inquiries' ), $permissions ) ) {
@@ -429,7 +432,7 @@ class WLSM_Menu {
 
 						if (!get_option('wlsm_lessons_menu')) {
 							// Lessons
-							if( WLSM_M_ROLE::check_permission( array( 'manage_lessons'), $permissions)){
+							if( WLSM_M_ROLE::check_permission( array( 'manage_chapter_lessons'), $permissions)){
 								$school_lectures = add_menu_page( esc_html__( 'Lessons', 'school-management' ), esc_html__( '10. Lessons', 'school-management' ), 'read', WLSM_LECTURE, array( 'WLSM_Menu', 'school_lecture' ), 'dashicons-location-alt', 34 );
 								add_action( 'admin_print_styles-' . $school_lectures, array( 'WLSM_Menu', 'menu_page_assets' ) );
 
