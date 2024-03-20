@@ -30,6 +30,7 @@ $chapter_page_url = WLSM_M_Staff_Transport::get_chapter_page_url();
 				<thead>
 					<tr class="text-white bg-primary">
 						<!-- <th scope="col" class="text-nowrap"><?php esc_html_e( 'ID', 'school-management' ); ?></th> -->
+						<th scope="col"><?php esc_html_e( 'Code', 'school-management' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Title', 'school-management' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Class', 'school-management' ); ?></th>
 						<th scope="col"><?php esc_html_e( 'Subject', 'school-management' ); ?></th>

@@ -13,6 +13,7 @@ $lecture = null;
 
 $nonce_action = 'add-lecture';
 
+$code     	 = '';
 $title       = '';
 $description = '';
 $class_id    = '';
@@ -29,6 +30,7 @@ if ( isset( $_GET['id'] ) && ! empty( $_GET['id'] ) ) {
 	if ( $lecture ) {
 		$nonce_action = 'edit-lecture-' . $lecture->ID;
 
+		$code	 	 = $lecture->code;
 		$title       = $lecture->title;
 		$description = $lecture->description;
 		$url         = $lecture->url;
@@ -85,7 +87,13 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 			<div class="wlsm-form-section">
 				<div class="form-row">
 					<div class="form-group col-md-3">
-						<label for="wlsm_label" class="wlsm-font-bold">
+						<label for="wlsm_lecture_code" class="wlsm-font-bold">
+							<span class="wlsm-important">*</span> <?php esc_html_e( 'Lesson Code', 'school-management' ); ?>:
+						</label>
+						<input type="text" name="code" class="form-control" id="wlsm_lecture_code" placeholder="<?php esc_attr_e( 'Enter Lesson Code', 'school-management' ); ?>" value="<?php echo esc_attr( stripslashes($code) );?>">
+					</div>
+					<div class="form-group col-md-3">
+						<label for="wlsm_title" class="wlsm-font-bold">
 							<span class="wlsm-important">*</span> <?php esc_html_e( 'Title', 'school-management' ); ?>:
 						</label>
 						<input type="text" name="title" class="form-control" id="wlsm_title" placeholder="<?php esc_attr_e( 'Enter title', 'school-management' ); ?>" value="<?php echo esc_attr( stripslashes( $title ) ); ?>">

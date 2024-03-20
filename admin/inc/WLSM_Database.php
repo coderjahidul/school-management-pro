@@ -1465,6 +1465,7 @@ class WLSM_Database
 
 		$sql = "CREATE TABLE IF NOT EXISTS " . WLSM_LECTURE . " (
 			ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			code varchar(10) DEFAULT NULL,
 			title varchar(191) DEFAULT NULL,
 			description text DEFAULT NULL,
 			attachment text DEFAULT NULL,
@@ -1479,6 +1480,14 @@ class WLSM_Database
 			PRIMARY KEY (ID)
 			) ENGINE=InnoDB " . $charset_collate;
 		dbDelta($sql);
+
+		// Check if code column already exists
+		$code_column_exists = $wpdb->get_var("SHOW COLUMNS FROM " . WLSM_LECTURE . " LIKE 'code'");
+		
+		// If the code column does not exist, add it
+		if(!$code_column_exists){
+			$wpdb->query("ALTER TABLE " . WLSM_LECTURE . " ADD COLUMN code VARCHAR(10) DEFAULT NULL AFTER ID" );
+		}
 
 		/** Ratting */
 

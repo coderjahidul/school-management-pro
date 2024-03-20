@@ -148,6 +148,7 @@ class WLSM_Lecture {
 				// Table columns.
 				$data[] = array(
 					// esc_html(WLSM_Config::limit_string(WLSM_M_Staff_Class::get_name_text($row->ID))),
+					esc_html(WLSM_Config::limit_string($row->code)),
 					esc_html(WLSM_Config::limit_string(WLSM_M_Staff_Class::get_name_text($row->title))),
 					// $link_to,
 					// esc_html(WLSM_M_Staff_Class::get_status_text($row->is_active)),
@@ -204,7 +205,7 @@ class WLSM_Lecture {
 					throw new Exception( esc_html__( 'Lecture not found.', 'school-management' ) );
 				}
 			}
-
+			$code        = isset($_POST['code']) ? sanitize_text_field($_POST['code']) : '';
 			$title       = isset($_POST['title']) ? sanitize_text_field($_POST['title']) : '';
 			$class_id    = isset($_POST['classes']) ? sanitize_text_field($_POST['classes']) : '';
 			$chapter_id    = isset($_POST['chapter']) ? sanitize_text_field($_POST['chapter']) : '';
@@ -219,9 +220,14 @@ class WLSM_Lecture {
 			// Start validation.
 			$errors = array();
 
+			if(empty($code)){
+				$errors['code'] = esc_html__('Please Provide Lesson Code', 'school-management');
+			}
+
 			if (empty($title)) {
 				$errors['title'] = esc_html__('Please provide lecture title.', 'school-management');
 			}
+
 
 			if (!in_array($link_to, array('url', 'attachment'))) {
 				$link_to = '';
@@ -259,6 +265,7 @@ class WLSM_Lecture {
 
 				// Lecture data.
 				$data = array(
+					'code'        => $code,
 					'title'       => $title,
 					'class_id'    => $class_id,
 					'chapter_id'  => $chapter_id,
