@@ -1468,6 +1468,9 @@ class WLSM_Database
 			code varchar(10) DEFAULT NULL,
 			title varchar(191) DEFAULT NULL,
 			description text DEFAULT NULL,
+			square_description text DEFAULT NULL,
+			circle_description text DEFAULT NULL,
+			triangle_description text DEFAULT NULL,
 			attachment text DEFAULT NULL,
 			link_to text DEFAULT NULL,
 			url text DEFAULT NULL,
@@ -1483,12 +1486,23 @@ class WLSM_Database
 
 		// Check if code column already exists
 		$code_column_exists = $wpdb->get_var("SHOW COLUMNS FROM " . WLSM_LECTURE . " LIKE 'code'");
+		$square_description = $wpdb->get_var("SHOW COLUMNS FROM " . WLSM_LECTURE . " LIKE 'square_description'");
+		$circle_description = $wpdb->get_var("SHOW COLUMNS FROM " . WLSM_LECTURE . " LIKE 'circle_description'");
+		$triangle_description = $wpdb->get_var("SHOW COLUMNS FROM " . WLSM_LECTURE . " LIKE 'triangle_description'");
 		
 		// If the code column does not exist, add it
 		if(!$code_column_exists){
 			$wpdb->query("ALTER TABLE " . WLSM_LECTURE . " ADD COLUMN code VARCHAR(10) DEFAULT NULL AFTER ID" );
 		}
-
+		if(!$square_description){
+			$wpdb->query("ALTER TABLE " . WLSM_LECTURE . " ADD COLUMN square_description text DEFAULT NULL AFTER description");
+		}
+		if(!$circle_description){
+			$wpdb->query("ALTER TABLE " . WLSM_LECTURE . " ADD COLUMN circle_description text DEFAULT NULL AFTER square_description");
+		}
+		if(!$triangle_description){
+			$wpdb->query("ALTER TABLE " . WLSM_LECTURE . " ADD COLUMN triangle_description text DEFAULT NULL AFTER circle_description");
+		}
 		/** Ratting */
 
 		$sql = "CREATE TABLE IF NOT EXISTS " . WLSM_RATTING . " (

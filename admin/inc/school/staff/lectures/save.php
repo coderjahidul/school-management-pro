@@ -1,3 +1,8 @@
+<style>
+	.display-none {
+		display: none;
+	}
+</style>
 <?php
 defined( 'ABSPATH' ) || die();
 
@@ -23,6 +28,9 @@ $url         = '';
 $attachment  = '';
 $link_to     = 'url';
 $is_active   = 1;
+$square_description = '';
+$circle_description = '';
+$triangle_description = '';
 
 if ( isset( $_GET['id'] ) && ! empty( $_GET['id'] ) ) {
 	$id      = absint( $_GET['id'] );
@@ -37,6 +45,9 @@ if ( isset( $_GET['id'] ) && ! empty( $_GET['id'] ) ) {
 		$link_to     = $lecture->link_to;
 		$attachment  = $lecture->attachment;
 		$class_id    = $lecture->class_id;
+		$square_description = $lecture->square_description;
+		$circle_description = $lecture->circle_description;
+		$triangle_description = $lecture->triangle_description;
 	}
 }
 
@@ -53,11 +64,12 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 						printf(
 							wp_kses(
 								/* translators: %s: lecture name */
-								__( 'Edit Lecture: %s', 'school-management' ),
+								__( 'Edit Lecture: %1$s %2$s', 'school-management' ),
 								array(
 									'span' => array( 'class' => array() ),
 								)
 							),
+							esc_html($code),
 							esc_html( $title )
 						);
 					} else {
@@ -162,7 +174,7 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 					</div>
 				</div>
 
-				<div class="form-row">
+				<div class="form-row display-none">
 					<div class="form-group col-md-4">
 						<label for="wlsm_link_to" class="wlsm-font-bold">
 							<span class="wlsm-important">*</span> <?php esc_html_e( 'Link to', 'school-management' ); ?>:
@@ -213,7 +225,7 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 					</div>
 				</div>
 
-				<div class="form-row">
+				<div class="form-row display-none">
 					<div class="col-md-12">
 						<label for="wlsm_subject" class="wlsm-font-bold">
 							<?php esc_html_e( 'Description', 'school-management' ); ?>:
@@ -227,6 +239,57 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 								'wpautop'       => false,
 							);
 							wp_editor( wp_kses_post( stripslashes( $description ) ), 'wlsm_description_body', $settings );
+							?>
+						</div>
+					</div>
+				</div>
+				<!-- Level of proficiency -->
+				<div class="form-row">
+					<div class="col-md-4">
+						<label for="wlsm_subject" class="wlsm-font-bold">
+							<?php esc_html_e( 'Square Description', 'school-management' ); ?> (<span>&#9634;</span>) :
+						</label>
+						<div class="form-group">
+							<?php
+							$settings = array(
+								'media_buttons' => false,
+								'textarea_name' => 'square_description_body',
+								'textarea_rows' => 10,
+								'wpautop'       => false,
+							);
+							wp_editor( wp_kses_post( stripslashes( $square_description ) ), 'square_description_body', $settings );
+							?>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<label for="wlsm_subject" class="wlsm-font-bold">
+							<?php esc_html_e( 'Circle Description', 'school-management' ); ?> (<span>&#11096;</span>) :
+						</label>
+						<div class="form-group">
+							<?php
+							$settings = array(
+								'media_buttons' => false,
+								'textarea_name' => 'circle_description_body',
+								'textarea_rows' => 10,
+								'wpautop'       => false,
+							);
+							wp_editor( wp_kses_post( stripslashes( $circle_description ) ), 'circle_description_body', $settings );
+							?>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<label for="wlsm_subject" class="wlsm-font-bold">
+							<?php esc_html_e( 'Triangle Description', 'school-management' ); ?> (<span>&#128710;</span>) :
+						</label>
+						<div class="form-group">
+							<?php
+							$settings = array(
+								'media_buttons' => false,
+								'textarea_name' => 'triangle_description_body',
+								'textarea_rows' => 10,
+								'wpautop'       => false,
+							);
+							wp_editor( wp_kses_post( stripslashes( $triangle_description ) ), 'triangle_description_body', $settings );
 							?>
 						</div>
 					</div>

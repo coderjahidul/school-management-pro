@@ -15,7 +15,7 @@ class WLSM_M_Staff_Lecture {
 	public static function fetch_lecture( $id ) {
 		global $wpdb;
 		$query = $wpdb->prepare(
-			'SELECT l.ID, l.description, l.code, l.title, l.attachment, l.url, l.link_to, l.created_at, c.ID as class_id, c.label as class, s.label as `subject`  FROM ' . WLSM_LECTURE . ' as l 
+			'SELECT l.ID, l.description, l.square_description, l.circle_description, l.triangle_description, l.code, l.title, l.attachment, l.url, l.link_to, l.created_at, c.ID as class_id, c.label as class, s.label as `subject`  FROM ' . WLSM_LECTURE . ' as l 
 			JOIN ' . WLSM_CLASSES . ' as c ON l.class_id = c.ID
 			JOIN ' . WLSM_SUBJECTS . ' as s ON s.ID = l.subject_id  
 			WHERE l.id =%s',

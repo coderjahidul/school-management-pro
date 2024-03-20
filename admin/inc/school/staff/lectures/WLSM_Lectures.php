@@ -213,6 +213,9 @@ class WLSM_Lecture {
 			$link_to     = isset($_POST['link_to']) ? sanitize_text_field($_POST['link_to']) : '';
 			$attachment  = (isset($_FILES['attachment']) && is_array($_FILES['attachment'])) ? $_FILES['attachment'] : NULL;
 			$url         = isset($_POST['url']) ? esc_url_raw($_POST['url']) : '';
+			$square_description = isset($_POST['square_description_body']) ? wp_kses_post($_POST['square_description_body']) : '';
+			$circle_description = isset($_POST['circle_description_body']) ? wp_kses_post($_POST['circle_description_body']) : '';
+			$triangle_description = isset($_POST['triangle_description_body']) ? wp_kses_post($_POST['triangle_description_body']) : '';
 			// $classes     = (isset($_POST['classes']) && is_array($_POST['classes'])) ? $_POST['classes'] : array();
 
 			$subject     = isset( $_POST['subject'] ) ? sanitize_text_field( $_POST['subject'] ) : '';
@@ -271,6 +274,9 @@ class WLSM_Lecture {
 					'chapter_id'  => $chapter_id,
 					'subject_id'  => $subject,
 					'description' => $description,
+					'square_description' => $square_description,
+					'circle_description' => $circle_description,
+					'triangle_description' => $triangle_description,
 					'link_to'     => $link_to,
 					'url'         => $url,
 					'attachment'  => $attachment,
