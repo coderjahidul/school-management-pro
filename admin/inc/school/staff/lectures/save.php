@@ -244,6 +244,7 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 					</div>
 				</div>
 				<!-- Level of proficiency -->
+				<h3 style="margin: 30px 0; text-align: center;"><?php esc_html_e( 'Add Level of Proficiency Description', 'school-management' ); ?></h3>
 				<div class="form-row">
 					<div class="col-md-4">
 						<label for="wlsm_subject" class="wlsm-font-bold">
