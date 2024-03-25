@@ -18,20 +18,24 @@ $description = '';
 $class_id    = '';
 $title       = '';
 $description = '';
+$assessment_types = '';
 
 if ( isset( $_GET['id'] ) && ! empty( $_GET['id'] ) ) {
 	$id      = absint( $_GET['id'] );
 	$chapter = WLSM_M_Staff_Lecture::fetch_chapter( $id );
+	
 	if ( $chapter ) {
 		$nonce_action = 'edit-chapter-' . $chapter->ID;
 
 		$title       = $chapter->title;
 		$class_id    = $chapter->class_id;
 		$subject_id  = $chapter->subject_id;
+		$assessment_types = $chapter->assessment_types;
 	}
 }
 
 $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
+$assessment_type_list = WLSM_Helper::assessment_type_list();
 ?>
 
 <div class="row">
@@ -121,6 +125,19 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 								<?php } ?>
 							<?php endif ?>
 
+						</select>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="wlsm_assessment" class="wlsm-font-bold">
+							<span class="wlsm-important">*</span> <?php esc_html_e( 'Assessment Types', 'school-management' ); ?>:
+						</label>
+						<select name="assessment_types" class="form-control selectpicker" id="wlsm_assessment" data-live-search="true">
+							<option value=""><?php esc_html_e( 'Select Assessment', 'school-management' ); ?></option>
+							<?php foreach ( $assessment_type_list as $key => $value ) { ?>
+								<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $key, $assessment_types, true ); ?>>
+									<?php echo esc_html( $value ); ?>
+								</option>
+							<?php } ?>
 						</select>
 					</div>
 				</div>

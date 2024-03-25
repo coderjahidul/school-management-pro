@@ -414,12 +414,22 @@ class WLSM_Lecture {
 			$title       = isset($_POST['title']) ? sanitize_text_field($_POST['title']) : '';
 			$class_id    = isset($_POST['classes']) ? sanitize_text_field($_POST['classes']) : '';
 			$subject_id    = isset($_POST['subject']) ? sanitize_text_field($_POST['subject']) : '';
+			$assessment_types = isset($_POST['assessment_types']) ? sanitize_text_field($_POST['assessment_types']) : '';
 
 			// Start validation.
 			$errors = array();
 
 			if (empty($title)) {
 				$errors['title'] = esc_html__('Please provide chapter title.', 'school-management');
+			}
+			if(empty($class_id)) {
+				$errors['class_id'] = esc_html__('Please Select Class.', 'school-management');
+			}
+			if(empty($subject_id)){
+				$errors['subject_id'] = esc_html__('Please Select Subject.', 'school-management');
+			}
+			if(empty($assessment_types)) {
+				$errors['assessment_types'] = esc_html__('Please Select Assessment Type.', 'school-management');
 			}
 
 
@@ -450,6 +460,7 @@ class WLSM_Lecture {
 					'title'       => $title,
 					'class_id'    => $class_id,
 					'subject_id'  => $subject_id,
+					'assessment_types' => $assessment_types
 				);
 
 				if (!empty($attachment)) {

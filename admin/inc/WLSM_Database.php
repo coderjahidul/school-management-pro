@@ -1457,11 +1457,21 @@ class WLSM_Database
 			title varchar(191) DEFAULT NULL,
 			class_id bigint(20) UNSIGNED DEFAULT NULL,
 			subject_id bigint(20) UNSIGNED DEFAULT NULL,
+			assessment_types varchar(55) DEFAULT NULL,
 			created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at timestamp NULL DEFAULT NULL,
 			PRIMARY KEY (ID)
 			) ENGINE=InnoDB " . $charset_collate;
 		dbDelta($sql);
+		
+		// Check if assessment_types column already exists
+		$assessment_types_exists = $wpdb->get_var("SHOW COLUMNS FROM " . WLSM_CHAPTER . " LIKE 'assessment_types'");
+
+		// if assessment_types column does not exist, add it
+		if(!$assessment_types_exists){
+			$wpdb->query("ALTER TABLE " . WLSM_CHAPTER . " ADD COLUMN assessment_types varchar(55) DEFAULT NULL AFTER subject_id");
+		}
+
 
 		$sql = "CREATE TABLE IF NOT EXISTS " . WLSM_LECTURE . " (
 			ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,

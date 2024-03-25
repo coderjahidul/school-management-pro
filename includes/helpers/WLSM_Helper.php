@@ -226,6 +226,15 @@ class WLSM_Helper {
 			'AB-' => esc_html__( 'AB-', 'school-management' ),
 		);
 	}
+	public static function assessment_type_list(){
+		return array(
+			'assessment_during_learning' => esc_html__('Assessment During Learning', 'school-management'),
+			'quarterly_summative_assessment' => esc_html__('Quarterly Summative Assessment', 'school-management'),
+			'annual_summative_assessment' => esc_html__('Annual Summative Assessment', 'school-management'),
+			'quarterly_behavioral_assessment' => esc_html__('Quarterly Behavioral Assessment'),
+			'annual_behavioral_assessment' => esc_html__('Annual Behavioral Assessment'),
+		);
+	}
 
 	public static function search_field_list() {
 		return array(
