@@ -455,12 +455,15 @@ class WLSM_Menu {
 								add_action('admin_print_styles-' . $school_staff_group_new_curriculum_submenu, array('WLSM_Menu', 'menu_page_assets'));
 
 								if(WLSM_M_Role::check_permission(array('manage_new_curriculum'), $permissions)){
+									// Assessment
+									$student_assessment = add_submenu_page(WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__('Assessment', 'school-management'), esc_html__('1. Assessment', 'school-management'), 'read', WLSM_MENU_STAFF_STUDENT_ASSESSMENT, array('WLSM_Menu', 'school_staff_student_assessment'));
+									add_action('admin_print_styles-' . $student_assessment, array('WLSM_Menu', 'menu_page_assets'));
 									// Subject Based Assessment
-									$Subject_based_assessment = add_submenu_page(WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__('Subject Based Assessment', 'school-management'), esc_html('Subject Based Assessment', 'school-management'), 'read', WLSM_MENU_STAFF_SUBJECT_BASED_ASSESSMENT, array( 'WLSM_Menu', 'school_staff_subject_based_assessment'));
+									$Subject_based_assessment = add_submenu_page(WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__('Subject Based Assessment', 'school-management'), esc_html('2. Subject Based Assessment', 'school-management'), 'read', WLSM_MENU_STAFF_SUBJECT_BASED_ASSESSMENT, array( 'WLSM_Menu', 'school_staff_subject_based_assessment'));
 									add_action('admin_print_styles-' . $Subject_based_assessment, array('WLSM_Menu', 'menu_page_assets'));
 
 									// Behavioral Assessment
-									$behavioral_assessment = add_submenu_page(WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__('Behavioral Assessment', 'school-management'),esc_html__('Behavioral Assessment', 'school-management'), 'read', WLSM_MENU_STAFF_BEHAVIORAL_ASSESSMENT, array( 'WLSM_Menu', 'school_staff_behavioral_assessment'));
+									$behavioral_assessment = add_submenu_page(WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__('Behavioral Assessment', 'school-management'),esc_html__('3. Behavioral Assessment', 'school-management'), 'read', WLSM_MENU_STAFF_BEHAVIORAL_ASSESSMENT, array( 'WLSM_Menu', 'school_staff_behavioral_assessment'));
 									add_action('admin_print_styles-' . $behavioral_assessment, array('WLSM_Menu', 'menu_page_assets'));
 									
 								}
@@ -838,6 +841,9 @@ class WLSM_Menu {
 	// New Curriculum
 	public static function school_staff_group_new_curriculum(){
 		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/groups/new-curriculum.php';
+	}
+	public static function school_staff_student_assessment(){
+		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/new-curriculum/student-assessment/route.php';
 	}
 	public static function school_staff_subject_based_assessment(){
 		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/new-curriculum/subject-based-assessment/route.php';
