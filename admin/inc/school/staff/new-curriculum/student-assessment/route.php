@@ -16,7 +16,8 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
 // $page_url_exam_admit_cards       = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAM_ADMIT_CARDS );
 // $page_url_exam_results           = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAM_RESULTS );
 // $page_url_results_assessment     = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAM_ASSESSMENT );
-$evaluate_the_student 
+$subject_based_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_SUBJECT_BASED_ASSESSMENT );
+$behavioral_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_BEHAVIORAL_ASSESSMENT );
 ?>
 <div class="wlsm container-fluid">
 	<?php
@@ -57,7 +58,7 @@ $evaluate_the_student
             $subject_types = array('subjective', 'practical');
             foreach ($subject_types as $subject_type) {
                 $subjects = $wpdb->get_results($wpdb->prepare(
-                    "SELECT label, code, class_school_id FROM {$wpdb->prefix}wlsm_subjects WHERE type = %s",
+                    "SELECT ID, label, code, class_school_id FROM {$wpdb->prefix}wlsm_subjects WHERE type = %s",
                     $subject_type
                 ));
 
@@ -66,6 +67,7 @@ $evaluate_the_student
                     <div class="row mt-3 mb-3">
                         <?php foreach ($subjects as $subject) { 
                             $class_school_id = $subject->class_school_id;
+                            $subject_id = $subject->ID;
                             $get_class_id = $wpdb->get_results($wpdb->prepare(
                                 "SELECT class_id FROM {$wpdb->prefix}wlsm_class_school WHERE ID = %d",
                                 $class_school_id
@@ -89,6 +91,16 @@ $evaluate_the_student
                                     <?php } ?>
                                     <br>
                                     <span><?php //echo esc_html("Teacher Name: " . $get_current_admin[0]->name); ?></span>
+                                    <br>
+                                    <span><?php echo "Subject ID: " . $subject_id; ?></span>
+                                    <div class="wlsm-group-actions">
+                                        <a href="<?php echo esc_url( $subject_based_assessment ); ?>" class="btn btn-sm btn-primary">
+                                            <?php esc_html_e( 'Subject Based', 'school-management' ); ?>
+                                        </a>
+                                        <a href="<?php echo esc_url( $behavioral_assessment . '&action=save' ); ?>" class="btn btn-sm btn-outline-primary">
+                                            <?php esc_html_e( 'Behavioral Based', 'school-management' ); ?>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         <?php } ?>
@@ -138,14 +150,16 @@ $evaluate_the_student
                                     <span><?php echo esc_html("Teacher: " . $get_current_admin[0]->name); ?></span>
                                     <br>
                                     <span><?php echo esc_html($get_current_admin[0]->designation); ?></span>
-                                    <!-- <div class="wlsm-group-actions">
-                                        <a href="<?php //echo esc_url( $page_url_exams ); ?>" class="btn btn-sm btn-primary">
-                                            <?php //esc_html_e( 'View Exams', 'school-management' ); ?>
+                                    <br>
+                                    <span><?php echo "Subject ID: " . $subject_id; ?></span>
+                                    <div class="wlsm-group-actions">
+                                        <a href="<?php echo esc_url( $subject_based_assessment );?>" class="btn btn-sm btn-primary">
+                                            <?php esc_html_e( 'Subject Based', 'school-management' ); ?>
                                         </a>
-                                        <a href="<?php //echo esc_url( $page_url_exams . '&action=save' ); ?>" class="btn btn-sm btn-outline-primary">
-                                            <?php //esc_html_e( 'Add New Exam', 'school-management' ); ?>
+                                        <a href="<?php echo esc_url( $behavioral_assessment . '&action=save' ); ?>" class="btn btn-sm btn-outline-primary">
+                                            <?php esc_html_e( 'Behavioral Based', 'school-management' ); ?>
                                         </a>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </div>
                         <?php
