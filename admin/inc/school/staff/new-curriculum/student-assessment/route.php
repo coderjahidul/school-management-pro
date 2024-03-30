@@ -16,6 +16,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
 // $page_url_exam_admit_cards       = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAM_ADMIT_CARDS );
 // $page_url_exam_results           = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAM_RESULTS );
 // $page_url_results_assessment     = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAM_ASSESSMENT );
+$evaluate_the_student 
 ?>
 <div class="wlsm container-fluid">
 	<?php
@@ -39,9 +40,6 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
         $get_current_user_id = get_current_user_id();
         $get_current_user_roles = wp_get_current_user()->roles;
         
-        echo '<pre>';
-        print_r($get_current_user_roles[0]);
-        echo '</pre>';
         // Get current staff
         $get_current_staff_id = $wpdb->get_results($wpdb->prepare(
             "SELECT ID FROM {$wpdb->prefix}wlsm_staff WHERE user_id = %d",
@@ -59,18 +57,38 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
             $subject_types = array('subjective', 'practical');
             foreach ($subject_types as $subject_type) {
                 $subjects = $wpdb->get_results($wpdb->prepare(
-                    "SELECT label, code FROM {$wpdb->prefix}wlsm_subjects WHERE type = %s",
+                    "SELECT label, code, class_school_id FROM {$wpdb->prefix}wlsm_subjects WHERE type = %s",
                     $subject_type
                 ));
 
                 if ($subjects) {
                     ?>
                     <div class="row mt-3 mb-3">
-                        <?php foreach ($subjects as $subject) { ?>
+                        <?php foreach ($subjects as $subject) { 
+                            $class_school_id = $subject->class_school_id;
+                            $get_class_id = $wpdb->get_results($wpdb->prepare(
+                                "SELECT class_id FROM {$wpdb->prefix}wlsm_class_school WHERE ID = %d",
+                                $class_school_id
+                            ));
+                            $get_class_lable = $wpdb->get_results($wpdb->prepare(
+                                "SELECT label FROM {$wpdb->prefix}wlsm_classes WHERE ID = %d",
+                                $get_class_id[0]->class_id
+                            ));
+                            ?>
+                            
                             <div class="col-md-3 col-sm-6">
                                 <div class="wlsm-group nc-subject-card">
                                     <img src="<?php echo esc_url( WLSM_PLUGIN_URL . '/assets/images/new-curriculum.png' ); ?>" alt="New Curriculum">
-                                    <span class="wlsm-group-title"><?php echo esc_html( $subject->label ); ?></span>
+                                    <br>
+                                    <span><?php echo esc_html( "Code: " . $subject->code ); ?></span>
+                                    <br>
+                                    <span><?php echo esc_html( $subject->label ); ?></span>
+                                    <br>
+                                    <?php foreach($get_class_lable as $class_lable) {?>
+                                    <span><?php echo esc_html( "Class: " . $class_lable->label ); ?></span>
+                                    <?php } ?>
+                                    <br>
+                                    <span><?php //echo esc_html("Teacher Name: " . $get_current_admin[0]->name); ?></span>
                                 </div>
                             </div>
                         <?php } ?>
@@ -89,18 +107,35 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                 foreach($teacher_assign_subjects as $teacher_assign_subject){
                     $subject_id = $teacher_assign_subject->subject_id;
                     $subjects = $wpdb->get_results($wpdb->prepare(
-                        "SELECT label , code  FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d",
+                        "SELECT label , code, class_school_id  FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d",
                         $subject_id
                     ));
                     ?>
                     <div class="row mt-3 mb-3">
-                        <?php foreach ($subjects as $subject) { ?>
+                        <?php foreach ($subjects as $subject) { 
+                            $class_school_id = $subject->class_school_id;
+                            $get_class_id = $wpdb->get_results($wpdb->prepare(
+                                "SELECT class_id FROM {$wpdb->prefix}wlsm_class_school WHERE ID = %d",
+                                $class_school_id
+                            ));
+                            $get_class_lable = $wpdb->get_results($wpdb->prepare(
+                                "SELECT label FROM {$wpdb->prefix}wlsm_classes WHERE ID = %d",
+                                $get_class_id[0]->class_id
+                            ));
+                            ?>
                             <div class="col-md-3 col-sm-6">
                                 <div class="wlsm-group nc-subject-card">
                                     <img src="<?php echo esc_url( WLSM_PLUGIN_URL . '/assets/images/new-curriculum.png' ); ?>" alt="New Curriculum">
-        
-                                    <span class="wlsm-group-title"><?php echo esc_html( $subject->label ); ?></span>
-                                    <span><?php echo esc_html("Teacher Name: " . $get_current_admin[0]->name); ?></span>
+                                    <br>
+                                    <span><?php echo esc_html( "Code: " . $subject->code ); ?></span>
+                                    <br>
+                                    <span><?php echo esc_html( $subject->label ); ?></span>
+                                    <br>
+                                    <?php foreach($get_class_lable as $class_lable) {?>
+                                    <span><?php echo esc_html( "Class: " . $class_lable->label ); ?></span>
+                                    <?php } ?>
+                                    <br>
+                                    <span><?php echo esc_html("Teacher: " . $get_current_admin[0]->name); ?></span>
                                     <br>
                                     <span><?php echo esc_html($get_current_admin[0]->designation); ?></span>
                                     <!-- <div class="wlsm-group-actions">
@@ -120,10 +155,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                     <?php
                 }
             }
-        }
-
-        
-        
+        } 
     ?>
 
     
