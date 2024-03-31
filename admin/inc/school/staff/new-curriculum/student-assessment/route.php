@@ -60,11 +60,8 @@ $behavioral_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_BEHAVIOR
                 $subjects = $wpdb->get_results($wpdb->prepare(
                     "SELECT ID, label, code, class_school_id FROM {$wpdb->prefix}wlsm_subjects WHERE type = %s",
                     $subject_type
-                ));
-
-                if ($subjects) {
-                    ?>
-                    <div class="row mt-3 mb-3">
+                ));?>
+                <div class="row mt-3 mb-3">
                         <?php foreach ($subjects as $subject) { 
                             $class_school_id = $subject->class_school_id;
                             $subject_id = $subject->ID;
@@ -91,13 +88,11 @@ $behavioral_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_BEHAVIOR
                                     <?php } ?>
                                     <br>
                                     <span><?php //echo esc_html("Teacher Name: " . $get_current_admin[0]->name); ?></span>
-                                    <br>
-                                    <span><?php echo "Subject ID: " . $subject_id; ?></span>
                                     <div class="wlsm-group-actions">
-                                        <a href="<?php echo esc_url( $subject_based_assessment ); ?>" class="btn btn-sm btn-primary">
+                                        <a href="<?php echo esc_url( $subject_based_assessment . '&subject_id=' . $subject_id); ?>" class="btn btn-sm btn-primary">
                                             <?php esc_html_e( 'Subject Based', 'school-management' ); ?>
                                         </a>
-                                        <a href="<?php echo esc_url( $behavioral_assessment . '&action=save' ); ?>" class="btn btn-sm btn-outline-primary">
+                                        <a href="<?php echo esc_url( $behavioral_assessment . '&subject_id=' . $subject_id); ?>" class="btn btn-sm btn-outline-primary">
                                             <?php esc_html_e( 'Behavioral Based', 'school-management' ); ?>
                                         </a>
                                     </div>
@@ -105,25 +100,24 @@ $behavioral_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_BEHAVIOR
                             </div>
                         <?php } ?>
                     </div>
+                    
                     <?php
-                } else {
-                    echo "No subjects found for type: $subject_type";
                 }
-            }
         }else{
             $teacher_assign_subjects = $wpdb->get_results($wpdb->prepare(
                 "SELECT subject_id FROM {$wpdb->prefix}wlsm_admin_subject WHERE admin_id = %d",
                 $get_current_admin[0]->ID
             ));
-            if($teacher_assign_subjects){
-                foreach($teacher_assign_subjects as $teacher_assign_subject){
-                    $subject_id = $teacher_assign_subject->subject_id;
-                    $subjects = $wpdb->get_results($wpdb->prepare(
-                        "SELECT label , code, class_school_id  FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d",
-                        $subject_id
-                    ));
-                    ?>
-                    <div class="row mt-3 mb-3">
+            if($teacher_assign_subjects){?>
+                <div class="row mt-3 mb-3">
+                <?php
+                    foreach($teacher_assign_subjects as $teacher_assign_subject){
+                        $subject_id = $teacher_assign_subject->subject_id;
+                        $subjects = $wpdb->get_results($wpdb->prepare(
+                            "SELECT label , code, class_school_id  FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d",
+                            $subject_id
+                        ));
+                        ?>
                         <?php foreach ($subjects as $subject) { 
                             $class_school_id = $subject->class_school_id;
                             $get_class_id = $wpdb->get_results($wpdb->prepare(
@@ -150,13 +144,11 @@ $behavioral_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_BEHAVIOR
                                     <span><?php echo esc_html("Teacher: " . $get_current_admin[0]->name); ?></span>
                                     <br>
                                     <span><?php echo esc_html($get_current_admin[0]->designation); ?></span>
-                                    <br>
-                                    <span><?php echo "Subject ID: " . $subject_id; ?></span>
                                     <div class="wlsm-group-actions">
-                                        <a href="<?php echo esc_url( $subject_based_assessment );?>" class="btn btn-sm btn-primary">
+                                        <a href="<?php echo esc_url( $subject_based_assessment . '&subject_id=' . $subject_id);?>" class="btn btn-sm btn-primary">
                                             <?php esc_html_e( 'Subject Based', 'school-management' ); ?>
                                         </a>
-                                        <a href="<?php echo esc_url( $behavioral_assessment . '&action=save' ); ?>" class="btn btn-sm btn-outline-primary">
+                                        <a href="<?php echo esc_url( $behavioral_assessment . '&subject_id=' . $subject_id); ?>" class="btn btn-sm btn-outline-primary">
                                             <?php esc_html_e( 'Behavioral Based', 'school-management' ); ?>
                                         </a>
                                     </div>
@@ -164,10 +156,10 @@ $behavioral_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_BEHAVIOR
                             </div>
                         <?php
                         }?>
-                    </div>
-        
-                    <?php
-                }
+                        <?php
+                    }?>
+                </div>
+                <?php
             }
         } 
     ?>
