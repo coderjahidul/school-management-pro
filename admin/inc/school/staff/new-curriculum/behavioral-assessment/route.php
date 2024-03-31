@@ -86,9 +86,9 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                     $chapter_id = $chapter->ID;
                                     $chapter_label = $chapter->title; ?>
                                     <div class="card">
-                                        <div class="card-header" id="headingOne">
+                                        <div class="card-header" id="heading<?php echo $chapter_id; ?>">
                                             <h5 class="mb-0">
-                                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<?php echo $chapter_id; ?>" aria-expanded="true" aria-controls="collapse<?php echo $chapter_id; ?>">
                                                     <span><?php echo $chapter_label; ?></span>
                                                 </button>
                                             </h5>
@@ -102,7 +102,7 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                                 $lesson_id = $lesson->ID;
                                                 $lesson_code = $lesson->code;
                                                 $lesson_label = $lesson->title;?>
-                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                                <div id="collapse<?php echo $chapter_id; ?>" class="collapse" aria-labelledby="heading<?php echo $chapter_id; ?>" data-parent="#accordion">
                                                     <div class="card-body">
                                                         <span><?php echo $lesson_code . " - " . $lesson_label; ?></span>
                                                     </div>
@@ -112,7 +112,7 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                     </div><?php
                                 } 
                             }else {
-                                ?><h3 class="chapter-not-found"><?php echo esc_html__("Chapter Not Found", "school-management"); ?></h3><?php
+                                ?><h3 class="chapter-not-found"><?php echo esc_html__("(BI) Chapter Not Found", "school-management"); ?></h3><?php
                             }
                             
                         ?>
@@ -138,9 +138,9 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                     $chapter_id = $chapter->ID;
                                     $chapter_label = $chapter->title; ?>
                                     <div class="card">
-                                        <div class="card-header" id="headingOne">
+                                        <div class="card-header" id="heading<?php echo $chapter_id; ?>">
                                             <h5 class="mb-0">
-                                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<?php echo $chapter_id; ?>" aria-expanded="true" aria-controls="collapse<?php echo $chapter_id; ?>">
                                                     <span><?php echo $chapter_label; ?></span>
                                                 </button>
                                             </h5>
@@ -154,7 +154,7 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                                 $lesson_id = $lesson->ID;
                                                 $lesson_code = $lesson->code;
                                                 $lesson_label = $lesson->title;?>
-                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                                <div id="collapse<?php echo $chapter_id; ?>" class="collapse" aria-labelledby="heading<?php echo $chapter_id; ?>" data-parent="#accordion">
                                                     <div class="card-body">
                                                         <span><?php echo $lesson_code . " - " . $lesson_label; ?></span>
                                                     </div>
@@ -164,7 +164,7 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                     </div><?php
                                 } 
                             }else {
-                                ?><h3 class="chapter-not-found"><?php echo esc_html__("Chapter Not Found", "school-management"); ?></h3><?php
+                                ?><h3 class="chapter-not-found"><?php echo esc_html__("(BI) Chapter Not Found", "school-management"); ?></h3><?php
                             }
                             
                         ?>
