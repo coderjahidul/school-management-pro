@@ -33,6 +33,50 @@
     text-align: center;
     margin-top: 200px;
 }
+.collapse button span {
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
+/* popup */
+.modal .modal-title {
+    font-size: 16px;
+    font-weight: 500;
+}
+.modal .close span {
+    font-size: 34px;
+    font-weight: 400;
+}
+.modal .modal-content {
+    margin-top: 50px;
+}
+
+.result-assessment {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.student-list {
+    width: 30%;
+    padding: 10px;
+}
+.student-list img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.student-result {
+    display: flex;
+    width: 70%;
+}
+.student-result div {
+    width: 33.33%;
+    padding: 10px;
+}
+
+
 
 </style>
 <?php
@@ -108,10 +152,77 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                             foreach($get_subject_lessons as $lesson){
                                                 $lesson_id = $lesson->ID;
                                                 $lesson_code = $lesson->code;
-                                                $lesson_label = $lesson->title;?>
+                                                $class_id = $lesson->class_id;
+                                                $lesson_label = $lesson->title;
+                                                $square_des = $lesson->square_description;
+                                                $circle_des = $lesson->circle_description;
+                                                $triangle_des = $lesson->triangle_description;
+                                                
+                                                ?>
                                                 <div id="collapse<?php echo $chapter_id; ?>" class="collapse" aria-labelledby="heading<?php echo $chapter_id; ?>" data-parent="#accordion">
                                                     <div class="card-body">
-                                                        <span><?php echo $lesson_code . " - " . $lesson_label; ?></span>
+                                                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#extraLargeModal<?php echo $lesson_id;?>"><span><?php echo $lesson_code . " - " . $lesson_label; ?></span></button>
+                                                    </div>
+                                                    <div class="modal fade" id="extraLargeModal<?php echo $lesson_id;?>" tabindex="-1" role="dialog" aria-labelledby="extraLargeModalLabel<?php echo $lesson_id;?>" aria-hidden="true">
+                                                        <div class="modal-dialog modal-xl" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="extraLargeModalLabel<?php echo $lesson_id;?>"><?php echo $lesson_code . " - " . $lesson_label; ?></h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <!-- Modal content goes here -->
+                                                                    <?php 
+                                                                        $get_class_school_id = $wpdb->get_results($wpdb->prepare(
+                                                                            "SELECT ID FROM {$wpdb->prefix}wlsm_class_school WHERE class_id = %d",
+                                                                            $class_id
+                                                                        ));
+                                                                        $get_section_id = $wpdb->get_results($wpdb->prepare(
+                                                                            "SELECT ID FROM {$wpdb->prefix}wlsm_sections WHERE class_school_id = %d",
+                                                                            $get_class_school_id[0]->ID
+                                                                        ));
+                                                                        $get_student_records = $wpdb->get_results($wpdb->prepare(
+                                                                            "SELECT * FROM {$wpdb->prefix}wlsm_student_records WHERE section_id = %d ORDER BY roll_number ASC",
+                                                                            $get_section_id[0]->ID
+                                                                        ));
+                                                                        foreach($get_student_records as $student_record){
+                                                                            ?>
+                                                                            <div class="result-assessment">
+                                                                                <div class="student-list">
+                                                                                    <img src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/user.png');?>" alt="student image">
+                                                                                    <br>
+                                                                                    <span><?php echo $student_record->name; ?></span>
+                                                                                    <br>
+                                                                                    <span><?php echo esc_html__("Roll No: " . $student_record->roll_number); ?></span>
+                                                                                </div>
+                                                                                <div class="student-result">
+                                                                                    <div class="square-description">
+                                                                                        <p><?php echo $square_des; ?></p>
+                                                                                    </div>
+                                                                                    <div class="circle-description">
+                                                                                        <p><?php echo $circle_des; ?></p>
+                                                                                    </div>
+                                                                                    <div class="triangle-description">
+                                                                                        <p><?php echo $triangle_des; ?></p>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            
+                                                                            
+                                                                            <?php
+                                                                            // echo "Student Class: " .$student_class = $student_record->class_id;
+                                                                        }
+                                                                    ?>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                                                                    <!-- Additional buttons can be added here -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div><?php
                                             } 
@@ -160,13 +271,80 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                             foreach($get_subject_lessons as $lesson){
                                                 $lesson_id = $lesson->ID;
                                                 $lesson_code = $lesson->code;
-                                                $lesson_label = $lesson->title;?>
+                                                $class_id = $lesson->class_id;
+                                                $lesson_label = $lesson->title;
+                                                $square_des = $lesson->square_description;
+                                                $circle_des = $lesson->circle_description;
+                                                $triangle_des = $lesson->triangle_description;
+                                                
+                                                ?>
                                                 <div id="collapse<?php echo $chapter_id; ?>" class="collapse" aria-labelledby="heading<?php echo $chapter_id; ?>" data-parent="#accordion">
                                                     <div class="card-body">
-                                                        <span><?php echo $lesson_code . " - " . $lesson_label; ?></span>
+                                                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#extraLargeModal<?php echo $lesson_id;?>"><span><?php echo $lesson_code . " - " . $lesson_label; ?></span></button>
+                                                    </div>
+                                                    <div class="modal fade" id="extraLargeModal<?php echo $lesson_id;?>" tabindex="-1" role="dialog" aria-labelledby="extraLargeModalLabel<?php echo $lesson_id;?>" aria-hidden="true">
+                                                        <div class="modal-dialog modal-xl" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="extraLargeModalLabel<?php echo $lesson_id;?>"><?php echo $lesson_code . " - " . $lesson_label; ?></h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <!-- Modal content goes here -->
+                                                                    <?php 
+                                                                        $get_class_school_id = $wpdb->get_results($wpdb->prepare(
+                                                                            "SELECT ID FROM {$wpdb->prefix}wlsm_class_school WHERE class_id = %d",
+                                                                            $class_id
+                                                                        ));
+                                                                        $get_section_id = $wpdb->get_results($wpdb->prepare(
+                                                                            "SELECT ID FROM {$wpdb->prefix}wlsm_sections WHERE class_school_id = %d",
+                                                                            $get_class_school_id[0]->ID
+                                                                        ));
+                                                                        $get_student_records = $wpdb->get_results($wpdb->prepare(
+                                                                            "SELECT * FROM {$wpdb->prefix}wlsm_student_records WHERE section_id = %d ORDER BY roll_number ASC",
+                                                                            $get_section_id[0]->ID
+                                                                        ));
+                                                                        foreach($get_student_records as $student_record){
+                                                                            ?>
+                                                                            <div class="result-assessment">
+                                                                                <div class="student-list">
+                                                                                    <img src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/user.png');?>" alt="student image">
+                                                                                    <br>
+                                                                                    <span><?php echo $student_record->name; ?></span>
+                                                                                    <br>
+                                                                                    <span><?php echo esc_html__("Roll No: " . $student_record->roll_number); ?></span>
+                                                                                </div>
+                                                                                <div class="student-result">
+                                                                                    <div class="square-description">
+                                                                                        <p><?php echo $square_des; ?></p>
+                                                                                    </div>
+                                                                                    <div class="circle-description">
+                                                                                        <p><?php echo $circle_des; ?></p>
+                                                                                    </div>
+                                                                                    <div class="triangle-description">
+                                                                                        <p><?php echo $triangle_des; ?></p>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            
+                                                                            
+                                                                            <?php
+                                                                            // echo "Student Class: " .$student_class = $student_record->class_id;
+                                                                        }
+                                                                    ?>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                                                                    <!-- Additional buttons can be added here -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div><?php
-                                            } 
+                                            }  
                                         ?>
                                     </div><?php
                                 } 
@@ -212,13 +390,80 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                             foreach($get_subject_lessons as $lesson){
                                                 $lesson_id = $lesson->ID;
                                                 $lesson_code = $lesson->code;
-                                                $lesson_label = $lesson->title;?>
+                                                $class_id = $lesson->class_id;
+                                                $lesson_label = $lesson->title;
+                                                $square_des = $lesson->square_description;
+                                                $circle_des = $lesson->circle_description;
+                                                $triangle_des = $lesson->triangle_description;
+                                                
+                                                ?>
                                                 <div id="collapse<?php echo $chapter_id; ?>" class="collapse" aria-labelledby="heading<?php echo $chapter_id; ?>" data-parent="#accordion">
                                                     <div class="card-body">
-                                                        <span><?php echo $lesson_code . " - " . $lesson_label; ?></span>
+                                                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#extraLargeModal<?php echo $lesson_id;?>"><span><?php echo $lesson_code . " - " . $lesson_label; ?></span></button>
+                                                    </div>
+                                                    <div class="modal fade" id="extraLargeModal<?php echo $lesson_id;?>" tabindex="-1" role="dialog" aria-labelledby="extraLargeModalLabel<?php echo $lesson_id;?>" aria-hidden="true">
+                                                        <div class="modal-dialog modal-xl" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="extraLargeModalLabel<?php echo $lesson_id;?>"><?php echo $lesson_code . " - " . $lesson_label; ?></h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <!-- Modal content goes here -->
+                                                                    <?php 
+                                                                        $get_class_school_id = $wpdb->get_results($wpdb->prepare(
+                                                                            "SELECT ID FROM {$wpdb->prefix}wlsm_class_school WHERE class_id = %d",
+                                                                            $class_id
+                                                                        ));
+                                                                        $get_section_id = $wpdb->get_results($wpdb->prepare(
+                                                                            "SELECT ID FROM {$wpdb->prefix}wlsm_sections WHERE class_school_id = %d",
+                                                                            $get_class_school_id[0]->ID
+                                                                        ));
+                                                                        $get_student_records = $wpdb->get_results($wpdb->prepare(
+                                                                            "SELECT * FROM {$wpdb->prefix}wlsm_student_records WHERE section_id = %d ORDER BY roll_number ASC",
+                                                                            $get_section_id[0]->ID
+                                                                        ));
+                                                                        foreach($get_student_records as $student_record){
+                                                                            ?>
+                                                                            <div class="result-assessment">
+                                                                                <div class="student-list">
+                                                                                    <img src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/user.png');?>" alt="student image">
+                                                                                    <br>
+                                                                                    <span><?php echo $student_record->name; ?></span>
+                                                                                    <br>
+                                                                                    <span><?php echo esc_html__("Roll No: " . $student_record->roll_number); ?></span>
+                                                                                </div>
+                                                                                <div class="student-result">
+                                                                                    <div class="square-description">
+                                                                                        <p><?php echo $square_des; ?></p>
+                                                                                    </div>
+                                                                                    <div class="circle-description">
+                                                                                        <p><?php echo $circle_des; ?></p>
+                                                                                    </div>
+                                                                                    <div class="triangle-description">
+                                                                                        <p><?php echo $triangle_des; ?></p>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            
+                                                                            
+                                                                            <?php
+                                                                            // echo "Student Class: " .$student_class = $student_record->class_id;
+                                                                        }
+                                                                    ?>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                                                                    <!-- Additional buttons can be added here -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div><?php
-                                            } 
+                                            }  
                                         ?>
                                     </div><?php
                                 } 
@@ -235,6 +480,8 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                 </div>
                 <!-- End Annual Summative Assessment -->
             </div>
+            <!-- student list modal popup -->
+            
         </div>
     </div>
 </div>
