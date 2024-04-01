@@ -33,6 +33,49 @@
     text-align: center;
     margin-top: 200px;
 }
+.collapse button span {
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
+/* popup */
+.modal .modal-title {
+    font-size: 16px;
+    font-weight: 500;
+}
+.modal .close span {
+    font-size: 34px;
+    font-weight: 400;
+}
+.modal .modal-content {
+    margin-top: 50px;
+}
+
+.result-assessment {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.student-list {
+    width: 30%;
+    padding: 10px;
+}
+.student-list img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.student-result {
+    display: flex;
+    width: 70%;
+}
+.student-result div {
+    width: 33.33%;
+    padding: 10px;
+}
+
 
 </style>
 <?php
@@ -197,7 +240,7 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                         <?php 
                             global $wpdb;
                             $get_subject_chapters = $wpdb->get_results($wpdb->prepare(
-                                "SELECT * FROM {$wpdb->prefix}wlsm_chapter WHERE subject_id = %d AND assessment_types = 'annular_behavioral_assessment'",
+                                "SELECT * FROM {$wpdb->prefix}wlsm_chapter WHERE subject_id = %d AND assessment_types = 'annual_behavioral_assessment'",
                                 $subject_id,
                             ));
                             if(!empty($get_subject_chapters)){

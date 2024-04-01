@@ -367,7 +367,7 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                         <?php 
                             global $wpdb;
                             $get_subject_chapters = $wpdb->get_results($wpdb->prepare(
-                                "SELECT * FROM {$wpdb->prefix}wlsm_chapter WHERE subject_id = %d AND assessment_types = 'annular_summative_assessment'",
+                                "SELECT * FROM {$wpdb->prefix}wlsm_chapter WHERE subject_id = %d AND assessment_types = 'annual_summative_assessment'",
                                 $subject_id,
                             ));
                             if(!empty($get_subject_chapters)){
