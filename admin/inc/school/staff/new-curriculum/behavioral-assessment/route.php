@@ -56,7 +56,7 @@
     margin-bottom: 5px;
 }
 .student-list {
-    width: 30%;
+    width: 20%;
     padding: 10px;
 }
 .student-list img {
@@ -67,11 +67,19 @@
 }
 .student-result {
     display: flex;
-    width: 70%;
+    width: 80%;
 }
 .student-result div {
     width: 33.33%;
     padding: 10px;
+    display: flex;
+    border-left: 1px solid #ddd;
+}
+.student-result div span {
+    font-size: 20px;
+    font-weight: 600;
+    color: #000;
+    margin-right: 10px;
 }
 </style>
 <?php
@@ -191,13 +199,16 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                                                                 </div>
                                                                                 <div class="student-result">
                                                                                     <div class="square-description">
-                                                                                        <p><?php echo $square_des; ?></p>
+                                                                                        <span class="square-icon">&#9634;</span>
+                                                                                        <?php echo $square_des; ?>
                                                                                     </div>
                                                                                     <div class="circle-description">
-                                                                                        <p><?php echo $circle_des; ?></p>
+                                                                                        <span class="circle-icon">&#11096;</span>
+                                                                                        <?php echo $circle_des; ?>
                                                                                     </div>
                                                                                     <div class="triangle-description">
-                                                                                        <p><?php echo $triangle_des; ?></p>
+                                                                                        <span class="triangle-icon">&#128710;</span>
+                                                                                        <?php echo $triangle_des; ?>
                                                                                     </div>
                                                                                 </div>
 
@@ -310,13 +321,16 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                                                                 </div>
                                                                                 <div class="student-result">
                                                                                     <div class="square-description">
-                                                                                        <p><?php echo $square_des; ?></p>
+                                                                                        <span class="square-icon">&#9634;</span>
+                                                                                        <?php echo $square_des; ?>
                                                                                     </div>
                                                                                     <div class="circle-description">
-                                                                                        <p><?php echo $circle_des; ?></p>
+                                                                                        <span class="circle-icon">&#11096;</span>
+                                                                                        <?php echo $circle_des; ?>
                                                                                     </div>
                                                                                     <div class="triangle-description">
-                                                                                        <p><?php echo $triangle_des; ?></p>
+                                                                                        <span class="triangle-icon">&#128710;</span>
+                                                                                        <?php echo $triangle_des; ?>
                                                                                     </div>
                                                                                 </div>
 
