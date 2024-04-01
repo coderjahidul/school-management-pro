@@ -14,7 +14,7 @@
     margin-top: 10px;
     padding: 0px;
 }
-.tab-content .card .btn-link {
+.tab-content .card .card-header .btn-link {
     color: #000;
     font-size: 16px;
     font-weight: 600;
@@ -24,18 +24,16 @@
     color: #0078F9;
 }
 .tab-content .card .collapse {
-    border: 1px solid #ddd;
-    border-left: 0;
-    border-right: 0;
-    margin: 5px 0;
+    border-top: 1px solid #ddd;
 }
 .chapter-not-found {
     text-align: center;
     margin-top: 200px;
 }
-.collapse button span {
+.collapse .card-body .btn-link {
     font-size: 16px;
     font-weight: 500;
+    color: #000;
     text-decoration: none;
 }
 /* popup */
@@ -75,47 +73,49 @@
     width: 33.33%;
     padding: 10px;
 }
-
-
 </style>
 <?php
 defined( 'ABSPATH' ) || die();
 
 require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
 
+// Define page URLs if needed
 // $page_url_exams                  = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAMS );
 // $page_url_exam_admit_cards       = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAM_ADMIT_CARDS );
 // $page_url_exam_results           = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAM_RESULTS );
 // $page_url_results_assessment     = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_EXAM_ASSESSMENT );
+
 $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
 ?>
-<div class="wlsm container-fluid">
-	<?php
-	require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/partials/header.php';
-	?>
 
-	<div class="row">
-		<div class="col-md-12">
-			<div class="text-center wlsm-section-heading-block">
-				<span class="wlsm-section-heading">
-					<i class="fas fa-clock"></i>
-					<?php esc_html_e( 'Behavioral Assessment', 'school-management' ); ?>
-				</span>
-			</div>
-			<!-- Tab navigation -->
+<div class="wlsm container-fluid">
+    <?php
+    require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/partials/header.php';
+    ?>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center wlsm-section-heading-block">
+                <span class="wlsm-section-heading">
+                    <i class="fas fa-clock"></i>
+                    <?php esc_html_e( 'Behavioral Assessment', 'school-management' ); ?>
+                </span>
+            </div>
+
+            <!-- Tab navigation -->
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false"><?php echo esc_html__("Quarterly Behavioral Assessment", "school-management");?></a>
+                    <a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true"><?php echo esc_html__("Quarterly Behavioral Assessment", "school-management");?></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false"><?php echo esc_html__("Annual Behavioral Assessment", "school-management");?></a>
+                    <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false"><?php echo esc_html__("Annual Behavioral Assessment", "school-management");?></a>
                 </li>
             </ul>
 
             
             <div class="tab-content" id="myTabContent">
                 <!-- Start Quarterly Behavioral Assessment -->
-                <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
                     <!-- Accordion -->
                     <div id="accordion">
                         <?php 
@@ -217,7 +217,7 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                                                         </div>
                                                     </div>
                                                 </div><?php
-                                            }  
+                                            } 
                                         ?>
                                     </div><?php
                                 } 
@@ -234,7 +234,7 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                 </div>
                 <!-- End Quarterly Behavioral Assessment -->
                 <!-- Start Annual Behavioral Assessment -->
-                <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+                <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
                     <!-- Accordion -->
                     <div id="accordion">
                         <?php 
@@ -353,6 +353,14 @@ $subject_id = isset($_GET['subject_id']) ? $_GET['subject_id'] : null;
                 </div>
                 <!-- End Annual Behavioral Assessment -->
             </div>
-		</div>
-	</div>
+            <!-- student list modal popup -->
+            
+        </div>
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+

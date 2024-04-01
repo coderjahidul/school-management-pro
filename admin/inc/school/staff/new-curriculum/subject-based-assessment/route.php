@@ -14,7 +14,7 @@
     margin-top: 10px;
     padding: 0px;
 }
-.tab-content .card .btn-link {
+.tab-content .card .card-header .btn-link {
     color: #000;
     font-size: 16px;
     font-weight: 600;
@@ -24,18 +24,16 @@
     color: #0078F9;
 }
 .tab-content .card .collapse {
-    border: 1px solid #ddd;
-    border-left: 0;
-    border-right: 0;
-    margin: 5px 0;
+    border-top: 1px solid #ddd;
 }
 .chapter-not-found {
     text-align: center;
     margin-top: 200px;
 }
-.collapse button span {
+.collapse .card-body .btn-link {
     font-size: 16px;
     font-weight: 500;
+    color: #000;
     text-decoration: none;
 }
 /* popup */
@@ -75,9 +73,6 @@
     width: 33.33%;
     padding: 10px;
 }
-
-
-
 </style>
 <?php
 defined( 'ABSPATH' ) || die();
