@@ -64,3 +64,193 @@ if( file_exists(__DIR__ . '/metabox.php') ){
 
 
 
+// new curriculum marks template 
+function chapters_function_template($get_subject_chapters, $wpdb){
+	// Submit student new curriculum results marks
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_ids'], $_POST['lesson_id'])) {
+        global $wpdb;
+    
+        // Sanitize and validate lesson_id
+        $lesson_id = intval($_POST['lesson_id']);
+    
+        // Retrieve the submitted data
+        $student_ids = $_POST['student_ids'];
+    
+        // Check if records already exist for the given lesson_id
+        $existing_records = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT student_id FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE lecture_id = %d",
+                $lesson_id
+            ),
+            ARRAY_A
+        );
+    
+        // Iterate through each student ID and insert or update the data into the database
+        foreach ($student_ids as $student_id) {
+            // Sanitize the student ID
+            $student_id = intval($student_id);
+    
+            // Get the selected mark for the student
+            $selected_mark_key = 'mark_' . $student_id;
+            if (isset($_POST[$selected_mark_key])) {
+                $selected_mark = sanitize_text_field($_POST[$selected_mark_key]);
+    
+                // Check if record exists for the current student_id and lesson_id combination
+                $existing_record_index = array_search($student_id, array_column($existing_records, 'student_id'));
+    
+                if ($existing_record_index !== false) {
+                    // Update existing record
+                    $wpdb->update(
+                        $wpdb->prefix . 'wlsm_new_curriculum_results',
+                        array(
+                            'new_curriculum_marks' => $selected_mark
+                        ),
+                        array(
+                            'student_id' => $student_id,
+                            'lecture_id' => $lesson_id
+                        ),
+                        array(
+                            '%s' // new_curriculum_marks format
+                        ),
+                        array(
+                            '%d', // student_id format
+                            '%d'  // lecture_id format
+                        )
+                    );
+                } else {
+                    // Insert new record
+                    $wpdb->insert(
+                        $wpdb->prefix . 'wlsm_new_curriculum_results',
+                        array(
+                            'student_id' => $student_id,
+                            'lecture_id' => $lesson_id,
+                            'new_curriculum_marks' => $selected_mark
+                        ),
+                        array(
+                            '%d', // student_id format
+                            '%d', // lecture_id format
+                            '%s'  // new_curriculum_marks format
+                        )
+                    );
+                }
+            }
+        }
+    }
+
+	foreach($get_subject_chapters as $chapter){
+		$chapter_id = $chapter->ID;
+		$chapter_label = $chapter->title; ?>
+		<div class="card">
+			<div class="card-header" id="heading<?php echo $chapter_id; ?>">
+				<h5 class="mb-0">
+					<button class="btn btn-link" data-toggle="collapse" data-target="#collapse<?php echo $chapter_id; ?>" aria-expanded="true" aria-controls="collapse<?php echo $chapter_id; ?>">
+						<span><?php echo $chapter_label; ?></span>
+					</button>
+				</h5>
+			</div>
+			<?php 
+				$get_subject_lessons = $wpdb->get_results($wpdb->prepare(
+					"SELECT * FROM {$wpdb->prefix}wlsm_lecture WHERE chapter_id = %d",
+					$chapter_id
+				));
+				foreach($get_subject_lessons as $lesson){
+					$lesson_id = $lesson->ID;
+					$lesson_code = $lesson->code;
+					$class_id = $lesson->class_id;
+					$lesson_label = $lesson->title;
+					$square_des = $lesson->square_description;
+					$circle_des = $lesson->circle_description;
+					$triangle_des = $lesson->triangle_description;
+					
+					?>
+					<div id="collapse<?php echo $chapter_id; ?>" class="collapse" aria-labelledby="heading<?php echo $chapter_id; ?>" data-parent="#accordion">
+						<div class="card-body">
+							<button type="button" class="btn btn-link" data-toggle="modal" data-target="#extraLargeModal<?php echo $lesson_id;?>"><span><?php echo $lesson_code . " - " . $lesson_label; ?></span></button>
+						</div>
+						<div class="modal fade" id="extraLargeModal<?php echo $lesson_id;?>" tabindex="-1" role="dialog" aria-labelledby="extraLargeModalLabel<?php echo $lesson_id;?>" aria-hidden="true">
+							<div class="modal-dialog modal-xl" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="extraLargeModalLabel<?php echo $lesson_id;?>"><?php echo $lesson_code . " - " . $lesson_label; ?></h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<!-- Modal content goes here -->
+										<?php 
+											$get_class_school_id = $wpdb->get_results($wpdb->prepare(
+												"SELECT ID FROM {$wpdb->prefix}wlsm_class_school WHERE class_id = %d",
+												$class_id
+											));
+											$get_section_id = $wpdb->get_results($wpdb->prepare(
+												"SELECT ID FROM {$wpdb->prefix}wlsm_sections WHERE class_school_id = %d",
+												$get_class_school_id[0]->ID
+											));
+											$get_student_records = $wpdb->get_results($wpdb->prepare(
+												"SELECT * FROM {$wpdb->prefix}wlsm_student_records WHERE section_id = %d ORDER BY roll_number ASC",
+												$get_section_id[0]->ID
+											));?>
+											<form action="" method="post"><?php
+												foreach($get_student_records as $student_record):
+													$student_id = $student_record->ID;
+													$get_new_curriculum_results = $wpdb->get_results($wpdb->prepare(
+														"SELECT new_curriculum_marks FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_id = %d AND lecture_id = %d", 
+														$student_record->ID,
+														$lesson_id
+													));
+													$result = isset($get_new_curriculum_results[0]->new_curriculum_marks) ? $get_new_curriculum_results[0]->new_curriculum_marks : '';
+													?>
+													<div class="result-assessment">
+														<div class="student-list">
+															<img src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/user.png');?>" alt="student image">
+															<br>
+															<span><?php echo $student_record->name; ?></span>
+															<br>
+															<span><?php echo esc_html__("Roll No: " . $student_record->roll_number); ?></span>
+														</div>
+														<input type="hidden" name="student_ids[]" value="<?php echo $student_record->ID; ?>">
+														<input type="hidden" name="lesson_id" value="<?php echo $lesson_id; ?>">   
+														<div class="student-result" x-data="{ selected: '<?php echo $result;?>' }">
+															<label class="square-description">
+																<input @click="selected = 'square'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="square">
+																<span class="square-icon" x-bind:class="{ 'selected': selected === 'square' }">&#9634;</span>
+																<?php echo $square_des; ?>
+															</label>
+															<label class="circle-description">
+																<input @click="selected = 'circle'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="circle">
+																<span class="circle-icon" x-bind:class="{ 'selected': selected === 'circle' }">&#11096;</span>
+																<?php echo $circle_des; ?>
+															</label>
+															<label class="triangle-description">
+																<input @click="selected = 'triangle'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="triangle">
+																<span class="triangle-icon" x-bind:class="{ 'selected': selected === 'triangle' }">&#128710;</span>
+																<?php echo $triangle_des; ?>
+															</label>
+														</div>
+													</div>                                                                               
+													<?php
+													// echo "Student Class: " .$student_class = $student_record->class_id;
+												endforeach;
+											?>
+											<div class="modal-footer">
+												<button class="btn btn-primary text-end" type="submit">Submit</button>
+											</div>
+											
+										</form>
+										<?php
+										?>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div><?php
+				} 
+			?>
+		</div><?php
+	} 
+}
+
+
+
