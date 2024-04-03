@@ -79,7 +79,7 @@ function chapters_function_template($get_subject_chapters, $wpdb){
         // Check if records already exist for the given lesson_id
         $existing_records = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT student_id FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE lecture_id = %d",
+                "SELECT student_record_id FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE lecture_id = %d",
                 $lesson_id
             ),
             ARRAY_A
@@ -96,7 +96,7 @@ function chapters_function_template($get_subject_chapters, $wpdb){
                 $selected_mark = sanitize_text_field($_POST[$selected_mark_key]);
     
                 // Check if record exists for the current student_id and lesson_id combination
-                $existing_record_index = array_search($student_id, array_column($existing_records, 'student_id'));
+                $existing_record_index = array_search($student_id, array_column($existing_records, 'student_record_id'));
     
                 if ($existing_record_index !== false) {
                     // Update existing record
@@ -106,7 +106,7 @@ function chapters_function_template($get_subject_chapters, $wpdb){
                             'new_curriculum_marks' => $selected_mark
                         ),
                         array(
-                            'student_id' => $student_id,
+                            'student_record_id' => $student_id,
                             'lecture_id' => $lesson_id
                         ),
                         array(
@@ -122,7 +122,7 @@ function chapters_function_template($get_subject_chapters, $wpdb){
                     $wpdb->insert(
                         $wpdb->prefix . 'wlsm_new_curriculum_results',
                         array(
-                            'student_id' => $student_id,
+                            'student_record_id' => $student_id,
                             'lecture_id' => $lesson_id,
                             'new_curriculum_marks' => $selected_mark
                         ),
@@ -195,7 +195,7 @@ function chapters_function_template($get_subject_chapters, $wpdb){
 												foreach($get_student_records as $student_record):
 													$student_id = $student_record->ID;
 													$get_new_curriculum_results = $wpdb->get_results($wpdb->prepare(
-														"SELECT new_curriculum_marks FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_id = %d AND lecture_id = %d", 
+														"SELECT new_curriculum_marks FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", 
 														$student_record->ID,
 														$lesson_id
 													));

@@ -844,6 +844,8 @@ class WLSM_Database
 				) ENGINE=InnoDB " . $charset_collate;
 		dbDelta($sql);
 
+		
+
 		/* Create exam_results table */
 		$sql = "CREATE TABLE IF NOT EXISTS " . WLSM_EXAM_RESULTS . " (
 				ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -1513,6 +1515,45 @@ class WLSM_Database
 		if(!$triangle_description){
 			$wpdb->query("ALTER TABLE " . WLSM_LECTURE . " ADD COLUMN triangle_description text DEFAULT NULL AFTER circle_description");
 		}
+
+		// Define the table name with prefix
+		$table_name = $wpdb->prefix . 'wlsm_new_curriculum_results';
+
+		// SQL query to create the table
+		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+			ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			new_curriculum_marks varchar(40) DEFAULT NULL,
+			lecture_id varchar(40) DEFAULT NULL,
+			student_record_id varchar(40) DEFAULT NULL,
+			created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at timestamp NULL DEFAULT NULL,
+			PRIMARY KEY (ID)
+		) ENGINE=InnoDB $charset_collate;";
+
+		// Execute the query using dbDelta
+		dbDelta($sql);
+
+		// Check if the table already exists
+		$table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'");
+
+		// If table does not exist, create it
+		if (!$table_exists) {
+			// Prepare SQL query with prefix
+			$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+				ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+				new_curriculum_marks varchar(40) DEFAULT NULL,
+				lecture_id varchar(40) DEFAULT NULL,
+				student_record_id varchar(40) DEFAULT NULL,
+				created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+				updated_at timestamp NULL DEFAULT NULL,
+				PRIMARY KEY (ID),
+			) ENGINE=InnoDB $charset_collate;";
+			
+			// Execute the query to create the table
+			dbDelta($sql);
+		}
+
+
 		/** Ratting */
 
 		$sql = "CREATE TABLE IF NOT EXISTS " . WLSM_RATTING . " (
