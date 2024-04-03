@@ -174,4 +174,5 @@ define('WLSM_MENU_STAFF_NEW_CURRICULUM', 'sm-staff-new-curriculum');
 define('WLSM_MENU_STAFF_STUDENT_ASSESSMENT', 'sm-staff-student-assessment');
 define( 'WLSM_MENU_STAFF_SUBJECT_BASED_ASSESSMENT', 'sm-staff-subject-based-assessment' );
 define('WLSM_MENU_STAFF_BEHAVIORAL_ASSESSMENT', 'sm-staff-behavioural-assessment');
+define('WLSM_MENU_STAFF_STUDENT_TRANSCRIPT', 'sm-staff-student-transcript');
 

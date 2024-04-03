@@ -465,6 +465,12 @@ class WLSM_Menu {
 									// Behavioral Assessment
 									$behavioral_assessment = add_submenu_page(WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__('Behavioral Assessment', 'school-management'),esc_html__('3. Behavioral Assessment', 'school-management'), 'read', WLSM_MENU_STAFF_BEHAVIORAL_ASSESSMENT, array( 'WLSM_Menu', 'school_staff_behavioral_assessment'));
 									add_action('admin_print_styles-' . $behavioral_assessment, array('WLSM_Menu', 'menu_page_assets'));
+
+									// Student Transcript
+									$student_transcript = add_submenu_page( WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__( 'Student Transcript', 'school-management'), esc_html__( '4. Student Transcript', 'school-management' ), 'read', WLSM_MENU_STAFF_STUDENT_TRANSCRIPT, array( 'WLSM_Menu', 'school_staff_student_transcript'));
+									add_action('admin_print_styles-' . $student_transcript, array('WLSM_Menu', 'menu_page_assets'));
+
+
 									
 								}
 							}
@@ -850,6 +856,9 @@ class WLSM_Menu {
 	}
 	public static function school_staff_behavioral_assessment(){
 		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/new-curriculum/behavioral-assessment/route.php';
+	}
+	public static function school_staff_student_transcript(){
+		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/new-curriculum/student-transcript/route.php';
 	}
 	public static function menu_page_assets() {
 		 wp_enqueue_style( 'bootstrap', WLSM_PLUGIN_URL . 'assets/css/bootstrap.min.css' );
