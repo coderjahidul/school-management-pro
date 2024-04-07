@@ -1,10 +1,31 @@
 <style>
-    .student-list{
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 10px;
-        box-shadow: 0px 0px 5px 0px #ddd;
+    .wlsm-student-list .card {
+        max-width: 100%;
+        margin-top: 10px;
+        padding: 0px;
+    }
+    .wlsm-student-list .card .card-header .btn-link {
+        color: #000;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: left;
+    }
+    .wlsm-student-list .card .btn-link:hover {
+        text-decoration: none;
+        color: #0078F9;
+    }
+    .wlsm-student-list .card .collapse {
+        border-top: 1px solid #ddd;
+    }
+    .chapter-not-found {
+        text-align: center;
+        margin-top: 200px;
+    }
+    .collapse .card-body .btn-link {
+        font-size: 16px;
+        font-weight: 500;
+        color: #000;
+        text-decoration: none;
     }
 </style>
 <?php
@@ -14,21 +35,6 @@ $school_id = $current_school['id'];
 $assessment_types = '';
 
 $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
-// global $wpdb;
-// $class_schools_id = $wpdb->get_results( $wpdb->prepare("SELECT ID FROM {$wpdb->prefix}wlsm_class_school WHERE school_id = %d", $school_id) );
-// echo "Class Schools ID: " . $class_schools_id[0]->ID;
-// $class_schools_id = 2;
-
-// Check if $class_schools_id is not empty before accessing its first element
-// if (!empty($class_schools_id)) {
-//     $subjects = $wpdb->get_results( $wpdb->prepare("SELECT ID, label FROM {$wpdb->prefix}wlsm_subjects WHERE class_school_id = %d AND type != 'mcq'", $class_schools_id) );
-
-//     // Proceed with further processing
-// } else {
-//     // Handle case when $class_schools_id is empty
-//     echo 'No class schools found for the specified school ID.';
-// }
-
 $assessment_type_list = WLSM_Helper::assessment_type_list();
 
 require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
@@ -150,11 +156,35 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                     foreach ($get_student_records as $student_record) {
                                         $student_name = $student_record->name;
                                         $student_roll = $student_record->roll_number;
+                                        $student_record_id = $student_record->ID;
                                         ?>
-                                        <div class="student-list">
-                                            <span class="student-name"><?php  echo esc_html__("Student Name: " . $student_name); ?></span>
-                                            <br>
-                                            <span class="student-roll"><?php echo esc_html__("Student Roll: " . $student_roll); ?></span>
+                                        <div id="accordion">
+                                            <!-- Accordion Item 1 -->
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5 class="mb-0">
+                                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<?php echo $student_record_id?>">
+                                                    <span class="student-name"><?php  echo esc_html__("Student Name: " . $student_name); ?></span>
+                                                    <br>
+                                                    <span class="student-roll"><?php echo esc_html__("Student Roll: " . $student_roll); ?></span>
+                                                    </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapse<?php echo $student_record_id?>" class="collapse" data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        <?php
+                                                            foreach($assessment_type_list as $assessment_type) {
+                                                                ?>
+                                                                <button class="btn btn-link">
+                                                                    <?php echo $assessment_type; ?>
+                                                                </button>
+                                                                <br>
+                                                                <?php
+                                                            }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <?php
                                     }
@@ -169,9 +199,6 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
             </div>
         </div>
     </div>
-    <div id="class-id"></div>
-    <div id="class-group"></div>
-    <div id="section-id"></div>
 
     <?php
     
@@ -184,9 +211,9 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
             e.preventDefault();
 
             // Get selected values
-            var classId = $('#wlsm_class').val();
-            var classGroup = $('#wlsm_class_group').val();
-            var sectionId = $('#wlsm_section').val();
+            let classId = $('#wlsm_class').val();
+            let classGroup = $('#wlsm_class_group').val();
+            let sectionId = $('#wlsm_section').val();
 
             // Print selected values (you can modify this part as needed)
             // console.log('Class ID: ' + classId);
