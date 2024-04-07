@@ -21,11 +21,23 @@
         text-align: center;
         margin-top: 200px;
     }
+    .card-header {
+        padding: 0px;
+    }
+    .collapse .card-body {
+        padding: 0px;
+    }
     .collapse .card-body .btn-link {
         font-size: 16px;
         font-weight: 500;
         color: #000;
         text-decoration: none;
+        margin-top: 10px;
+        max-width: 100%;
+        width: 100%;
+        text-align: left;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
     }
 </style>
 <?php
@@ -175,10 +187,32 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                         <?php
                                                             foreach($assessment_type_list as $assessment_type) {
                                                                 ?>
-                                                                <button class="btn btn-link">
-                                                                    <?php echo $assessment_type; ?>
+                                                                <!-- Button trigger modal -->
+                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#exampleModal">
+                                                                    <?php echo esc_html($assessment_type); ?>
                                                                 </button>
                                                                 <br>
+
+                                                                <!-- Modal -->
+                                                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog modal-xl" role="document">
+                                                                    <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        ...
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                                </div>
                                                                 <?php
                                                             }
                                                         ?>
