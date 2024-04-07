@@ -14,18 +14,20 @@ $school_id = $current_school['id'];
 $assessment_types = '';
 
 $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
-global $wpdb;
-$class_schools_id = $wpdb->get_results( $wpdb->prepare("SELECT ID FROM {$wpdb->prefix}wlsm_class_school WHERE school_id = %d", $school_id) );
+// global $wpdb;
+// $class_schools_id = $wpdb->get_results( $wpdb->prepare("SELECT ID FROM {$wpdb->prefix}wlsm_class_school WHERE school_id = %d", $school_id) );
+// echo "Class Schools ID: " . $class_schools_id[0]->ID;
+// $class_schools_id = 2;
 
 // Check if $class_schools_id is not empty before accessing its first element
-if (!empty($class_schools_id)) {
-    $subjects = $wpdb->get_results( $wpdb->prepare("SELECT ID, label FROM {$wpdb->prefix}wlsm_subjects WHERE class_school_id = %d AND type != 'mcq'", $class_schools_id[0]->ID) );
+// if (!empty($class_schools_id)) {
+//     $subjects = $wpdb->get_results( $wpdb->prepare("SELECT ID, label FROM {$wpdb->prefix}wlsm_subjects WHERE class_school_id = %d AND type != 'mcq'", $class_schools_id) );
 
-    // Proceed with further processing
-} else {
-    // Handle case when $class_schools_id is empty
-    echo 'No class schools found for the specified school ID.';
-}
+//     // Proceed with further processing
+// } else {
+//     // Handle case when $class_schools_id is empty
+//     echo 'No class schools found for the specified school ID.';
+// }
 
 $assessment_type_list = WLSM_Helper::assessment_type_list();
 
@@ -60,11 +62,11 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="wlsm_class" class="wlsm-font-bold">
-                                            <?php esc_html_e( 'Class', 'school-management' ); ?>:
+                                            <span class="wlsm-important">*</span> <?php esc_html_e( 'Class', 'school-management' ); ?>:
                                         </label>
-                                        <select name="class_id" class="form-control selectpicker" data-nonce="<?php echo esc_attr( wp_create_nonce( 'get-class-sections' ) ); ?>" id="wlsm_class" data-live-search="true">
+                                        <select name="class_id" class="form-control selectpicker wlsm_class_subjects" data-nonce="<?php echo esc_attr( wp_create_nonce( 'get-class-sections' ) ); ?>" data-nonce-subjects="<?php echo esc_attr( wp_create_nonce( 'get-class-subjects' ) ); ?>" id="wlsm_class" data-live-search="true">
                                             <option value=""><?php esc_html_e( 'Select Class', 'school-management' ); ?></option>
                                             <?php foreach ( $classes as $class ) { ?>
                                                 <option value="<?php echo esc_attr( $class->ID ); ?>">
@@ -73,7 +75,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                             <?php } ?>
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label for="wlsm_class_group" class="wlsm-font-bold">
                                             <?php esc_html_e( 'Class Group', 'school-management' ); ?>:
                                         </label>
@@ -86,19 +88,26 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                             <option value="vocational">Vocational</option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-4">
+
+                                    <div class="form-group col-md-3">
                                         <label for="wlsm_section" class="wlsm-font-bold">
-                                            <?php esc_html_e( 'Section', 'school-management' ); ?>:
+                                            <span class="wlsm-important">*</span> <?php esc_html_e( 'Section', 'school-management' ); ?>:
                                         </label>
-                                        <select name="section_id" class="form-control selectpicker wlsm_section_excel_bulk" id="wlsm_section" data-live-search="true" title="<?php esc_attr_e( 'All Sections', 'school-management' ); ?>" data-all-sections="1">
+                                        <select name="section_id" class="form-control selectpicker" id="wlsm_section" data-live-search="true" title="<?php esc_attr_e( 'Select Section', 'school-management' ); ?>" data-actions-box="true">
+                                            <?php foreach ( $sections as $section ) { ?>
+                                                <option value="<?php echo esc_attr( $section->ID ); ?>" <?php selected( in_array( $section->ID, $homework_sections ), true, true ); ?>>
+                                                    <?php echo esc_html( WLSM_M_Staff_Class::get_section_label_text( $section->label ) ); ?>
+                                                </option>
+                                            <?php } ?>
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-4">
+
+                                    <div class="form-group col-md-3">
                                         <label for="wlsm_subject" class="wlsm-font-bold">
-                                            <?php esc_html_e( 'Subject', 'school-management' ); ?>:
+                                            <span class="wlsm-important">*</span> <?php esc_html_e( 'Subject', 'school-management' ); ?>:
                                         </label>
-                                        <select name="subject_id" class="form-control selectpicker" id="wlsm_subject" data-live-search="true">
-                                            <option value=""><?php esc_html_e( 'Select Subject', 'school-management' ); ?></option>
+
+                                        <select name="subject_id" class="form-control selectpicker wlsm_class_chapter" data-nonce="<?php echo esc_attr( wp_create_nonce( 'get-class-chapter' ) ); ?>" data-nonce-chapter="<?php echo esc_attr( wp_create_nonce( 'get-class-chapter' ) ); ?>" id="wlsm_subject" data-live-search="true" title="<?php esc_attr_e( 'Select subject', 'school-management' ); ?>" data-actions-box="true">
                                             <?php foreach ( $subjects as $subject ) { ?>
                                                 <option value="<?php echo esc_attr( $subject->ID ); ?>">
                                                     <?php echo esc_html( WLSM_M_Class::get_label_text( $subject->label ) ); ?>
@@ -126,12 +135,13 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                 // Fetch selected values from the form
                                 $class_group = sanitize_text_field($_POST['class_group']);
                                 $section_id = absint($_POST['section_id']);
+                                
 
                                 // Perform SQL query to fetch student records based on selected parameters
                                 global $wpdb;
                                 $table_name = $wpdb->prefix . 'wlsm_student_records';
                                 $get_student_records = $wpdb->get_results($wpdb->prepare(
-                                    "SELECT * FROM $table_name WHERE note = %s AND section_id = %d", $class_group, $section_id
+                                    "SELECT * FROM $table_name WHERE note = %s AND section_id = %d order by roll_number", $class_group, $section_id
                                 ));
 
                                 // Display student names and IDs
