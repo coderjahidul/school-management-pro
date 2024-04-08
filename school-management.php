@@ -252,5 +252,126 @@ function chapters_function_template($get_subject_chapters, $wpdb){
 	} 
 }
 
+// new curriculum subject woys result print function
+function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label) {?>
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student During Learning Transcript', 'school-management');?></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="student-info">
+					<div class="student-info-one">
+						<span><?php echo esc_html__('School Name: ' . $school_name); ?></span>
+						<br>
+						<span><?php echo esc_html__('Student Name: ' . $student_name); ?></span>
+						<br>
+						<span><?php echo esc_html__('Student Roll: ' . $student_roll); ?></span>
+						
+					</div>
+					<div class="student-info-two">
+						<span><?php echo esc_html__('Class: ' . $class_label); ?></span>
+						<br>
+						<span><?php echo esc_html__('Group: ' . $class_group); ?></span>
+						<br>
+						<span><?php echo esc_html__('Section: ' . $section_label); ?></span>
+						<br>
+						<span><?php echo esc_html__('Subject: ' . $subject_label); ?></span>
+					</div>
+				</div>
+				<div class="result-assessment-title">
+					<div class="transcript-lesson">
+						<?php echo esc_html__('Proficiency index', 'school-management');?>
+					</div>  
+					<div class="transcript-result">
+						<?php echo esc_html__('Level of proficiency', 'school-management');?>
+					</div>
+				</div>
+				<?php 
+					
+					$chapter_ids = $wpdb->get_results($wpdb->prepare(
+						"SELECT ID FROM {$wpdb->prefix}wlsm_chapter WHERE class_id = %d AND subject_id = %d AND assessment_types = %s", $class_id, $subject_id, $assessment_types
+					));
+					foreach($chapter_ids as $chapter_id) {
+						$chapter_id = $chapter_id->ID;
+						$get_subject_lesson = $wpdb->get_results($wpdb->prepare(
+							"SELECT * FROM {$wpdb->prefix}wlsm_lecture WHERE chapter_id = %d", $chapter_id
+						));
+						
+						foreach ($get_subject_lesson as $subject_lesson) {
+							$lesson_id = $subject_lesson->ID;
+							$lesson_code = $subject_lesson->code;
+							$lesson_title = $subject_lesson->title;
+							$square_des = $subject_lesson->square_description;
+							$circle_des = $subject_lesson->circle_description;
+							$triangle_des = $subject_lesson->triangle_description;
+							?>
+
+								<div class="result-assessment">
+									<div class="transcript-lesson">
+										<span><?php echo $lesson_code . ' - ' . $lesson_title; ?></span>
+									</div> 
+									<?php 
+										$new_curriculum_results = $wpdb->get_results($wpdb->prepare(
+											"SELECT * FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", $student_record_id, $lesson_id
+										));
+										foreach($new_curriculum_results as $new_curriculum_result) {
+											$marks = $new_curriculum_result->new_curriculum_marks;
+											?>
+												<div class="transcript-result">
+													<div class="square-description">
+														<?php if($marks == "square"){?>
+														<span class="square-icon active">&#9634;</span>
+														<?php } else {
+															?>
+																<span class="square-icon">&#9634;</span>
+															<?php
+														}
+														echo $square_des; ?>
+													</div>
+													<div class="circle-description">
+													<?php if($marks == "circle"){?>
+														<span class="circle-icon active">&#11096;</span>
+														<?php } else {
+															?>
+																<span class="circle-icon">&#11096;</span>
+															<?php
+														}
+														echo $circle_des; ?>
+													</div>
+													<div class="triangle-description">
+													<?php if($marks == "triangle"){?>
+														<span class="triangle-icon active">&#128710;</span>
+														<?php } else {
+															?>
+																<span class="triangle-icon">&#128710;</span>
+															<?php
+														}
+														echo $triangle_des; ?>
+													</div>
+												</div>
+											<?php
+										}
+									?> 
+									
+								</div>
+
+							<?php
+						}
+					}
+					
+				?>
+						
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary"><?php echo esc_html__('Print Transcript', 'school-management');?></button>
+			</div>
+		</div>
+	</div><?php
+}
 
 
