@@ -231,8 +231,8 @@ class WLSM_Helper {
 			'assessment_during_learning' => esc_html__('Assessment During Learning', 'school-management'),
 			'quarterly_summative_assessment' => esc_html__('Quarterly Summative Assessment', 'school-management'),
 			'annual_summative_assessment' => esc_html__('Annual Summative Assessment', 'school-management'),
-			'quarterly_behavioral_assessment' => esc_html__('Quarterly Behavioral Assessment'),
-			'annual_behavioral_assessment' => esc_html__('Annual Behavioral Assessment'),
+			'quarterly_behavioral_assessment' => esc_html__('Quarterly Behavioral Assessment', 'school-management'),
+			'annual_behavioral_assessment' => esc_html__('Annual Behavioral Assessment', 'school-management'),
 		);
 	}
 

@@ -39,11 +39,49 @@
         padding: 15px;
         border-bottom: 1px solid #ddd;
     }
+    .student-info {
+        display: flex;
+        border: 1px solid #ddd;
+    }
+    .student-info span{
+        font-weight: 500;
+    }
+    .student-info-one,
+    .student-info-two {
+        width:50%;
+        padding: 10px;
+    }
+    .student-info-one {
+        border-right: 1px solid #ddd;
+    }
+
+    .result-assessment {
+        display: flex;
+        border: 1px solid #ddd;
+    }
+    .result-assessment .transcript-lesson {
+        width: 30%;
+        padding: 10px;
+    }
+    .result-assessment .transcript-result {
+        width: 70%;
+        display: flex;
+    }
+    .transcript-result div {
+        width: 33.33%;
+        padding: 10px;
+        border-left: 1px solid #ddd;
+        margin: 0px;
+    }
+    .transcript-result div p {
+        font-size: 16px;
+    }
 </style>
 <?php
 defined( 'ABSPATH' ) || die();
-
+global $wpdb;
 $school_id = $current_school['id'];
+$school_name = $current_school['name'];
 $assessment_types = '';
 
 $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
@@ -151,16 +189,22 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                             // Display student names and IDs based on selected parameters
                             if ( isset($_POST['class_group']) && isset($_POST['section_id'])) {
                                 // Fetch selected values from the form
+                                $class_id = absint($_POST['class_id']);
                                 $class_group = sanitize_text_field($_POST['class_group']);
                                 $section_id = absint($_POST['section_id']);
-                                
+                                $subject_id = absint($_POST['subject_id']);
+
+                                $section_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_sections WHERE ID = %d", $section_id));
+                                $section_label = isset($section_label[0]->label) ? $section_label[0]->label : '';
 
                                 // Perform SQL query to fetch student records based on selected parameters
-                                global $wpdb;
                                 $table_name = $wpdb->prefix . 'wlsm_student_records';
                                 $get_student_records = $wpdb->get_results($wpdb->prepare(
                                     "SELECT * FROM $table_name WHERE note = %s AND section_id = %d order by roll_number", $class_group, $section_id
                                 ));
+                                $subject_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d", $subject_id));
+                                $subject_label = isset($subject_label[0]->label) ? $subject_label[0]->label : '';
+
 
                                 // Display student names and IDs
                                 if ($get_student_records) {
@@ -185,36 +229,183 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                 <div id="collapse<?php echo $student_record_id?>" class="collapse" data-parent="#accordion">
                                                     <div class="card-body">
                                                         <?php
-                                                            foreach($assessment_type_list as $assessment_type) {
                                                                 ?>
                                                                 <!-- Button trigger modal -->
-                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#exampleModal">
-                                                                    <?php echo esc_html($assessment_type); ?>
+                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#assessment_during_learning<?php echo $student_record_id;?>">
+                                                                    <?php echo esc_html__('Assessment During Learning', 'school-management'); ?>
+                                                                </button>
+                                                                <br>
+                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#quarterly_summative_assessment<?php echo $student_record_id;?>">
+                                                                    <?php echo esc_html__('Quarterly Summative Assessment', 'school-management'); ?>
+                                                                </button>
+                                                                <br>
+                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#annual_summative_assessment<?php echo $student_record_id;?>">
+                                                                    <?php echo esc_html__('Annual Summative Assessment', 'school-management'); ?>
+                                                                </button>
+                                                                <br>
+                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#quarterly_behavioral_assessment<?php echo $student_record_id;?>">
+                                                                    <?php echo esc_html__('Quarterly Behavioral Assessment', 'school-management'); ?>
+                                                                </button>
+                                                                <br>
+                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#annual_behavioral_assessment<?php echo $student_record_id;?>">
+                                                                    <?php echo esc_html__('Annual Behavioral Assessment', 'school-management'); ?>
                                                                 </button>
                                                                 <br>
 
-                                                                <!-- Modal -->
-                                                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                <div class="modal-dialog modal-xl" role="document">
-                                                                    <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        ...
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                                                    </div>
+
+                                                                <!-- Assessment During Learning Modal -->
+                                                                <div class="modal fade" id="assessment_during_learning<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-xl" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student During Learning Transcript', 'school-management');?></h5>
+                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <div class="student-info">
+                                                                                    <div class="student-info-one">
+                                                                                        <span><?php echo esc_html__('School Name: ' . $school_name); ?></span>
+                                                                                        <br>
+                                                                                        <span><?php echo esc_html__('Student Name: ' . $student_name); ?></span>
+                                                                                        <br>
+                                                                                        <span><?php echo esc_html__('Student Roll: ' . $student_roll); ?></span>
+                                                                                    </div>
+                                                                                    <div class="student-info-two">
+                                                                                        <span><?php echo esc_html__('Class: ' . $class->label); ?></span>
+                                                                                        <br>
+                                                                                        <span><?php echo esc_html__('Group: ' . $class_group); ?></span>
+                                                                                        <br>
+                                                                                        <span><?php echo esc_html__('Section: ' . $section_label); ?></span>
+                                                                                        <br>
+                                                                                        <span><?php echo esc_html__('Subject: ' . $subject_label); ?></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <?php 
+                                                                                    $get_subject_lesson = $wpdb->get_results($wpdb->prepare(
+                                                                                        "SELECT * FROM {$wpdb->prefix}wlsm_lecture WHERE class_id = %d AND subject_id = %d", $class_id, $subject_id
+                                                                                    ));
+
+                                                                                    foreach ($get_subject_lesson as $subject_lesson) {
+                                                                                        $lesson_code = $subject_lesson->code;
+                                                                                        $lesson_title = $subject_lesson->title;
+                                                                                        $square_des = $subject_lesson->square_description;
+                                                                                        $circle_des = $subject_lesson->circle_description;
+                                                                                        $triangle_des = $subject_lesson->triangle_description;
+                                                                                        ?>
+
+                                                                                            <div class="result-assessment">
+                                                                                                <div class="transcript-lesson">
+                                                                                                    <span><?php echo $lesson_code . ' - ' . $lesson_title; ?></span>
+                                                                                                </div>  
+                                                                                                <div class="transcript-result">
+                                                                                                    <div class="square-description">
+                                                                                                        <?php echo $square_des; ?>
+                                                                                                    </div>
+                                                                                                    <div class="circle-description">
+                                                                                                        <?php echo $circle_des; ?>
+                                                                                                    </div>
+                                                                                                    <div class="triangle-description">
+                                                                                                        <?php echo $triangle_des; ?>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        <?php
+                                                                                    }
+                                                                                ?>
+                                                                                      
+                                                                                
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                                <button type="button" class="btn btn-primary">Save changes</button>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
+                                                                <!-- Quarterly Summative Assessment Modal -->
+                                                                <div class="modal fade" id="quarterly_summative_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-xl" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student Quarterly Summative Transcript', 'school-management');?></h5>
+                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                ...
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                                <button type="button" class="btn btn-primary">Save changes</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Annual Summative Assessment Modal -->
+                                                                <div class="modal fade" id="annual_summative_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-xl" role="document">
+                                                                        <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student Annual Summative Transcript', 'school-management');?></h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            ...
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                                                        </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Quarterly Behavioral Assessment Modal -->
+                                                                <div class="modal fade" id="quarterly_behavioral_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-xl" role="document">
+                                                                        <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student Quarterly Behavioral Transcript', 'school-management');?></h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            ...
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                                                        </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Annual Behavioral Assessment Modal -->
+                                                                <div class="modal fade" id="annual_behavioral_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-xl" role="document">
+                                                                        <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student Annual Behavioral Transcript', 'school-management');?></h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            ...
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                                                        </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                                 <?php
-                                                            }
                                                         ?>
                                                     </div>
                                                 </div>
