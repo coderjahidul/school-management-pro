@@ -66,6 +66,9 @@
         width: 30%;
         padding: 10px;
     }
+    .result-assessment .transcript-lesson p {
+        font-size: 13px;
+    }
     .result-assessment .transcript-result {
         width: 70%;
         display: flex;
@@ -90,7 +93,7 @@
         font-weight: 600;
     }
     .transcript-result div p {
-        font-size: 16px;
+        font-size: 13px;
     }
     .result-assessment-title {
         display: flex;
@@ -291,36 +294,41 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                                 <!-- Assessment During Learning Modal -->
                                                                 <div class="modal fade" id="assessment_during_learning<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                     <?php 
-                                                                        $assessment_types = "assessment_during_learning"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label);
+                                                                        $assessment_types = "assessment_during_learning";
+                                                                        $assessment_label = "Assessment During Learning";
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <!-- Quarterly Summative Assessment Modal -->
                                                                 <div class="modal fade" id="quarterly_summative_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                     <?php 
                                                                         $assessment_types = "quarterly_summative_assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label);
+                                                                        $assessment_label = "Quarterly Summative Assessment";
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <!-- Annual Summative Assessment Modal -->
                                                                 <div class="modal fade" id="annual_summative_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                     <?php 
-                                                                        $assessment_types = "annual_summative_assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label);
+                                                                        $assessment_types = "annual_summative_assessment";
+                                                                        $assessment_label = "Annual Summative Assessment"; 
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <!-- Quarterly Behavioral Assessment Modal -->
                                                                 <div class="modal fade" id="quarterly_behavioral_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                     <?php 
-                                                                        $assessment_types = "quarterly_behavioral_assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label);
+                                                                        $assessment_types = "quarterly_behavioral_assessment";
+                                                                        $assessment_label = "Quarterly Behavioral Assessment"; 
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <!-- Annual Behavioral Assessment Modal -->
                                                                 <div class="modal fade" id="annual_behavioral_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                     <?php 
-                                                                        $assessment_types = "annual_behavioral_assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label);
+                                                                        $assessment_types = "annual_behavioral_assessment";
+                                                                        $assessment_label = "Annual Behavioral Assessment"; 
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <?php
@@ -372,4 +380,5 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
         });
     });
 </script>
+
 

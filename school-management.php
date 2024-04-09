@@ -253,11 +253,11 @@ function chapters_function_template($get_subject_chapters, $wpdb){
 }
 
 // new curriculum subject woys result print function
-function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label) {?>
+function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label) {?>
 	<div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student During Learning Transcript', 'school-management');?></h5>
+				<h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__($assessment_label . ' Student Transcript', 'school-management');?></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>
@@ -312,7 +312,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 
 								<div class="result-assessment">
 									<div class="transcript-lesson">
-										<span><?php echo $lesson_code . ' - ' . $lesson_title; ?></span>
+										<p><?php echo $lesson_code . ' - ' . $lesson_title; ?></p>
 									</div> 
 									<?php 
 										$new_curriculum_results = $wpdb->get_results($wpdb->prepare(
