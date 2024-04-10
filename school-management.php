@@ -257,14 +257,16 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 	<div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__($assessment_label . ' Student Transcript', 'school-management');?></h5>
+				<h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student Transcript', 'school-management');?></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" id="transcript-content">
 				<div class="student-info">
 					<div class="student-info-one">
+						<span><?php echo esc_html__("Assessment Types: " . $assessment_label);?></span>
+						<br>
 						<span><?php echo esc_html__('School Name: ' . $school_name); ?></span>
 						<br>
 						<span><?php echo esc_html__('Student Name: ' . $student_name); ?></span>
@@ -368,7 +370,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 				
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary"><?php echo esc_html__('Print Transcript', 'school-management');?></button>
+				<button type="button" class="btn btn-primary" id="print-transcript"><?php echo esc_html__('Print Transcript', 'school-management');?></button>
 			</div>
 		</div>
 	</div><?php

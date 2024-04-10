@@ -378,6 +378,15 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
             // Here, we can submit the form to fetch and display student names and IDs
             $('#wlsm-student-transcript-form').submit();
         });
+        $("#print-transcript").click(function(){
+            let content = $("#transcript-content").html();
+            let printWindow = window.open('', '', 'height=400, width=800');
+            printWindow.document.write('<html><head><title><?php echo esc_html__('Print Transcript'); ?></title></head><body>');
+            printWindow.document.write(content);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
     });
 </script>
 
