@@ -387,7 +387,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 
 						printWindow.document.write('<html><head><title><?php echo esc_html__('Print ' . $student_name . "-" . $assessment_label . 'Transcript'); ?></title></head><body>');
 						printWindow.document.write(content);
-						// printWindow.document.write('</body></html>');
+						printWindow.document.write('</body></html>');
 						printWindow.document.close();
 						printWindow.print();
 					});
