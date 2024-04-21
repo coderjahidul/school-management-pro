@@ -470,6 +470,10 @@ class WLSM_Menu {
 									$student_transcript = add_submenu_page( WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__( 'Student Transcript', 'school-management'), esc_html__( '4. Student Transcript', 'school-management' ), 'read', WLSM_MENU_STAFF_STUDENT_TRANSCRIPT, array( 'WLSM_Menu', 'school_staff_student_transcript'));
 									add_action('admin_print_styles-' . $student_transcript, array('WLSM_Menu', 'menu_page_assets'));
 
+									// Student Report Card
+									$student_report_card = add_submenu_page( WLSM_MENU_STAFF_NEW_CURRICULUM, esc_html__('Student Report Card', 'school-management'), esc_html__('5. Student Report Card', 'school-management'), 'read', WLSM_MENU_STAFF_STUDENT_REPORT_CARD, array( 'WLSM_Menu', 'school_staff_student_report_card'));
+									add_action('admin_print_styles-' . $student_report_card, array('WLSM_Menu', 'menu_page_assets'));
+
 
 									
 								}
@@ -859,6 +863,9 @@ class WLSM_Menu {
 	}
 	public static function school_staff_student_transcript(){
 		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/new-curriculum/student-transcript/route.php';
+	}
+	public static function school_staff_student_report_card(){
+		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/new-curriculum/student-report-card/route.php';
 	}
 	public static function menu_page_assets() {
 		 wp_enqueue_style( 'bootstrap', WLSM_PLUGIN_URL . 'assets/css/bootstrap.min.css' );
