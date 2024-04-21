@@ -61,6 +61,8 @@
     .modal-body table tr td,
     .modal-body table tr th {
         padding: 5px !important;
+    }
+    .modal-body table tr td {
         text-align: left !important;
     }
     .marking p {

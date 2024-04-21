@@ -266,7 +266,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 				<table border="1" style="border-collapse: collapse;">
 					<tbody>
 						<tr>
-							<th colspan="2" align="left" style="padding: 5px;">
+							<th colspan="2" align="left" style="padding: 5px; text-align: left">
 								<?php echo esc_html__('School Name: ' . $school_name); ?>
 								<br>
 								<?php echo esc_html__("Assessment Types: " . $assessment_label);?>
@@ -275,7 +275,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 								<br>
 								<?php echo esc_html__('Student Roll: ' . $student_roll); ?>
 							</th>
-							<th colspan="2" align="left" style="padding: 5px;">
+							<th colspan="2" align="left" style="padding: 5px; text-align: left">
 								<?php echo esc_html__('Class: ' . $class_label); ?>
 								<br>
 								<?php echo esc_html__('Group: ' . $class_group); ?>
@@ -286,10 +286,10 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 							</th>
 						</tr>
 						<tr>
-							<th colspan = "2" style="padding: 5px;"> 
+							<th colspan = "1" style="padding: 5px;"> 
 								<?php echo esc_html__('Proficiency index', 'school-management');?>
 							</th>
-							<th colspan = "2" style="padding: 5px;">
+							<th colspan = "3" style="padding: 5px;">
 								<?php echo esc_html__('Level of proficiency', 'school-management');?>
 							</th>
 						</tr>
