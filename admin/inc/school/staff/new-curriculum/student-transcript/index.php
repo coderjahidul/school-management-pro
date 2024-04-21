@@ -58,61 +58,19 @@
         border-right: 1px solid #ddd;
     }
 
-    .result-assessment {
-        display: flex;
-        border: 1px solid #ddd;
+    .modal-body table tr td,
+    .modal-body table tr th {
+        padding: 5px !important;
+        text-align: left !important;
     }
-    .result-assessment .transcript-lesson {
-        width: 30%;
-        padding: 10px;
+    .marking p {
+        font-size: 14px !important;
     }
-    .result-assessment .transcript-lesson p {
-        font-size: 13px;
+
+    .modal-body table tr td .active{
+        color: #007bff !important;
     }
-    .result-assessment .transcript-result {
-        width: 70%;
-        display: flex;
-    }
-    .transcript-result div {
-        width: 33.33%;
-        padding: 10px;
-        border-left: 1px solid #ddd;
-        margin: 0px;
-    }
-    .square-description,
-    .circle-description,
-    .triangle-description {
-        display: flex;
-        justify-content: space-between;
-    }
-    .square-description span,
-    .circle-description span,
-    .triangle-description span {
-        font-size: 20px;
-        padding-right: 10px;
-        font-weight: 600;
-    }
-    .transcript-result div p {
-        font-size: 13px;
-    }
-    .result-assessment-title {
-        display: flex;
-        font-weight: 600;
-        text-align: center;
-        border: 1px solid #ddd;
-    }
-    .result-assessment-title .transcript-lesson {
-        width: 30%;
-        padding: 10px;
-    }
-    .result-assessment-title .transcript-result {
-        width: 70%;
-        border-left: 1px solid #ddd;
-        padding: 10px;
-    }
-    .active {
-        color: #007bff;
-    }
+    
 </style>
 <?php
 defined( 'ABSPATH' ) || die();
@@ -365,29 +323,11 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
             let classId = $('#wlsm_class').val();
             let classGroup = $('#wlsm_class_group').val();
             let sectionId = $('#wlsm_section').val();
-
-            // Print selected values (you can modify this part as needed)
-            // console.log('Class ID: ' + classId);
-            // console.log('Class Group: ' + classGroup);
-            // console.log('Section ID: ' + sectionId);
-            // document.getElementById('class-id').innerHTML = "Class Id: " + classId;
-            // document.getElementById('class-group').innerHTML = "Class Group: " + classGroup;
-            // document.getElementById('section-id').innerHTML = "Class Section: " + sectionId;
-
-            // Perform further actions here, such as submitting the form or processing the data
-            // Here, we can submit the form to fetch and display student names and IDs
             $('#wlsm-student-transcript-form').submit();
         });
-        $("#print-transcript").click(function(){
-            let content = $("#transcript-content").html();
-            let printWindow = window.open('', '', 'height=400, width=800');
-            printWindow.document.write('<html><head><title><?php echo esc_html__('Print Transcript'); ?></title></head><body>');
-            printWindow.document.write(content);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-        });
+        
     });
+
 </script>
 
 
