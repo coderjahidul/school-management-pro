@@ -1,63 +1,14 @@
 <style>
-    .wlsm-student-list .card {
-        max-width: 100%;
-        margin-top: 10px;
-        padding: 0px;
-    }
-    .wlsm-student-list .card .card-header .btn-link {
-        color: #000;
+    .student-list {
+        width: 100%;
+        border: 1px solid #c9c4c47a;
+        padding: 10px 10px;
+        margin-bottom: 5px;
+        border-radius: 5px;
         font-size: 16px;
         font-weight: 600;
-        text-align: left;
+        /* box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2); */
     }
-    .wlsm-student-list .card .btn-link:hover {
-        text-decoration: none;
-        color: #0078F9;
-    }
-    .wlsm-student-list .card .collapse {
-        border-top: 1px solid #ddd;
-    }
-    .chapter-not-found {
-        text-align: center;
-        margin-top: 200px;
-    }
-    .card-header {
-        padding: 0px;
-    }
-    .collapse .card-body {
-        padding: 0px;
-    }
-    .collapse .card-body .btn-link {
-        font-size: 16px;
-        font-weight: 500;
-        color: #000;
-        text-decoration: none;
-        margin-top: 10px;
-        max-width: 100%;
-        width: 100%;
-        text-align: left;
-        padding: 15px;
-        border-bottom: 1px solid #ddd;
-    }
-    .modal .modal-content {
-        margin-top: 50px;
-    }
-    .student-info {
-        display: flex;
-        border: 1px solid #ddd;
-    }
-    .student-info span{
-        font-weight: 500;
-    }
-    .student-info-one,
-    .student-info-two {
-        width:50%;
-        padding: 10px;
-    }
-    .student-info-one {
-        border-right: 1px solid #ddd;
-    }
-
     .modal-body table tr td,
     .modal-body table tr th {
         padding: 5px !important;
@@ -80,6 +31,12 @@ global $wpdb;
 $school_id = $current_school['id'];
 $school_name = $current_school['name'];
 $assessment_types = '';
+
+// school header section. ---------------------------------------
+$school = WLSM_M_School::fetch_school($school_id);
+$settings_general = WLSM_M_Setting::get_settings_general($school_id);
+$school_logo = $settings_general['school_logo'];
+$school_signature = $settings_general['school_signature'];
 
 $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 $assessment_type_list = WLSM_Helper::assessment_type_list();
@@ -197,25 +154,18 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                         $student_name = $student_record->name;
                                         $student_roll = $student_record->roll_number;
                                         $student_record_id = $student_record->ID;
+                                        $student_session_id = $student_record->session_id;
+
+                                        $student_session = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_sessions WHERE ID = %d", $student_session_id));
                                         ?>
-                                            <div class="card-body">
-                                                <?php
-                                                    ?>
-                                                    <!-- Button trigger modal -->
-                                                    <button type="button" class="btn btn-link " data-toggle="modal" data-target="#student_report_card<?php echo $student_record_id;?>">
-                                                        <?php echo $student_roll . ' - ' . $student_name; ?>
-                                                    </button>
-                                                    <!-- Assessment During Learning Modal -->
-                                                    <div class="modal fade" id="student_report_card<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                        <?php 
-                                                            $assessment_types = "assessment_during_learning";
-                                                            $assessment_label = "Assessment During Learning";
-                                                            $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
-                                                        ?>
-                                                    </div>
-                                                    <?php
-                                                ?>
-                                            </div>
+                                            <div type="button" class="student-list" data-toggle="modal" data-target="#student_report_card<?php echo $student_record_id;?>"><?php echo esc_html($student_roll . '. ' . $student_name);?></div>
+
+                                            <div class="modal fade" id="student_report_card<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <?php 
+                                                $assessment_types = "assessment_during_learning";
+                                                $assessment_label = "Assessment During Learning";
+                                                $subject_woys_result = student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $class_label, $assessment_label);
+                                            ?>
                                         </div>
                                         <?php
                                     }

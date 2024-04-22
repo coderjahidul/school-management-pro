@@ -397,4 +397,94 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 	</div><?php
 }
 
+// Student Report Card Function
+function student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $class_label, $assessment_label) {?>
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student Report Card', 'school-management');?></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="report-content<?php echo $student_record_id;?>">
+				<table border="1" style="border-collapse: collapse;">
+					<tbody>
+						<tr>
+							<th>
+								<div class="school-banner text-center">
+									<img style="width: 70%; padding: 20px 0" src="<?php echo esc_url(WLSM_PLUGIN_URL . "assets/images/student-report-card-banner.png"); ?>" alt="student-report-card-banner">
+								</div>
+							</th>
+						</tr>
+						<tr>
+							<th>
+								<div class="school-logo text-center">
+									<?php 
+										if(!empty($school_logo)) {
+											?>
+												<img style="border-radius: 50%; padding: 10px 0;" src="<?php echo esc_url(wp_get_attachment_url($school_logo));?>" alt="school logo">
+											<?php
+										}
+									?>
+								</div>
+							</th>
+						</tr>
+						<tr>
+							<th colspan="2" align="left" style="padding: 5px; text-align: left">
+								<?php echo esc_html__('School Name: ' . $school_name); ?>
+								<br>
+								<?php echo esc_html__('Student Name: ' . $student_name);?>
+								<br>
+								<?php echo esc_html__('Student Roll: ' . $student_roll);?>
+								<br>
+								<?php echo esc_html__('Class: ' . $class_label);?>
+								<br>
+								<?php echo esc_html__('Session: ' . $student_session[0]->label);?>
+							</th>
+						</tr>
+						<tr>
+							<th colspan="2" align="center" style="padding: 5px; text-align: center">
+								<h4 class="border-bottom pb-1"><?php echo esc_html__("Subjects", "school-management");?></h4>
+								<div align="left" class="subject-list text-left" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));">
+									<?php 
+										$class_school_id = $wpdb->get_results($wpdb->prepare("SELECT ID FROM {$wpdb->prefix}wlsm_class_school WHERE class_id = %d", $class_id));
+										$subject_list = $wpdb->get_results($wpdb->prepare("SELECT ID, label FROM {$wpdb->prefix}wlsm_subjects WHERE class_school_id = %d AND type IN ('subjective', 'practical')", $class_school_id[0]->ID));
+										foreach($subject_list as $subject) {
+											$subject_label = $subject->label;
+											?>
+												<div class="subject"><img style="width: 35px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . "assets/images/new-curriculum.png"); ?>" alt=""><?php echo esc_html($subject_label);?></div>
+											<?php
+										}
+									?>
+								</div>
+								
+							</th>			
+						</tr>
+						
+					</tbody>
+				
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="print-report-card<?php echo $student_record_id;?>"><?php echo esc_html__('Print Report Card', 'school-management');?></button>
+			</div>
+			<script>
+				jQuery(document).ready(function ($) {
+					$("#print-report-card<?php echo $student_record_id;?>").click(function(){
+						let content = $("#report-content<?php echo $student_record_id;?>").html();
+						let printWindow = window.open('', '', 'resizable=yes, scrollbars=yes');
+
+						printWindow.document.write('<html><head><title><?php echo esc_html__('Print ' . $student_name  . 'Report Card'); ?></title></head><body>');
+						printWindow.document.write(content);
+						printWindow.document.write('</body></html>');
+						printWindow.document.close();
+						printWindow.print();
+					});
+				});
+			</script>
+		</div>
+	</div><?php
+}
+
 
