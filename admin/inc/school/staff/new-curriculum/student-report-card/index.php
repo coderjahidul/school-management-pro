@@ -13,9 +13,7 @@
     .modal-body table tr th {
         padding: 5px !important;
     }
-    .modal-body table tr td {
-        text-align: left !important;
-    }
+    
     .marking p {
         font-size: 14px !important;
     }
@@ -132,7 +130,6 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                 $class_id = absint($_POST['class_id']);
                                 $class_group = sanitize_text_field($_POST['class_group']);
                                 $section_id = absint($_POST['section_id']);
-                                // $subject_id = absint($_POST['subject_id']);
                                 $class_label = isset($class->label) ? $class->label : '';
 
                                 $section_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_sections WHERE ID = %d", $section_id));
@@ -143,8 +140,6 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                 $get_student_records = $wpdb->get_results($wpdb->prepare(
                                     "SELECT * FROM $table_name WHERE note = %s AND section_id = %d order by roll_number", $class_group, $section_id
                                 ));
-                                // $subject_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d", $subject_id));
-                                // $subject_label = isset($subject_label[0]->label) ? $subject_label[0]->label : '';
 
 
                                 // Display student names and IDs
@@ -164,7 +159,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                             <?php 
                                                 $assessment_types = "assessment_during_learning";
                                                 $assessment_label = "Assessment During Learning";
-                                                $subject_woys_result = student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $class_label, $assessment_label);
+                                                $subject_woys_result = student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $assessment_types, $school_name, $school_logo, $class_label, $assessment_label);
                                             ?>
                                         </div>
                                         <?php

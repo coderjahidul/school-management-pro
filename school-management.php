@@ -398,7 +398,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 }
 
 // Student Report Card Function
-function student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $class_label, $assessment_label) {?>
+function student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $assessment_types, $school_name, $school_logo, $class_label, $assessment_label) {?>
 	<div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -468,58 +468,76 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 										$subject_label = $subject->label;?>
 
 											<h5 class="bg-light font-size-18 font-weight-500" style="padding: 10px 0; margin: 10px 0;"><?php echo esc_html($subject_label);?></h5>
-											<table border="1" style="border-collapse: collapse;">
+											<table style="margin-top: 0 !important;">
 												<tr>
 													<td style="padding: 0 !important;">
-														<div align ="center" class="subject-report-title border-bottom border-1 border-black text-center" style="padding: 5px 0;">
-															<?php echo esc_html("Contact", "school-management");?>
-														</div>
-														<div align ="center" class="subject-report-description text-center" style="padding: 30px;">
-															<?php echo esc_html("ব্যক্তির সাথে সম্পর্কের ধরন অনুযায়ী মর্যাদাপূর্ণ শারীরিক ভাষা প্রয়োগ করতে পারছে", "school-management");?>
-														</div>
-														<div align ="center" class="student-report-mark d-flex border-top border-color-black" style="border-collapse: collapse;">
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">1</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">2</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">3</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">4</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">5</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">6</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">7</div>
-														</div>
+														<table border="1" style="border-collapse: collapse; margin-top: 0 !important;">
+															<tr>
+																<td colspan="7" style="padding: 5px !important; text-align: center;">
+																	<?php echo esc_html("Contact", "school-management");?>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="7" style="padding: 5px !important; text-align: center;">
+																	<?php echo esc_html("ব্যক্তির সাথে সম্পর্কের ধরন অনুযায়ী মর্যাদাপূর্ণ শারীরিক ভাষা প্রয়োগ করতে পারছে", "school-management");?>
+																</td>
+															</tr>
+															<tr>
+																<td style="padding: 5px !important; text-align: center;">1</td>
+																<td style="padding: 5px !important; text-align: center;">2</td>
+																<td style="padding: 5px !important; text-align: center;">3</td>
+																<td style="padding: 5px !important; text-align: center;">4</td>
+																<td style="padding: 5px !important; text-align: center;">5</td>
+																<td style="padding: 5px !important; text-align: center;">6</td>
+																<td style="padding: 5px !important; text-align: center;">7</td>
+															</tr>
+														</table>
 													</td>
 													<td style="padding: 0 !important;">
-														<div align ="center" class="subject-report-title border-bottom border-1 border-black text-center" style="padding: 5px 0;">
-															<?php echo esc_html("Contact", "school-management");?>
-														</div>
-														<div align ="center" class="subject-report-description text-center" style="padding: 30px;">
-															<?php echo esc_html("ব্যক্তির সাথে সম্পর্কের ধরন অনুযায়ী মর্যাদাপূর্ণ শারীরিক ভাষা প্রয়োগ করতে পারছে", "school-management");?>
-														</div>
-														<div align ="center" class="student-report-mark d-flex border-top border-color-black" style="border-collapse: collapse;">
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">1</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">2</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">3</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">4</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">5</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">6</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">7</div>
-														</div>
+														<table border="1" style="border-collapse: collapse; margin-top: 0 !important;">
+															<tr>
+																<td colspan="7" style="padding: 5px !important; text-align: center;">
+																	<?php echo esc_html("Contact", "school-management");?>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="7" style="padding: 5px !important; text-align: center;">
+																	<?php echo esc_html("ব্যক্তির সাথে সম্পর্কের ধরন অনুযায়ী মর্যাদাপূর্ণ শারীরিক ভাষা প্রয়োগ করতে পারছে", "school-management");?>
+																</td>
+															</tr>
+															<tr>
+																<td style="padding: 5px !important; text-align: center;">1</td>
+																<td style="padding: 5px !important; text-align: center;">2</td>
+																<td style="padding: 5px !important; text-align: center;">3</td>
+																<td style="padding: 5px !important; text-align: center;">4</td>
+																<td style="padding: 5px !important; text-align: center;">5</td>
+																<td style="padding: 5px !important; text-align: center;">6</td>
+																<td style="padding: 5px !important; text-align: center;">7</td>
+															</tr>
+														</table>
 													</td>
 													<td style="padding: 0 !important;">
-														<div align ="center" class="subject-report-title border-bottom border-1 border-black text-center" style="padding: 5px 0;">
-															<?php echo esc_html("Contact", "school-management");?>
-														</div>
-														<div align ="center" class="subject-report-description text-center" style="padding: 30px;">
-															<?php echo esc_html("ব্যক্তির সাথে সম্পর্কের ধরন অনুযায়ী মর্যাদাপূর্ণ শারীরিক ভাষা প্রয়োগ করতে পারছে", "school-management");?>
-														</div>
-														<div align ="center" class="student-report-mark d-flex border-top border-color-black" style="border-collapse: collapse;">
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">1</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">2</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">3</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">4</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">5</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">6</div>
-															<div class="one border-right border-color-black" style="width: 100%; flex: 0 1 auto; padding: 5px 0;">7</div>
-														</div>
+														<table border="1" style="border-collapse: collapse; margin-top: 0 !important;">
+															<tr>
+																<td colspan="7" style="padding: 5px !important; text-align: center;">
+																	<?php echo esc_html("Contact", "school-management");?>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="7" style="padding: 5px !important; text-align: center;">
+																	<?php echo esc_html("ব্যক্তির সাথে সম্পর্কের ধরন অনুযায়ী মর্যাদাপূর্ণ শারীরিক ভাষা প্রয়োগ করতে পারছে", "school-management");?>
+																</td>
+															</tr>
+															<tr>
+																<td style="padding: 5px !important; text-align: center;">1</td>
+																<td style="padding: 5px !important; text-align: center;">2</td>
+																<td style="padding: 5px !important; text-align: center;">3</td>
+																<td style="padding: 5px !important; text-align: center;">4</td>
+																<td style="padding: 5px !important; text-align: center;">5</td>
+																<td style="padding: 5px !important; text-align: center;">6</td>
+																<td style="padding: 5px !important; text-align: center;">7</td>
+															</tr>
+														</table>
 													</td>
 												</tr>
 											</table>
