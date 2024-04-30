@@ -325,44 +325,42 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 											foreach($new_curriculum_results as $new_curriculum_result) {
 												$marks = $new_curriculum_result->new_curriculum_marks;
 												?>
-													<!-- <div class="transcript-result"> -->
-														<td style="padding: 5px;">
-															<div class="marking" style="display: flex;justify-content: left;">
-																<?php if($marks == "square"){?>
-																	<span class="square-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">&#9634;</span>
-																<?php } else {
-																	?>
-																		<span class="square-icon" style="padding-right: 5px;">&#9634;</span>
-																	<?php
-																}
-																echo $square_des;?>
-															</div>
-														</td>
-														<td style="padding: 5px;">
-															<div class="marking" style="display: flex;justify-content: left;">
-																<?php if($marks == "circle"){?>
-																	<span class="circle-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">&#11096;</span>
-																<?php } else {
-																	?>
-																		<span class="circle-icon" style="padding-right: 5px;">&#11096;</span>
-																	<?php
-																}
-																echo $circle_des; ?>
-															</div>
-														</td>
-														<td style="padding: 5px;"> 
-															<div class="marking" style="display: flex;justify-content: left;">
-																<?php if($marks == "triangle"){?>
-																	<span class="triangle-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">&#128710;</span>
-																<?php } else {
-																	?>
-																		<span class="triangle-icon" style="padding-right: 5px;">&#128710;</span>
-																	<?php
-																}
-																echo $triangle_des; ?>
-															</div>
-														</td>
-													<!-- </div> -->
+													<td style="padding: 5px;">
+														<div class="marking" style="display: flex;justify-content: left;">
+															<?php if($marks == "square"){?>
+																<span class="square-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">&#9634;</span>
+															<?php } else {
+																?>
+																	<span class="square-icon" style="padding-right: 5px;">&#9634;</span>
+																<?php
+															}
+															echo $square_des;?>
+														</div>
+													</td>
+													<td style="padding: 5px;">
+														<div class="marking" style="display: flex;justify-content: left;">
+															<?php if($marks == "circle"){?>
+																<span class="circle-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">&#11096;</span>
+															<?php } else {
+																?>
+																	<span class="circle-icon" style="padding-right: 5px;">&#11096;</span>
+																<?php
+															}
+															echo $circle_des; ?>
+														</div>
+													</td>
+													<td style="padding: 5px;"> 
+														<div class="marking" style="display: flex;justify-content: left;">
+															<?php if($marks == "triangle"){?>
+																<span class="triangle-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">&#128710;</span>
+															<?php } else {
+																?>
+																	<span class="triangle-icon" style="padding-right: 5px;">&#128710;</span>
+																<?php
+															}
+															echo $triangle_des; ?>
+														</div>
+													</td>
 												<?php
 											}
 										?> 
@@ -411,14 +409,14 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 				<table border="1" style="border-collapse: collapse;">
 					<tbody>
 						<tr>
-							<th>
+							<th colspan="5">
 								<div class="school-banner text-center">
 									<img style="width: 70%; padding: 20px 0" src="<?php echo esc_url(WLSM_PLUGIN_URL . "assets/images/student-report-card-banner.png"); ?>" alt="student-report-card-banner">
 								</div>
 							</th>
 						</tr>
 						<tr>
-							<th>
+							<th colspan="5">
 								<div class="school-logo text-center">
 									<?php 
 										if(!empty($school_logo)) {
@@ -431,7 +429,7 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 							</th>
 						</tr>
 						<tr>
-							<th colspan="2" align="left" style="padding: 5px; text-align: left">
+							<th colspan="5" align="left" style="padding: 5px; text-align: left">
 								<?php echo esc_html__('School Name: ' . $school_name); ?>
 								<br>
 								<?php echo esc_html__('Student Name: ' . $student_name);?>
@@ -444,7 +442,7 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 							</th>
 						</tr>
 						<tr>
-							<th colspan="2" align="center" style="padding: 5px; text-align: center">
+							<th colspan="5" align="center" style="padding: 5px; text-align: center">
 								<h4 class="border-bottom pb-1"><?php echo esc_html__("Subjects", "school-management");?></h4>
 								<div align="left" class="subject-list text-left" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));">
 									<?php 
@@ -462,7 +460,7 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 							</th>			
 						</tr>
 						<tr>
-							<th colspan="2" align="center" style="padding: 5px; text-align: center">
+							<th colspan="5" align="center" style="padding: 5px; text-align: center">
 								<?php 
 									foreach($subject_list as $subject){
 										$subject_label = $subject->label;?>
@@ -546,6 +544,202 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 									}
 								?>
 							</th>
+						</tr>
+						<tr>
+							<th colspan="21" align="center" style="padding: 5px; text-align: center">
+								<h5 class="bg-light font-size-18 font-weight-500" style="padding: 10px 0; margin: 10px 0;"><?php echo esc_html("Behavioral indicators", "school-management");?></h5>
+								<table style="margin-top: 0 !important; width: 100%;">
+									<tr>
+										<td style="padding: 0 !important; width: 33.33%;">
+											<table border="1" style="border-collapse: collapse; margin-top: 0 !important; width: 100%;">
+												<!-- Your table content here -->
+												<tr>
+													<td colspan="7" style="padding: 5px !important; text-align: center;">
+														<?php echo esc_html("Contact", "school-management");?>
+													</td>
+												</tr>
+												<tr>
+													<td style="padding: 5px !important; text-align: center;">1</td>
+													<td style="padding: 5px !important; text-align: center;">2</td>
+													<td style="padding: 5px !important; text-align: center;">3</td>
+													<td style="padding: 5px !important; text-align: center;">4</td>
+													<td style="padding: 5px !important; text-align: center;">5</td>
+													<td style="padding: 5px !important; text-align: center;">6</td>
+													<td style="padding: 5px !important; text-align: center;">7</td>
+												</tr>
+											</table>
+										</td>
+										<td style="padding: 0 !important; width: 33.33%;">
+											<table border="1" style="border-collapse: collapse; margin-top: 0 !important; width: 100%;">
+												<!-- Your table content here -->
+												<tr>
+													<td colspan="7" style="padding: 5px !important; text-align: center;">
+														<?php echo esc_html("Contact", "school-management");?>
+													</td>
+												</tr>
+												<tr>
+													<td style="padding: 5px !important; text-align: center;">1</td>
+													<td style="padding: 5px !important; text-align: center;">2</td>
+													<td style="padding: 5px !important; text-align: center;">3</td>
+													<td style="padding: 5px !important; text-align: center;">4</td>
+													<td style="padding: 5px !important; text-align: center;">5</td>
+													<td style="padding: 5px !important; text-align: center;">6</td>
+													<td style="padding: 5px !important; text-align: center;">7</td>
+												</tr>
+											</table>
+										</td>
+										<td style="padding: 0 !important; width: 33.33%;">
+											<table border="1" style="border-collapse: collapse; margin-top: 0 !important; width: 100%;">
+												<!-- Your table content here -->
+												<tr>
+													<td colspan="7" style="padding: 5px !important; text-align: center;">
+														<?php echo esc_html("Contact", "school-management");?>
+													</td>
+												</tr>
+												<tr>
+													<td style="padding: 5px !important; text-align: center;">1</td>
+													<td style="padding: 5px !important; text-align: center;">2</td>
+													<td style="padding: 5px !important; text-align: center;">3</td>
+													<td style="padding: 5px !important; text-align: center;">4</td>
+													<td style="padding: 5px !important; text-align: center;">5</td>
+													<td style="padding: 5px !important; text-align: center;">6</td>
+													<td style="padding: 5px !important; text-align: center;">7</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table> 
+							</th>
+						</tr>
+						<tr>
+							<th colspan="5">
+							<h5 class="bg-light font-size-18 font-weight-500" style="padding: 10px 0; margin: 10px 0; text-align: left;"><?php echo esc_html("Evaluation Scale", "school-management");?></h5>
+							</th>		
+						</tr>
+						<tr>
+							<td colspan="2" style="width: 40%;">
+								<table border="1" style="border-collapse: collapse; margin-top: 0 !important; width: 100%;">
+									<tr>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">4</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">5</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">6</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">7</td>
+									</tr>
+									<tr>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">4</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">5</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">6</td>
+										<td style="padding: 5px !important; text-align: center;">7</td>
+									</tr>
+									<tr>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">4</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">5</td>
+										<td style="padding: 5px !important; text-align: center;">6</td>
+										<td style="padding: 5px !important; text-align: center;">7</td>
+									</tr>
+									<tr>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">4</td>
+										<td style="padding: 5px !important; text-align: center;">5</td>
+										<td style="padding: 5px !important; text-align: center;">6</td>
+										<td style="padding: 5px !important; text-align: center;">7</td>
+									</tr>
+									<tr>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
+										<td style="padding: 5px !important; text-align: center;">4</td>
+										<td style="padding: 5px !important; text-align: center;">5</td>
+										<td style="padding: 5px !important; text-align: center;">6</td>
+										<td style="padding: 5px !important; text-align: center;">7</td>
+									</tr>
+									<tr>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
+										<td style="padding: 5px !important; text-align: center;">3</td>
+										<td style="padding: 5px !important; text-align: center;">4</td>
+										<td style="padding: 5px !important; text-align: center;">5</td>
+										<td style="padding: 5px !important; text-align: center;">6</td>
+										<td style="padding: 5px !important; text-align: center;">7</td>
+									</tr>
+									<tr>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
+										<td style="padding: 5px !important; text-align: center;">2</td>
+										<td style="padding: 5px !important; text-align: center;">3</td>
+										<td style="padding: 5px !important; text-align: center;">4</td>
+										<td style="padding: 5px !important; text-align: center;">5</td>
+										<td style="padding: 5px !important; text-align: center;">6</td>
+										<td style="padding: 5px !important; text-align: center;">7</td>
+									</tr>
+								</table>
+							</td>
+							<td colspan="1" style="width: 20%;">
+								<table border="1" style="border-collapse: collapse; margin-top: 0 !important; width: 100%;">
+									<tr><td border="0" style="text-align: left; padding: 5px;"><?php echo esc_html("Upgrading", "school-management");?></td></tr>
+									<tr><td border="0" style="text-align: left; padding: 5px;"><?php echo esc_html("Achieving", "school-management");?></td></tr>
+									<tr><td border="0" style="text-align: left; padding: 5px;"><?php echo esc_html("Advancing", "school-management");?></td></tr>
+									<tr><td border="0" style="text-align: left; padding: 5px;"><?php echo esc_html("Activating", "school-management");?></td></tr>
+									<tr><td border="0" style="text-align: left; padding: 5px;"><?php echo esc_html("Exploring", "school-management");?></td></tr>
+									<tr><td border="0" style="text-align: left; padding: 5px;"><?php echo esc_html("Developing", "school-management");?></td></tr>
+									<tr><td border="0" style="text-align: left; padding: 5px;"><?php echo esc_html("Elementary", "school-management");?></td></tr>
+								</table>
+							</td>
+							<td colspan="2" style="width: 40%;" style="padding: 10px !important;">
+									<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('উপস্থিতির হার:..............................%', 'school-management'); ?></p>
+									<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('শ্রেণী শিক্ষকের মন্তব্য:..........................................................................', 'school-management'); ?></p>
+									<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+									<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+									<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="padding: 10px;">
+								<h5 class="font-size-18 font-weight-500" style="text-align: left;"><?php echo esc_html("শিক্ষার্থীর মন্তব্য:", "school-management");?></h5>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('যে কাজটি সবচেয়ে ভালোভাবে করতে পেরেছি:', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('আরো উন্নতির জন্য যা যা করতে চাই:', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p><p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+							</td>
+							<td></td>
+							<td colspan="2" style="padding: 10px;">
+								<h5 class="font-size-18 font-weight-500" style="text-align: left;"><?php echo esc_html("শিক্ষার্থীর মন্তব্য:", "school-management");?></h5>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('যে কাজটি সবচেয়ে ভালোভাবে করতে পেরেছি:', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('আরো উন্নতির জন্য যা যা করতে চাই:', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p><p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+								<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<p style="padding-top: 20px; margin-bottom: 0px;"><?php echo esc_html__('...............................................', 'school-management');?></p>
+								<p style="margin-bottom: 0px;"><?php echo esc_html__('শ্রেণী শিক্ষকের স্বাক্ষর', 'school-management');?></p>
+								<p style="margin-bottom: 0px;"><?php echo esc_html__('তারিখ:', 'school-management');?></p>
+							</td>
+							<td>
+								<p style="padding-top: 20px; margin-bottom: 0px;"><?php echo esc_html__('...............................................', 'school-management');?></p>
+								<p style="margin-bottom: 0px;"><?php echo esc_html__('শ্রেণী শিক্ষকের স্বাক্ষর', 'school-management');?></p>
+								<p style="margin-bottom: 0px;"><?php echo esc_html__('তারিখ:', 'school-management');?></p>
+							</td>
+							<td colspan="2">
+								<p style="padding-top: 20px; margin-bottom: 0px;"><?php echo esc_html__('...............................................', 'school-management');?></p>
+								<p style="margin-bottom: 0px;"><?php echo esc_html__('শ্রেণী শিক্ষকের স্বাক্ষর', 'school-management');?></p>
+								<p style="margin-bottom: 0px;"><?php echo esc_html__('তারিখ:', 'school-management');?></p>
+							</td>
 						</tr>
 						
 					</tbody>
