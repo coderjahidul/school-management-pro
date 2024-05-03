@@ -123,6 +123,7 @@ define( 'WLSM_MENU_SUBMIT_HOMEWORK', 'submit-homework' );
 define( 'WLSM_MENU_SUBMIT_HOMEWORK_EDIT', 'submit-homework-edit' );
 define( 'WLSM_MENU_STAFF_HOMEWORK_SUBMISSION', 'homework' );
 define( 'WLSM_MENU_STAFF_NOTICES', 'sm-staff-notices' );
+define( 'WLSM_MENU_STAFF_GSMS', 'sm-staff-gsms' );
 define( 'WLSM_MENU_STAFF_EVENTS', 'sm-staff-events' );
 define( 'WLSM_MENU_STAFF_MEETINGS', 'sm-staff-live-classes' );
 define( 'WLSM_MENU_STAFF_RATTING', 'sm-staff-ratting' );

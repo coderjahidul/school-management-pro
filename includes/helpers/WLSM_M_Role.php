@@ -171,6 +171,7 @@ class WLSM_M_Role {
 			'manage_library'              => esc_html__( 'Manage Library', 'school-management' ),
 			'manage_transport'            => esc_html__( 'Manage Transport', 'school-management' ),
 			'manage_notices'              => esc_html__( 'Manage Noticeboard', 'school-management' ),
+			'manage_gsms'               => esc_html__( 'Manage GSMS', 'school-management' ),
 			'manage_events'               => esc_html__( 'Manage Events', 'school-management' ),
 			'manage_exams'                => esc_html__( 'Manage Exams', 'school-management' ),
 			'manage_new_curriculum'		  => esc_html__( 'Manage New Curriculum', 'school-management' ),
