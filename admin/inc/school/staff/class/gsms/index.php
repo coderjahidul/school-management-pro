@@ -26,7 +26,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
             <div class="mt-2 text-center wlsm-section-heading-block">
                 <span class="wlsm-section-heading">
                     <i class="fas fa-id-card"></i>
-                    <?php esc_html_e( 'Student Report Card', 'school-management' ); ?>
+                    <?php esc_html_e( 'Sand SMS', 'school-management' ); ?>
                 </span>
             </div>
             <div class="wlsm-students-block wlsm-form-section">
@@ -89,8 +89,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <button type="button" class="btn btn-sm btn-outline-primary" id="wlsm-print-transcript-btn">
-                                        <i class="fas fa-print"></i>&nbsp;
-                                        <?php esc_html_e( 'Print Transcript', 'school-management' ); ?>
+                                        <?php esc_html_e( 'Select Students', 'school-management' ); ?>
                                     </button>
                                 </div>
                             </div>

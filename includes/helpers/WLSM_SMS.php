@@ -27,7 +27,7 @@ class WLSM_SMS {
 			'vinuthan'        => esc_html__('Vinuthan', 'school-management'),
 			'logixsms'        => esc_html__('Logixsms', 'school-management'),
 			'bdbsms'          => esc_html__('bdbulksms', 'school-management'),
-			'bulksmsbd'		  => esc_html__('bulksmsbd', 'school-management'),
+			'bulksmsbd'		  => esc_html__('Bulksmsbd', 'school-management'),
 			'nextsms'         => esc_html__('nextsms', 'school-management'),
 			'whatsapp'        => esc_html__('Whatsapp API (Intechno)', 'school-management'),
 		);
