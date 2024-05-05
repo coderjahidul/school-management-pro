@@ -117,6 +117,11 @@ $school_textlocal_sender  = $settings_textlocal['sender'];
 $settings_bdbsms       = WLSM_M_Setting::get_settings_bdbsms($school_id);
 $school_bdbsms_api_key = $settings_bdbsms['api_key'];
 
+// bulksmsbd settings.
+$settings_bulksmsbd       = WLSM_M_Setting::get_settings_bulksmsbd($school_id);
+$school_bulksmsbd_apikey = $settings_bulksmsbd['api_key'];
+$school_bulksmsbd_senderid = $settings_bulksmsbd['sender'];
+
 // kivalosolutions settings.
 $settings_kivalosolutions       = WLSM_M_Setting::get_settings_kivalosolutions($school_id);
 
@@ -1160,6 +1165,33 @@ $school_logixsms_sender_id = $settings_logixsms['sender_id'];
 						<div class="col-md-9">
 							<div class="form-group">
 								<input name="bdbsms_api_key" type="text" id="wlsm_bdbsms_api_key" value="<?php echo esc_attr($school_bdbsms_api_key); ?>" class="form-control" placeholder="<?php esc_attr_e('bdbsms Token', 'school-management'); ?>">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- bulksmsbd -->
+				<div class="wlsm_sms_carrier wlsm_bulksmsbd">
+					<div class="row">
+						<div class="col-md-3">
+							<label for="wlsm_bulksmsbd_apikey" class="wlsm-font-bold"><?php esc_html_e('API Key', 'school-management'); ?>:</label>
+						</div>
+						<div class="col-md-9">
+							<div class="form-group">
+								<input name="bulksmsbd_api_key" type="text" id="wlsm_bulksmsbd_apikey" value="<?php echo esc_attr($school_bulksmsbd_apikey); ?>" class="form-control" placeholder="<?php esc_attr_e('bulksmsbd API Key', 'school-management'); ?>">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="wlsm_sms_carrier wlsm_bulksmsbd">
+					<div class="row">
+						<div class="col-md-3">
+							<label for="wlsm_bulksmsbd_senderid" class="wlsm-font-bold"><?php esc_html_e('Sender ID', 'school-management'); ?>:</label>
+						</div>
+						<div class="col-md-9">
+							<div class="form-group">
+								<input name="bulksmsbd_sender_id" type="text" id="wlsm_bulksmsbd_senderid" value="<?php echo esc_attr($school_bulksmsbd_senderid); ?>" class="form-control" placeholder="<?php esc_attr_e('bulksmsbd Sender ID', 'school-management'); ?>">
 							</div>
 						</div>
 					</div>

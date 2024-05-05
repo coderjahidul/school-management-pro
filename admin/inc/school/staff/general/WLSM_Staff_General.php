@@ -8606,6 +8606,11 @@ class WLSM_Staff_General
 			
 			$bdbsms_api_key = isset($_POST['bdbsms_api_key']) ? sanitize_text_field($_POST['bdbsms_api_key']) : '';
 
+			// bulksmsbd
+			$bulksmsbd_api_url = isset($_POST['bulksmsbd_api_url']) ? sanitize_text_field($_POST['bulksmsbd_api_url']) : '';
+			$bulksmsbd_api_key = isset($_POST['bulksmsbd_api_key']) ? sanitize_text_field($_POST['bulksmsbd_api_key']) : '';
+			$bulksmsbd_sender_id = isset($_POST['bulksmsbd_sender_id']) ? sanitize_text_field($_POST['bulksmsbd_sender_id']) : '';
+
 			$kivalosolutions_api_key = isset($_POST['kivalosolutions_api_key']) ? sanitize_text_field($_POST['kivalosolutions_api_key']) : '';
 			$kivalosolutions_sender  = isset($_POST['kivalosolutions_sender']) ? sanitize_text_field($_POST['kivalosolutions_sender']) : '';
 
@@ -9208,6 +9213,29 @@ class WLSM_Staff_General
 					);
 				}
 
+				// bulksmsbd.
+				$bulksmsbd = $wpdb->get_row($wpdb->prepare('SELECT ID, setting_value FROM ' . WLSM_SETTINGS . ' WHERE school_id = %d AND setting_key = "bulksmsbd"', $school_id));
+				$bulksmsbd_data = array(
+					'api_url' => $bulksmsbd_api_url,
+					'api_key' => $bulksmsbd_api_key,
+					'sender' => $bulksmsbd_sender_id,
+				);
+				if (!$bulksmsbd) {
+					$wpdb->insert(
+						WLSM_SETTINGS,
+						array(
+							'setting_key'   => 'bulksmsbd',
+							'setting_value' => serialize($bulksmsbd_data),
+							'school_id'     => $school_id,
+						)
+					);
+				} else {
+					$wpdb->update(
+						WLSM_SETTINGS,
+						array('setting_value' => serialize($bulksmsbd_data)),
+						array('ID'            => $bulksmsbd->ID)
+					);
+				}
 				// kivalosolutions.
 				$kivalosolutions = $wpdb->get_row($wpdb->prepare('SELECT ID, setting_value FROM ' . WLSM_SETTINGS . ' WHERE school_id = %d AND setting_key = "kivalosolutions"', $school_id));
 

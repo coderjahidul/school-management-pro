@@ -27,6 +27,7 @@ class WLSM_SMS {
 			'vinuthan'        => esc_html__('Vinuthan', 'school-management'),
 			'logixsms'        => esc_html__('Logixsms', 'school-management'),
 			'bdbsms'          => esc_html__('bdbulksms', 'school-management'),
+			'bulksmsbd'		  => esc_html__('bulksmsbd', 'school-management'),
 			'nextsms'         => esc_html__('nextsms', 'school-management'),
 			'whatsapp'        => esc_html__('Whatsapp API (Intechno)', 'school-management'),
 		);
@@ -116,6 +117,8 @@ class WLSM_SMS {
 			return self::sendpk($school_id, $message, $to);
 		}elseif ('bdbsms' === $sms_carrier) {
 			return self::bdbsms($school_id, $message, $to);
+		}elseif('bulksmsbd' === $sms_carrier) {
+			return self::bulksmsbd($school_id, $message, $to);
 		}elseif ('smartsms' === $sms_carrier) {
 			return self::smartsms($school_id, $message, $to);
 		}
@@ -944,6 +947,38 @@ class WLSM_SMS {
 
 		return false;
 	}
+
+	// bulksmsbd api for sending sms
+	public static function bulksmsbd($school_id, $message, $numbers) {
+		try {
+			$bulksmsbd = WLSM_M_Setting::get_settings_bulksmsbd($school_id);
+			$api_key   = $bulksmsbd['api_key'];
+			$sender_id = $bulksmsbd['sender_id'];
+
+			if (is_array($numbers)) {
+				$numbers = implode(',', $numbers);
+			}
+			if(!($api_key && $sender_id)) {
+				return false;
+			}
+			$data = array(
+				"api_key"  => $api_key,
+				"sender_id"  => $sender_id,
+				"message"  => urlencode($message),
+				"numbers"  => $numbers,
+			);
+			$url = ("http://bulksmsbd.net/api/smsapi?api_key=$api_key&type=text&number=$numbers&senderid=$sender_id&message=$message");
+			$response = wp_remote_get($url);
+			$result   = wp_remote_retrieve_body($response);
+			if ($result) {
+				return $result;
+			}
+		} catch (Exception $e) {
+			
+		}
+		return false;	
+	}
+	
 
 	public static function kivalosolutions($school_id, $message, $numbers) {
 		try {

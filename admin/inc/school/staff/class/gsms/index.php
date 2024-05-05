@@ -115,48 +115,212 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                     "SELECT * FROM $table_name WHERE note = %s AND section_id = %d order by roll_number", $class_group, $section_id
                                 ));
 
+                                $bulksmsbd_apikey = $wpdb->get_results($wpdb->prepare("SELECT setting_value FROM {$wpdb->prefix}wlsm_settings WHERE setting_key = %s", 'bulksmsbd'));
 
-                                // Display student names and IDs
-                                if ($get_student_records) {
-                                    echo '<div class="wlsm-student-list">';
-                                    // foreach ($get_student_records as $student_record) {
-                                        // $student_name = $student_record->name;
-                                        // $student_roll = $student_record->roll_number;
-                                        // $student_record_id = $student_record->ID;
-                                        // $student_session_id = $student_record->session_id;
-                                        // $student_father_phone = $student_record->father_phone;
+                                foreach ($bulksmsbd_apikey as $value) {
+                                    $serialized_data = $value->setting_value;
+                                    $decoded_data = unserialize($serialized_data);
 
-                                        // $student_session = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_sessions WHERE ID = %d", $student_session_id));
+                                    // Check if $decoded_data is an array
+                                    if (is_array($decoded_data)) {
+                                        // Check if 'api_key' and 'sender' keys exist in the array
+                                        if (isset($decoded_data['api_key']) && isset($decoded_data['sender'])) {
+                                            // Access the values directly
+                                            $api_key = $decoded_data['api_key'] . "<br>";
+                                            $sender = $decoded_data['sender'] . "<br>";
 
-                                        // echo $student_roll . '. ' . $student_name . ' ' . $student_father_phone .  '<br>';
-                                        
-                                        ?>
-                                        
-                                        
-                                        <!-- <div type="button" class="student-list" data-toggle="modal" data-target="#student_report_card<?php //echo $student_record_id;?>"><?php// echo esc_html($student_roll . '. ' . $student_name);?>
-                                        </div> -->
-
-                                            
-                                        <?php
-                                    // }
-                                    // function sms_sender_form() {
-                                        ?>
-                                        <div class="wrap">
-                                            <form method="post" action="">
-                                                <label for="phone_number">Phone Number:</label>
-                                                <textarea type="text" id="phone_number" name="phone_number" required><?php foreach($get_student_records as $student) { echo $student->father_phone . ", "; }?></textarea><br>
-                                                <label for="message">Message:</label>
-                                                <textarea id="message" name="message" required></textarea><br>
-                                                <input type="submit" name="send_sms" value="Send SMS">
-                                            </form>
-                                        </div>
-                                        <?php
-                                    // }
-                                    echo '</div>';
-                                } else {
-                                    echo '<p>!No students found.</p>';
+                                            // Display student names and IDs
+                                            if ($get_student_records) {
+                                                echo '<div class="wlsm-student-list">';
+                                                define('BULKSMSBD_API_URL', 'http://bulksmsbd.net/api/smsapi');
+                                                define('BULKSMSBD_API_KEY', $api_key);
+                                                define('BULKSMSBD_SENDER_ID', $sender);
+                                                
+                                                // Function to send SMS message using BulkSMSBD API
+                                                function send_sms($to, $message) {
+                                                    $url = BULKSMSBD_API_URL;
+                                                    $api_key = BULKSMSBD_API_KEY;
+                                                    $sender_id = BULKSMSBD_SENDER_ID;
+                                                
+                                                    // Construct URL with parameters
+                                                    $url .= '?api_key=' . $api_key;
+                                                    $url .= '&type=text';
+                                                    $url .= '&number=' . urlencode($to);
+                                                    $url .= '&senderid=' . $sender_id;
+                                                    $url .= '&message=' . urlencode($message);
+                                                
+                                                    // Send request using cURL for better control and error handling
+                                                    $ch = curl_init($url);
+                                                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                                    $response = curl_exec($ch);
+                                                    curl_close($ch);
+                                                
+                                                    // Check response
+                                                    if ($response) {
+                                                        // Check the response from BulkSMSBD API if needed
+                                                        // For example, you might parse the JSON response to check for success or error messages
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+                                                }
+                                                
+                                                // Handle SMS submission when the form is submitted
+                                                function handle_sms_submission() {
+                                                    if (isset($_POST['send_sms'])) {
+                                                        // Sanitize phone number and message
+                                                        $to = isset($_POST['phone_number']) ? sanitize_text_field($_POST['phone_number']) : '';
+                                                        $message = isset($_POST['message']) ? sanitize_text_field($_POST['message']) : '';
+                                                
+                                                        if (!empty($to) && !empty($message)) {
+                                                            // Send SMS
+                                                            $result = send_sms($to, $message);
+                                                
+                                                            if ($result) {
+                                                                echo '<div class="updated"><p>SMS sent successfully!</p></div>';
+                                                            } else {
+                                                                echo '<div class="error"><p>Failed to send SMS. Please try again later.</p></div>';
+                                                            }
+                                                        } else {
+                                                            echo '<div class="error"><p>Phone number and message are required.</p></div>';
+                                                        }
+                                                    }
+                                                }
+                                                // add_action('admin_init', 'handle_sms_submission');
+                                                echo handle_sms_submission();
+                                                ?>
+                                                
+                                                <div class="wrap">
+                                                    <h1><?php esc_html_e('Send SMS', 'sms-sender');?></h1>
+                                                    <form method="post" action="">
+                                                        <div class="form-group">
+                                                            <label for="phone_number">Phone Number:</label>
+                                                            <input type="text" id="phone_number" name="phone_number" value="<?php foreach($get_student_records as $student){ echo $student->phone . ', '; }?>" class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="message">Message:</label>
+                                                            <textarea id="message" name="message" class="form-control" rows="10" required></textarea>
+                                                        </div>
+                                                        <button type="submit" name="send_sms" class="btn btn-primary">Send SMS</button>
+                                                    </form>
+                                                </div>
+                                                <?php
+                                                
+                                                echo '</div>';
+                                            } else {
+                                                echo '<p>!No students found.</p>';
+                                            }
+                                        } else {
+                                            echo "Error: 'api_key' or 'sender' key is missing from the array.<br>";
+                                        }
+                                    } else {
+                                        // Handle the case where $decoded_data is not an array
+                                        echo "Error: Decoded data is not an array.<br>";
+                                    }
                                 }
+
+
+
+                                
+                            }else {
+                                $bulksmsbd_apikey = $wpdb->get_results($wpdb->prepare("SELECT setting_value FROM {$wpdb->prefix}wlsm_settings WHERE setting_key = %s", 'bulksmsbd'));
+
+                                foreach ($bulksmsbd_apikey as $value) {
+                                    $serialized_data = $value->setting_value;
+                                    $decoded_data = unserialize($serialized_data);
+
+                                    // Check if $decoded_data is an array
+                                    if (is_array($decoded_data)) {
+                                        // Check if 'api_key' and 'sender' keys exist in the array
+                                        if (isset($decoded_data['api_key']) && isset($decoded_data['sender'])) {
+                                            // Access the values directly
+                                            $api_key = $decoded_data['api_key'];
+                                            $sender = $decoded_data['sender'];
+                                            define('BULKSMSBD_API_URL', 'http://bulksmsbd.net/api/smsapi');
+                                            define('BULKSMSBD_API_KEY', $api_key);
+                                            define('BULKSMSBD_SENDER_ID', $sender);
+                                            
+                                            // Function to send SMS message using BulkSMSBD API
+                                            function send_sms($to, $message) {
+                                                $url = BULKSMSBD_API_URL;
+                                                $api_key = BULKSMSBD_API_KEY;
+                                                $sender_id = BULKSMSBD_SENDER_ID;
+                                            
+                                                // Construct URL with parameters
+                                                $url .= '?api_key=' . $api_key;
+                                                $url .= '&type=text';
+                                                $url .= '&number=' . urlencode($to);
+                                                $url .= '&senderid=' . $sender_id;
+                                                $url .= '&message=' . urlencode($message);
+                                            
+                                                // Send request using cURL for better control and error handling
+                                                $ch = curl_init($url);
+                                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                                $response = curl_exec($ch);
+                                                curl_close($ch);
+                                            
+                                                // Check response
+                                                if ($response) {
+                                                    // Check the response from BulkSMSBD API if needed
+                                                    // For example, you might parse the JSON response to check for success or error messages
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }
+                                            }
+                                            
+                                            // Handle SMS submission when the form is submitted
+                                            function handle_sms_submission() {
+                                                if (isset($_POST['send_sms'])) {
+                                                    // Sanitize phone number and message
+                                                    $to = isset($_POST['phone_number']) ? sanitize_text_field($_POST['phone_number']) : '';
+                                                    $message = isset($_POST['message']) ? sanitize_text_field($_POST['message']) : '';
+                                            
+                                                    if (!empty($to) && !empty($message)) {
+                                                        // Send SMS
+                                                        $result = send_sms($to, $message);
+                                            
+                                                        if ($result) {
+                                                            echo '<div class="updated"><p>SMS sent successfully!</p></div>';
+                                                        } else {
+                                                            echo '<div class="error"><p>Failed to send SMS. Please try again later.</p></div>';
+                                                        }
+                                                    } else {
+                                                        echo '<div class="error"><p>Phone number and message are required.</p></div>';
+                                                    }
+                                                }
+                                            }
+                                            // add_action('admin_init', 'handle_sms_submission');
+                                            echo handle_sms_submission();
+                                            ?>
+                                            
+                                            <div class="wrap">
+                                                <h1><?php esc_html_e('Send SMS', 'sms-sender');?></h1>
+                                                <form method="post" action="">
+                                                    <div class="form-group">
+                                                        <label for="phone_number">Phone Number:</label>
+                                                        <input type="text" id="phone_number" name="phone_number" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="message">Message:</label>
+                                                        <textarea id="message" name="message" class="form-control" rows="10" required></textarea>
+                                                    </div>
+                                                    <button type="submit" name="send_sms" class="btn btn-primary">Send SMS</button>
+                                                </form>
+                                            </div>
+                                        <?php  
+                                        } else {
+                                            echo "Error: 'api_key' or 'sender' key is missing from the array.<br>";
+                                        }
+                                    } else {
+                                        // Handle the case where $decoded_data is not an array
+                                        echo "Error: Decoded data is not an array.<br>";
+                                    }
+                                }
+
+                                   
                             }
+                            
                         ?>
                     </div>
                 </div>

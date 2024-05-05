@@ -6834,6 +6834,7 @@
 		var msg91 = $('.wlsm_msg91');
 		var textlocal = $('.wlsm_textlocal');
 		var bdbsms = $('.wlsm_bdbsms');
+		var bulksmsbd =$('.wlsm_bulksmsbd');
 		var kivalosolutions = $('.wlsm_kivalosolutions');
 		var ebulksms = $('.wlsm_ebulksms');
 		var sendpk = $('.wlsm_sendpk');
@@ -6874,6 +6875,8 @@
 			textlocal.show();
 		} else if ('bdbsms' === wlsmSMSCarrier) {
 			bdbsms.show();
+		} else if ('bulksmsbd' === wlsmSMSCarrier) {
+			bulksmsbd.show();
 		} else if ('kivalosolutions' === wlsmSMSCarrier) {
 			kivalosolutions.show();
 		} else if ('ebulksms' === wlsmSMSCarrier) {
@@ -6921,6 +6924,8 @@
 				textlocal.fadeIn();
 			} else if ('bdbsms' === wlsmSMSCarrier) {
 				bdbsms.fadeIn();
+			} else if('bulksmsbd' === wlsmSMSCarrier){
+				bulksmsbd.fadeIn();
 			} else if ('kivalosolutions' === wlsmSMSCarrier) {
 				kivalosolutions.fadeIn();
 			} else if ('twilio' === wlsmSMSCarrier) {
