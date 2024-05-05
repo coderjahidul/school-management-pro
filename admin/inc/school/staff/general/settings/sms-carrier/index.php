@@ -1174,6 +1174,20 @@ $school_logixsms_sender_id = $settings_logixsms['sender_id'];
 				<div class="wlsm_sms_carrier wlsm_bulksmsbd">
 					<div class="row">
 						<div class="col-md-3">
+							<label class="wlsm-font-bold"><?php esc_html_e('SMS Package', 'school-management'); ?>:</label>
+						</div>
+						<div class="col-md-9">
+							<div class="form-group">
+								<a class="wlsm-font-bold" target="_blank" href="https://bulksmsbd.com/bulksms-price.php">
+									<?php esc_html_e('Click for SMS Package Features and Pricing', 'school-management'); ?>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="wlsm_sms_carrier wlsm_bulksmsbd">
+					<div class="row">
+						<div class="col-md-3">
 							<label for="wlsm_bulksmsbd_apikey" class="wlsm-font-bold"><?php esc_html_e('API Key', 'school-management'); ?>:</label>
 						</div>
 						<div class="col-md-9">
@@ -1196,20 +1210,7 @@ $school_logixsms_sender_id = $settings_logixsms['sender_id'];
 						</div>
 					</div>
 				</div>
-				<div class="wlsm_sms_carrier wlsm_bulksmsbd">
-					<div class="row">
-						<div class="col-md-3">
-							<label class="wlsm-font-bold"><?php esc_html_e('SMS Package', 'school-management'); ?>:</label>
-						</div>
-						<div class="col-md-9">
-							<div class="form-group">
-								<a class="wlsm-font-bold" target="_blank" href="https://bulksmsbd.com/bulksms-price.php">
-									<?php esc_html_e('Click for SMS Package Features and Pricing', 'school-management'); ?>
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
+				
 
 				<div class="wlsm_sms_carrier wlsm_kivalosolutions">
 					<div class="row">
