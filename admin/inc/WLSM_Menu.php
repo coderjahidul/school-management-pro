@@ -445,7 +445,7 @@ class WLSM_Menu {
 								$school_staff = add_submenu_page( WLSM_LECTURE, esc_html__( 'Lessons', 'school-management' ), esc_html__( 'Lessons', 'school-management' ), 'read', WLSM_LECTURE, array( 'WLSM_Menu', 'school_lecture' ) );
 								add_action( 'admin_print_styles-' . $school_staff, array( 'WLSM_Menu', 'menu_page_assets' ) );
 
-								$chapter = add_submenu_page( WLSM_LECTURE, esc_html__( 'Chapter', 'school-management' ), esc_html__( 'Chapter', 'school-management' ), 'read', WLSM_CHAPTER, array( 'WLSM_Menu', 'school_chapter' ) );
+								$chapter = add_submenu_page( WLSM_LECTURE, esc_html__( 'Single Qualification', 'school-management' ), esc_html__( 'Single Qualification', 'school-management' ), 'read', WLSM_CHAPTER, array( 'WLSM_Menu', 'school_chapter' ) );
 								add_action( 'admin_print_styles-' . $chapter, array( 'WLSM_Menu', 'menu_page_assets' ) );
 							}
 							

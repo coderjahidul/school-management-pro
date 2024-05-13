@@ -56,7 +56,7 @@ $assessment_type_list = WLSM_Helper::assessment_type_list();
 							esc_html( $title )
 						);
 					} else {
-						esc_html_e( 'Add New Chapter', 'school-management' );
+						esc_html_e( 'Add New Single Qualification', 'school-management' );
 					}
 					?>
 				</span>
@@ -155,7 +155,7 @@ $assessment_type_list = WLSM_Helper::assessment_type_list();
 								?>
 								<i class="fas fa-plus-square"></i>&nbsp;
 								<?php
-								esc_html_e( 'Add New Chapter', 'school-management' );
+								esc_html_e( 'Add New Single Qualification', 'school-management' );
 							}
 							?>
 						</button>
