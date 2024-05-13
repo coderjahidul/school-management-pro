@@ -1465,6 +1465,9 @@ class WLSM_Database
 			PRIMARY KEY (ID)
 			) ENGINE=InnoDB " . $charset_collate;
 		dbDelta($sql);
+		$wpdb->query("ALTER TABLE " . WLSM_CHAPTER . "
+			MODIFY COLUMN title varchar(355) DEFAULT NULL
+		");
 		
 		// Check if assessment_types column already exists
 		$assessment_types_exists = $wpdb->get_var("SHOW COLUMNS FROM " . WLSM_CHAPTER . " LIKE 'assessment_types'");
@@ -1495,6 +1498,11 @@ class WLSM_Database
 			PRIMARY KEY (ID)
 			) ENGINE=InnoDB " . $charset_collate;
 		dbDelta($sql);
+		$wpdb->query("ALTER TABLE " . WLSM_LECTURE . "
+			MODIFY COLUMN code varchar(20) DEFAULT NULL,
+			MODIFY COLUMN title varchar(355) DEFAULT NULL"
+		);
+
 
 		// Check if code column already exists
 		$code_column_exists = $wpdb->get_var("SHOW COLUMNS FROM " . WLSM_LECTURE . " LIKE 'code'");
