@@ -48,7 +48,7 @@ $assessment_type_list = WLSM_Helper::assessment_type_list();
 						printf(
 							wp_kses(
 								/* translators: %s: chapter name */
-								__( 'Edit Chapter: %s', 'school-management' ),
+								__( 'Edit Single Qualification: %s', 'school-management' ),
 								array(
 									'span' => array( 'class' => array() ),
 								)
@@ -150,7 +150,7 @@ $assessment_type_list = WLSM_Helper::assessment_type_list();
 								?>
 								<i class="fas fa-save"></i>&nbsp;
 								<?php
-								esc_html_e( 'Update Chapter', 'school-management' );
+								esc_html_e( 'Update Single Qualification', 'school-management' );
 							} else {
 								?>
 								<i class="fas fa-plus-square"></i>&nbsp;

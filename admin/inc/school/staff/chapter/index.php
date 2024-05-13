@@ -11,7 +11,7 @@ $chapter_page_url = WLSM_M_Staff_Transport::get_chapter_page_url();
 		<div class="text-center wlsm-section-heading-block">
 			<span class="wlsm-section-heading">
 			<i class="fas fa-home"></i>
-				<?php esc_html_e( 'Chapters (Single Qualification)', 'school-management' ); ?>
+				<?php esc_html_e( 'Single Qualifications', 'school-management' ); ?>
 			</span>
 			<span class="float-md-right">
 				<a href="<?php echo esc_url( $chapter_page_url . '&action=save' ); ?>" class="btn btn-sm btn-outline-light">

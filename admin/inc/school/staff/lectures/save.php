@@ -64,7 +64,7 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 						printf(
 							wp_kses(
 								/* translators: %s: lecture name */
-								__( 'Edit Lecture: %1$s %2$s', 'school-management' ),
+								__( 'Edit Lecture (PI): %1$s %2$s', 'school-management' ),
 								array(
 									'span' => array( 'class' => array() ),
 								)
@@ -73,7 +73,7 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 							esc_html( $title )
 						);
 					} else {
-						esc_html_e( 'Add New Lesson', 'school-management' );
+						esc_html_e( 'Add New Lesson (PI)', 'school-management' );
 					}
 					?>
 				</span>
@@ -100,9 +100,9 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 				<div class="form-row">
 					<div class="form-group col-md-3">
 						<label for="wlsm_lecture_code" class="wlsm-font-bold">
-							<span class="wlsm-important">*</span> <?php esc_html_e( 'Lesson Code', 'school-management' ); ?>:
+							<span class="wlsm-important">*</span> <?php esc_html_e( 'Lesson (PI) Code', 'school-management' ); ?>:
 						</label>
-						<input type="text" name="code" class="form-control" id="wlsm_lecture_code" placeholder="<?php esc_attr_e( 'Enter Lesson Code', 'school-management' ); ?>" value="<?php echo esc_attr( stripslashes($code) );?>">
+						<input type="text" name="code" class="form-control" id="wlsm_lecture_code" placeholder="<?php esc_attr_e( 'Enter Lesson (PI) Code', 'school-management' ); ?>" value="<?php echo esc_attr( stripslashes($code) );?>">
 					</div>
 					<div class="form-group col-md-3">
 						<label for="wlsm_title" class="wlsm-font-bold">
@@ -166,10 +166,10 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 
 					<div class="form-group col-md-3">
 						<label for="wlsm_chapter" class="wlsm-font-bold">
-							<?php esc_html_e( 'Chapter', 'school-management' ); ?>:
+							<?php esc_html_e( 'Single Qualification', 'school-management' ); ?>:
 						</label>
 
-						<select name="chapter" class="form-control selectpicker" id="wlsm_chapter" data-live-search="true" title="<?php esc_attr_e( 'Select chapter', 'school-management' ); ?>" data-actions-box="true">
+						<select name="chapter" class="form-control selectpicker" id="wlsm_chapter" data-live-search="true" title="<?php esc_attr_e( 'Select Single Qualification', 'school-management' ); ?>" data-actions-box="true">
 						</select>
 					</div>
 				</div>
@@ -304,12 +304,12 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 								?>
 								<i class="fas fa-save"></i>&nbsp;
 								<?php
-								esc_html_e( 'Update Lecture', 'school-management' );
+								esc_html_e( 'Update Lecture (PI)', 'school-management' );
 							} else {
 								?>
 								<i class="fas fa-plus-square"></i>&nbsp;
 								<?php
-								esc_html_e( 'Add New Lesson', 'school-management' );
+								esc_html_e( 'Add New Lesson (PI)', 'school-management' );
 							}
 							?>
 						</button>
