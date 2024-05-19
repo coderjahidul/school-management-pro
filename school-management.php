@@ -372,6 +372,17 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 						}
 						
 					?>
+					<td colspan="2" style="text-align: center !important; border: 0;">
+						<?php echo esc_html__('', 'school-management'); ?><br>
+						<?php echo esc_html__('____________________________', 'school-management'); ?><br>
+						<?php echo esc_html__('Subject Teacher', 'school-management'); ?>
+						</td>
+						<td colspan="2" style="text-align: center !important; border: 0;">
+						<?php echo esc_html__('', 'school-management'); ?><br>
+						<?php echo esc_html__('____________________________', 'school-management'); ?><br>
+						<?php echo esc_html__('Head Teacher', 'school-management'); ?>
+					</td>
+
 				</table>
 			</div>
 			<div class="modal-footer">
