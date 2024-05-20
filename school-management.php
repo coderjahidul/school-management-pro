@@ -312,12 +312,33 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 								$square_des = $subject_lesson->square_description;
 								$circle_des = $subject_lesson->circle_description;
 								$triangle_des = $subject_lesson->triangle_description;
-								?>
 
+								
+								
+								?>
 									<tbody>
+											<?php 
+												// Fetch lesson IDs from the database
+												$results_lesson_id = $wpdb->get_results(
+													$wpdb->prepare("SELECT lecture_id FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", $student_record_id, $lesson_id)
+												);
+												
+												// Check if there are any results
+												if (!empty($results_lesson_id)) {
+													foreach ($results_lesson_id as $r_lesson_id) {
+														// Get the lesson ID from the current result
+														$rlesson_id = $r_lesson_id->lecture_id;
+													}
+												} else {
+													// Nothing to print
+												}
+											?>
+										<?php if($lesson_id == $rlesson_id) {?>
 										<td style="padding: 5px;">
-											<p><?php echo $lesson_code . ' - ' . $lesson_title; ?></p>
+											
+											<p><?php echo $lesson_code . ' - ' . $lesson_title;?></p>
 										</td> 
+										<?php }?>
 										<?php 
 											$new_curriculum_results = $wpdb->get_results($wpdb->prepare(
 												"SELECT * FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", $student_record_id, $lesson_id
