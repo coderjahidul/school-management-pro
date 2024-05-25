@@ -19,10 +19,10 @@ $school_signature = $settings_general['school_signature'];
 ?>
 <div class="wlsm-print-id-card-container">
 
-	<div class="id_card  ">
+	<div class="id_card">
         <div class="first-box">
      
-            <div class="font-header" style="background-image:url('<?php echo esc_url( WLSM_PLUGIN_URL . 'assets/images/solid-color-image.png' ); ?>');" >
+            <div class="font-header" style="margin-top: 20px; background-image:url('<?php echo esc_url( WLSM_PLUGIN_URL . 'assets/images/solid-color-image.png' ); ?>');" >
 			<h3><?php echo esc_html( WLSM_M_School::get_label_text( $school->label ) ); ?></h3>
    
                 
@@ -45,40 +45,44 @@ $school_signature = $settings_general['school_signature'];
                     <p><strong>Section:</strong> <?php echo esc_html( WLSM_M_Class::get_label_text( $student->section_label ) ); ?></p>
                     <p><strong>Blood Group:</strong> <?php echo esc_html( $student->blood_group ); ?></p>
                     <p style="font-size:12px;" ><strong>Father's Name:</strong> <?php echo esc_html( WLSM_M_Staff_Class::get_name_text( $student->father_name ) ); ?></p>
-                    <p style="font-size:13px;"><strong>Address:</strong> <?php echo esc_html( $student->address ); ?></p>
+                    <p style="font-size:13px;"><strong>Address: </strong><?php echo esc_html( $student->address);?></p>
                     
                 </div>
                 
             </div>
-            <div class="font-footer" style="background-image:url('<?php echo esc_url( WLSM_PLUGIN_URL . 'assets/images/solid-color-image.png' ); ?>');">
-                <h4><?php echo esc_html( WLSM_M_School::get_label_text( $school->label ) ); ?></h4>
-                <p><?php echo esc_html( WLSM_M_School::get_email_text( $school->address ) ); ?></p>
-            </div>
+            <!-- <div class="font-footer" style="background-image:url('<?php //echo esc_url( WLSM_PLUGIN_URL . 'assets/images/solid-color-image.png' ); ?>');">
+                <h4><?php //echo esc_html( WLSM_M_School::get_label_text( $school->label ) ); ?></h4>
+                <p><?php //echo esc_html( WLSM_M_School::get_email_text( $school->address ) ); ?></p>
+            </div> -->
         </div>
         
         <!-- back side -->
         <div class="second-box ">
-            <div class="font-header" style="background-image:url('<?php echo esc_url( WLSM_PLUGIN_URL . 'assets/images/solid-color-image.png' ); ?>');">
-                <h3>Validation Date 27-07-2023</h3>
+            <div class="font-header" style="margin-top:20px; background-image:url('<?php echo esc_url( WLSM_PLUGIN_URL . 'assets/images/solid-color-image.png' ); ?>');">
+                <h3><?php echo "If Found Please Return the Card"; ?></h3>
             </div>
             <div class="back-card">
-                
-						<div class="images">
+                    <!-- <h5><?php //echo "If Found Please Return the Card" ?></h5> -->
+					<div class="images">
 						<?php if ( ! empty ( $school_logo ) ) { ?>
-					<img src="<?php echo esc_url( wp_get_attachment_url( $school_logo ) ); ?>" class="wlsm-print-school-logo">
-					<?php } ?>
-						</div>
-						<div class="info">
-							<p style="font-size: 13px;">Innovative learning environment fostering creativity, critical thinking, and personal growth. Welcoming, diverse, and dedicated faculty. Excellence in education.</p>
-							<p style="font-size: 13px;" >Excellence in education.</p>
-						
-							<span><strong>Phone: +88<?php echo esc_html( WLSM_M_School::get_label_text( $school->phone ) ); ?></strong> </span>
-						</div>
+                            <img src="<?php echo esc_url( wp_get_attachment_url( $school_logo ) ); ?>" class="wlsm-print-school-logo">
+                        <?php } ?>
+					</div>
+                    <div class="info">
+                        <h5><?php echo esc_html( WLSM_M_School::get_label_text( $school->label ) ); ?></h5>
+                        <p style="font-size: 13px;" ><?php echo home_url();?></p>
+                        <p style="font-size: 13px;" ><strong>Email: </strong><?php echo esc_html( WLSM_M_School::get_email_text( $school->email ) );?></p>
+
+                    
+                        <span><strong>Phone: +88<?php echo esc_html( WLSM_M_School::get_label_text( $school->phone ) ); ?></strong> </span>
+                        <img style="width: 35%;" src="<?php echo esc_url(wp_get_attachment_url($school_signature))?>" alt="school signature">
+                        <p><?php echo esc_html("Authorized Signature");?></p>
+                    </div>
                 
             </div>
-            <div class="font-footer" style="background-image:url('<?php echo esc_url( WLSM_PLUGIN_URL . 'assets/images/solid-color-image.png' ); ?>');">
-                <h4><?php echo esc_html( WLSM_M_School::get_label_text( $school->label ) ); ?></h4>
-                <p><?php echo esc_html( WLSM_M_School::get_email_text( $school->address ) ); ?></p>
+            <!-- <div class="font-footer" style="background-image:url('<?php //echo esc_url( WLSM_PLUGIN_URL . 'assets/images/solid-color-image.png' ); ?>');">
+                <h4><?php //echo esc_html( WLSM_M_School::get_label_text( $school->label ) ); ?></h4>
+                <p><?php //echo esc_html( WLSM_M_School::get_email_text( $school->address ) ); ?></p> -->
             </div>
         </div>
     </div>

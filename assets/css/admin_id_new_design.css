@@ -111,8 +111,8 @@
     padding-right: 10px;
 }
 .back-card .images img {
-    width: 150px;
-    height: 150px;
-    margin: 10px !important;
+    width: 50px !important;
+    height: 50px !important;
+    margin: 5px !important;
     object-fit: contain;
 }
