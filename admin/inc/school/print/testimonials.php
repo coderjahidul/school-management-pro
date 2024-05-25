@@ -75,7 +75,7 @@ if ( isset( $from_front ) ) {
                
             </div>
             <div class="footer">
-            <img style="transform: translateX(22px);height:60px ; width:120px;" src="<?php echo esc_url( wp_get_attachment_url( $school_signature ) ); ?>" class="wlsm-print-school-logo">
+            <img style="height:60px ; width:120px;" src="<?php echo esc_url( wp_get_attachment_url( $school_signature ) ); ?>" class="wlsm-print-school-logo">
                 <p>প্রধান শিক্ষক/অধ্যক্ষ</p>
                 
             </div>
