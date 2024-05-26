@@ -39,7 +39,9 @@ $behavioral_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_BEHAVIOR
 
         // Get current user
         $get_current_user_id = get_current_user_id();
-        $get_current_user_roles = wp_get_current_user()->roles;
+        echo "<pre>"; 
+        print_r($get_current_user_roles = wp_get_current_user()->roles);
+        echo"</pre>";
         
         // Get current staff
         $get_current_staff_id = $wpdb->get_results($wpdb->prepare(
@@ -53,8 +55,15 @@ $behavioral_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_BEHAVIOR
             "SELECT * FROM {$wpdb->prefix}wlsm_admins WHERE staff_id = %d",
             $get_current_staff_id
         ));
-        
-        if($get_current_user_roles[0] == 'administrator'){
+        $roles_users = array('administrator', 'author', 'editor');
+        $role_matched = false;
+        foreach($get_current_user_roles as $role){
+            if(in_array($role, $roles_users)){
+                $role_matched = true;
+                break;
+            }
+        }
+        if($role_matched){
             $subject_types = array('subjective', 'practical');
             foreach ($subject_types as $subject_type) {
                 $subjects = $wpdb->get_results($wpdb->prepare(
