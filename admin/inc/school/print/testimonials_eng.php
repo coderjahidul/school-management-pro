@@ -226,7 +226,7 @@ if ( isset( $from_front ) ) {
                 <div class="kromik-num"></div>
             </div>
             <div class="footer">
-            <img style="transform: translateX(22px);height:60px ; width:120px;" src="<?php echo esc_url( wp_get_attachment_url( $school_signature ) ); ?>" class="wlsm-print-school-logo">
+            <img style="height:60px ; width:120px;" src="<?php echo esc_url( wp_get_attachment_url( $school_signature ) ); ?>" class="wlsm-print-school-logo">
                 <p>Head Teacher/Principal</p>
                 <h6 style="text-align:right;"><?php echo $second_school_name; ?></h6>
             </div>

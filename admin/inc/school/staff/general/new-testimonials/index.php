@@ -351,7 +351,7 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
              
                   </div>
                   <div class="footer">
-                  <img style="transform: translateX(22px);" src="<?php echo esc_url( wp_get_attachment_url( $school_signature ) ); ?>" class="wlsm-print-school-logo">
+                  <img src="<?php echo esc_url( wp_get_attachment_url( $school_signature ) ); ?>" class="wlsm-print-school-logo">
                     <p>Head Teacher / Principal</p>
                     
                   </div>
