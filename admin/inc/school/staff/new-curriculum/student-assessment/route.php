@@ -39,9 +39,6 @@ $behavioral_assessment = admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_BEHAVIOR
 
         // Get current user
         $get_current_user_id = get_current_user_id();
-        echo "<pre>"; 
-        print_r($get_current_user_roles = wp_get_current_user()->roles);
-        echo"</pre>";
         
         // Get current staff
         $get_current_staff_id = $wpdb->get_results($wpdb->prepare(
