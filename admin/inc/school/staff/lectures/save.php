@@ -280,7 +280,7 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 					</div>
 					<div class="col-md-4">
 						<label for="wlsm_subject_triangle" class="wlsm-font-bold">
-							<?php esc_html_e( 'Triangle Description', 'school-management' ); ?> (<span>&#128710;</span>) :
+							<?php esc_html_e( 'Triangle Description', 'school-management' ); ?> (<span>🛆</span>) :
 						</label>
 						<div class="form-group">
 							<?php

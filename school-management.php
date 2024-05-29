@@ -224,7 +224,7 @@ function chapters_function_template($get_subject_chapters, $wpdb){
 															</label>
 															<label class="triangle-description">
 																<input @click="selected = 'triangle'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="triangle">
-																<span class="triangle-icon" x-bind:class="{ 'selected': selected === 'triangle' }">&#128710;</span>
+																<span class="triangle-icon" x-bind:class="{ 'selected': selected === 'triangle' }">🛆</span>
 																<?php echo $triangle_des; ?>
 															</label>
 														</div>
@@ -373,10 +373,10 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 													<td style="padding: 5px;"> 
 														<div class="marking" style="display: flex;justify-content: left;">
 															<?php if($marks == "triangle"){?>
-																<span class="triangle-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">&#128710;</span>
+																<span class="triangle-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">🛆</span>
 															<?php } else {
 																?>
-																	<span class="triangle-icon" style="padding-right: 5px;">&#128710;</span>
+																	<span class="triangle-icon" style="padding-right: 5px;">🛆</span>
 																<?php
 															}
 															echo $triangle_des; ?>
