@@ -276,7 +276,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 								<?php echo esc_html__('Student Roll: ' . $student_roll); ?>
 							</th>
 							<th colspan="2" align="left" style="padding: 5px; text-align: left">
-								<?php echo esc_html__('Class: ' . $class_label); ?>
+								<?php echo esc_html__('Class: ' . $class_id); ?>
 								<br>
 								<?php echo esc_html__('Group: ' . $class_group); ?>
 								<br>
