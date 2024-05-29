@@ -190,7 +190,8 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                 $class_group = sanitize_text_field($_POST['class_group']);
                                 $section_id = absint($_POST['section_id']);
                                 $subject_id = absint($_POST['subject_id']);
-                                $class_label = isset($class->label) ? $class->label : '';
+                                $class_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_classes WHERE ID = %d", $class_id));
+                                $class_label = isset($class_label[0]->label) ? $class_label[0]->label : '';
 
                                 $section_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_sections WHERE ID = %d", $section_id));
                                 $section_label = isset($section_label[0]->label) ? $section_label[0]->label : '';
