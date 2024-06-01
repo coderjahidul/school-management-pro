@@ -253,7 +253,7 @@ function chapters_function_template($get_subject_chapters, $wpdb){
 }
 
 // new curriculum subject woys result print function
-function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label) {?>
+function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label) {?>
 	<div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -263,12 +263,43 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 				</button>
 			</div>
 			<div class="modal-body" id="transcript-content<?php echo $assessment_types . $student_record_id;?>">
+					<?php 
+						global $wpdb; // Declare the global $wpdb object
+						$table_name = $wpdb->prefix . 'wlsm_schools';
+						$active_schools_id = $active_schools_id[0]->ID;
+						// Prepare and execute the SQL query to get the school's address and email by school ID
+						$school = $wpdb->get_row($wpdb->prepare("SELECT address, email FROM $table_name WHERE id = %d", $active_schools_id));
+						
+						// Extract the address from the result object and assign it to $school_address
+						$school_address = $school->address;
+						
+						// Extract the email from the result object and assign it to $school_email
+						$school_email = $school->email;
+					?>
 				<table border="1" style="border-collapse: collapse;">
 					<tbody>
+						<tr style="border: none;">
+							<th colspan="4" style="border: none;">
+								<div class="schools-info" style="display: flex;">
+									<div class="logo" style="text-align: right; padding-right: 20px;">
+										<img style="border-radius: 50%; width: 25%; align-items: center;" src="<?php echo esc_url(wp_get_attachment_url($school_logo));?>" alt="school logo">
+									</div>
+									<div class="info">
+										<h3><?php echo esc_html($school_name);?></h3>
+										<?php if(!empty($school_address)) { ?>
+											<h5><?php echo esc_html($school_address);?></h5>
+										<?php } ?>
+										<?php if(!empty($school_email)) { ?>
+											<p><?php echo esc_html("Email: " . $school_email);?></p>
+										<?php } ?>
+									</div>
+								</div>
+							</th>
+						</tr>
+
+
 						<tr>
 							<th colspan="2" align="left" style="padding: 5px; text-align: left">
-								<?php echo esc_html__('School Name: ' . $school_name); ?>
-								<br>
 								<?php echo esc_html__("Assessment Types: " . $assessment_label);?>
 								<br>
 								<?php echo esc_html__('Student Name: ' . $student_name); ?>

@@ -77,8 +77,11 @@
 <?php
 defined( 'ABSPATH' ) || die();
 global $wpdb;
+$active_schools_id = WLSM_M_School::get_active_schools();
 $school_id = $current_school['id'];
 $school_name = $current_school['name'];
+$settings_general = WLSM_M_Setting::get_settings_general($school_id);
+$school_logo = $settings_general['school_logo'];
 $assessment_types = '';
 
 $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
@@ -257,7 +260,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                                     <?php 
                                                                         $assessment_types = "assessment_during_learning";
                                                                         $assessment_label = "Assessment During Learning";
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <!-- Quarterly Summative Assessment Modal -->
@@ -265,7 +268,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                                     <?php 
                                                                         $assessment_types = "quarterly_summative_assessment"; 
                                                                         $assessment_label = "Quarterly Summative Assessment";
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <!-- Annual Summative Assessment Modal -->
@@ -273,7 +276,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                                     <?php 
                                                                         $assessment_types = "annual_summative_assessment";
                                                                         $assessment_label = "Annual Summative Assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <!-- Quarterly Behavioral Assessment Modal -->
@@ -281,7 +284,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                                     <?php 
                                                                         $assessment_types = "quarterly_behavioral_assessment";
                                                                         $assessment_label = "Quarterly Behavioral Assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <!-- Annual Behavioral Assessment Modal -->
@@ -289,7 +292,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                                     <?php 
                                                                         $assessment_types = "annual_behavioral_assessment";
                                                                         $assessment_label = "Annual Behavioral Assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $class_label, $assessment_label);
+                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
                                                                     ?>
                                                                 </div>
                                                                 <?php
