@@ -380,10 +380,10 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 													<td style="padding: 5px;">
 														<div class="marking" style="display: flex;justify-content: left;">
 															<?php if($marks == "square"){?>
-																<span class="square-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">&#9634;</span>
+																<span class="square-icon active" style=" padding-right: 10px;"><img style="width: 17px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/square-black.png');?>" alt=""></span>
 															<?php } else {
 																?>
-																	<span class="square-icon" style="padding-right: 5px;">&#9634;</span>
+																	<span class="square-icon" style="padding-right: 10px;"><img style="width: 17px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/square-white.png');?>" alt=""></span>
 																<?php
 															}
 															echo $square_des;?>
@@ -392,10 +392,10 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 													<td style="padding: 5px;">
 														<div class="marking" style="display: flex;justify-content: left;">
 															<?php if($marks == "circle"){?>
-																<span class="circle-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">&#11096;</span>
+																<span class="circle-icon active" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/circle-black.png');?>" alt=""></span>
 															<?php } else {
 																?>
-																	<span class="circle-icon" style="padding-right: 5px;">&#11096;</span>
+																	<span class="circle-icon" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/circle-white.png');?>" alt=""></span>
 																<?php
 															}
 															echo $circle_des; ?>
@@ -404,10 +404,10 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 													<td style="padding: 5px;"> 
 														<div class="marking" style="display: flex;justify-content: left;">
 															<?php if($marks == "triangle"){?>
-																<span class="triangle-icon active" style="color: #007bff; font-weight: 600; padding-right: 5px;">🛆</span>
+																<span class="triangle-icon active" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/triangle-black.png');?>" alt=""></span>
 															<?php } else {
 																?>
-																	<span class="triangle-icon" style="padding-right: 5px;">🛆</span>
+																	<span class="triangle-icon" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/triangle-white.png');?>" alt=""></span>
 																<?php
 															}
 															echo $triangle_des; ?>
