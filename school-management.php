@@ -280,9 +280,9 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 					<tbody>
 						<tr style="border: none;">
 							<th colspan="4" style="border: none;">
-								<div class="schools-info" style="display: flex;">
+								<div class="schools-info" style="display: flex; align-items: center;">
 									<div class="logo" style="text-align: right; padding-right: 20px;">
-										<img style="border-radius: 50%; width: 25%; align-items: center;" src="<?php echo esc_url(wp_get_attachment_url($school_logo));?>" alt="school logo">
+										<img style="border-radius: 50%; width: 20%; align-items: center;" src="<?php echo esc_url(wp_get_attachment_url($school_logo));?>" alt="school logo">
 									</div>
 									<div class="info">
 										<h3><?php echo esc_html($school_name);?></h3>
@@ -290,7 +290,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 											<h5><?php echo esc_html($school_address);?></h5>
 										<?php } ?>
 										<?php if(!empty($school_email)) { ?>
-											<p><?php echo esc_html("Email: " . $school_email);?></p>
+											<p style="margin: 0; padding: 0;"><?php echo esc_html("Email: " . $school_email);?></p>
 										<?php } ?>
 									</div>
 								</div>
@@ -300,20 +300,20 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 
 						<tr>
 							<th colspan="2" align="left" style="padding: 5px; text-align: left">
-								<?php echo esc_html__("Assessment Types: " . $assessment_label);?>
+								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__("Assessment Types: " . $assessment_label);?></span>
 								<br>
-								<?php echo esc_html__('Student Name: ' . $student_name); ?>
+								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Student Name: ' . $student_name); ?></span>
 								<br>
-								<?php echo esc_html__('Student Roll: ' . $student_roll); ?>
+								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Student Roll: ' . $student_roll); ?></span>
 							</th>
 							<th colspan="2" align="left" style="padding: 5px; text-align: left">
-								<?php echo esc_html__('Class: ' . $class_label); ?>
+								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Class: ' . $class_label); ?></span>
 								<br>
-								<?php echo esc_html__('Group: ' . $class_group); ?>
+								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Group: ' . $class_group); ?></span>
 								<br>
-								<?php echo esc_html__('Section: ' . $section_label); ?>
+								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Section: ' . $section_label); ?></span>
 								<br>
-								<?php echo esc_html__('Subject: ' . $subject_label); ?>
+								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Subject: ' . $subject_label); ?></span>
 							</th>
 						</tr>
 						<tr>
