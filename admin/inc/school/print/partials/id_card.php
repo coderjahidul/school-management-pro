@@ -83,7 +83,7 @@ $school_signature = $settings_general['school_signature'];
             <!-- <div class="font-footer" style="background-image:url('<?php //echo esc_url( WLSM_PLUGIN_URL . 'assets/images/solid-color-image.png' ); ?>');">
                 <h4><?php //echo esc_html( WLSM_M_School::get_label_text( $school->label ) ); ?></h4>
                 <p><?php //echo esc_html( WLSM_M_School::get_email_text( $school->address ) ); ?></p> -->
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 
