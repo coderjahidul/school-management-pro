@@ -194,7 +194,13 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                     <form method="post" action="">
                                                         <div class="form-group">
                                                             <label for="phone_number">Phone Number:</label>
-                                                            <input type="text" id="phone_number" name="phone_number" value="<?php foreach($get_student_records as $student){ echo $student->phone . ', '; }?>" class="form-control" required>
+                                                            <input type="text" id="phone_number" name="phone_number" value="<?php foreach($get_student_records as $student){ 
+                                                                if($student->father_phone){
+                                                                    echo $student->father_phone . ', ';
+                                                                }else {
+                                                                    echo $student->mother_phone . ', ';
+                                                                }
+                                                            }?>" class="form-control" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="message">Message:</label>
