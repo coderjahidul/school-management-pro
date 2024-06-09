@@ -29,6 +29,7 @@ if ( isset( $_GET['id'] ) && ! empty( $_GET['id'] ) ) {
 		$title       = $area_of_expertise->title;
 		$class_id    = $area_of_expertise->class_id;
 		$subject_id  = $area_of_expertise->subject_id;
+		$description = $area_of_expertise->description;
 	}
 }
 
@@ -79,10 +80,16 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 			<div class="wlsm-form-section">
 				<div class="form-row">
 					<div class="form-group col-md-3">
-						<label for="wlsm_label" class="wlsm-font-bold">
+						<label for="wlsm_title" class="wlsm-font-bold">
 							<span class="wlsm-important">*</span> <?php esc_html_e( 'Title', 'school-management' ); ?>:
 						</label>
 						<input type="text" name="title" class="form-control" id="wlsm_title" placeholder="<?php esc_attr_e( 'Enter title', 'school-management' ); ?>" value="<?php echo esc_attr( stripslashes( $title ) ); ?>">
+					</div>
+					<div class="form-group col-md-3">
+						<label for="wlsm_description" class="wlsm-font-bold">
+							<span class="wlsm-important">*</span> <?php esc_html_e( 'Description', 'school-management' ); ?>:
+						</label>
+						<input type="text" name="description" class="form-control" id="wlsm_description" placeholder="<?php esc_attr_e( 'Enter Description', 'school-management' ); ?>" value="<?php echo esc_attr( stripslashes( $description ) ); ?>">
 					</div>
 
 					<div class="form-group col-md-3">

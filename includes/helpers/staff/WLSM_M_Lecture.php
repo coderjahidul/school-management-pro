@@ -100,7 +100,7 @@ class WLSM_M_Staff_Lecture {
 	public static function fetch_area_of_expertise( $id ) {
 		global $wpdb;
 		$query = $wpdb->prepare(
-			'SELECT l.ID, l.title, l.created_at, c.ID as class_id, c.label as class, s.label as `subject_id`  FROM ' . WLSM_AREA_OF_EXPERTISE . ' as l 
+			'SELECT l.ID, l.title, l.description, l.created_at, c.ID as class_id, c.label as class, s.label as `subject_id`  FROM ' . WLSM_AREA_OF_EXPERTISE . ' as l 
 			JOIN ' . WLSM_CLASSES . ' as c ON l.class_id = c.ID
 			JOIN ' . WLSM_SUBJECTS . ' as s ON s.ID = l.subject_id  
 			WHERE l.id =%s',

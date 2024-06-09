@@ -1456,6 +1456,7 @@ class WLSM_Database
 		$sql = "CREATE TABLE IF NOT EXISTS " . WLSM_AREA_OF_EXPERTISE . " (
 			ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			title varchar(191) DEFAULT NULL,
+			description text DEFAULT NULL,
 			class_id bigint(20) UNSIGNED DEFAULT NULL,
 			subject_id bigint(20) UNSIGNED DEFAULT NULL,
 			created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
