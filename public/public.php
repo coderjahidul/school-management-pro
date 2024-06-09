@@ -187,6 +187,10 @@ add_action( 'wp_ajax_nopriv_wlsm-p-get-class-subjects', array( 'WLSM_P_General',
 add_action( 'wp_ajax_wlsm-p-get-subject-chapter', array( 'WLSM_P_General', 'get_subject_chapters' ) );
 add_action( 'wp_ajax_nopriv_wlsm-p-get-subject-chapter', array( 'WLSM_P_General', 'get_subject_chapters' ) );
 
+// add_action('wp_ajax_wlsm-p-get-subject-lectures', array('WLSM_P_General', 'get_class_lecture'));
+// add_action('wp_ajax_nopriv_wlsm-p-get-subject-lectures', array('WLSM_P_General', 'get_class_lecture'));
+
+
 add_action( 'wp_ajax_wlsm-p-submit-lessons', array( 'WLSM_P_General', 'get_lessons' ) );
 add_action( 'wp_ajax_nopriv_wlsm-p-submit-lessons', array( 'WLSM_P_General', 'get_lessons' ) );
 

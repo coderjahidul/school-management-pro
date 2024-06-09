@@ -92,7 +92,7 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 						<input type="text" name="description" class="form-control" id="wlsm_description" placeholder="<?php esc_attr_e( 'Enter Description', 'school-management' ); ?>" value="<?php echo esc_attr( stripslashes( $description ) ); ?>">
 					</div>
 
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-2">
 						<label for="wlsm_class" class="wlsm-font-bold">
 							<span class="wlsm-important">*</span> <?php esc_html_e( 'Class', 'school-management' ); ?>:
 						</label>
@@ -106,12 +106,12 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 						</select>
 					</div>
 
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-2">
 						<label for="wlsm_subject" class="wlsm-font-bold">
 							<span class="wlsm-important">*</span> <?php esc_html_e( 'Subject', 'school-management' ); ?>:
 						</label>
 
-						<select name="subject" class="form-control selectpicker" id="wlsm_subject" data-live-search="true" title="<?php esc_attr_e( 'Select subject', 'school-management' ); ?>" data-actions-box="true">
+						<select name="subject" class="form-control selectpicker wlsm_class_lecture" data-nonce="<?php echo esc_attr( wp_create_nonce( 'get-class-lecture' ) ); ?>" data-nonce-lecture="<?php echo esc_attr( wp_create_nonce( 'get-class-lecture' ) ); ?>" id="wlsm_subject" data-live-search="true" title="<?php esc_attr_e( 'Select subject', 'school-management' ); ?>" data-actions-box="true">
 							<?php if ( $subject_id ) : ?>
 								<?php foreach ( $subjects as $subject ) { ?>
 									<option value="<?php echo esc_attr( $subject->ID ); ?>">
@@ -129,6 +129,14 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 								<?php } ?>
 							<?php endif ?>
 
+						</select>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="wlsm_lecture" class="wlsm-font-bold">
+							<?php esc_html_e( 'Subject PI Code', 'school-management' ); ?>:
+						</label>
+
+						<select name="lecture" class="form-control selectpicker" id="wlsm_lecture" data-live-search="true" title="<?php esc_attr_e( 'Select Subject PI Code', 'school-management' ); ?>" data-actions-box="true" multiple>
 						</select>
 					</div>
 				</div>

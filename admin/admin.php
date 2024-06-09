@@ -392,6 +392,8 @@ add_action( 'wp_ajax_wlsm-get-school-class-sections', array( 'WLSM_Staff_General
 add_action( 'wp_ajax_wlsm-get-class-subjects', array( 'WLSM_Staff_General', 'get_class_subjects' ) );
 add_action( 'wp_ajax_wlsm-get-class-chapter', array( 'WLSM_Staff_General', 'get_class_chapter' ) );
 add_action( 'wp_ajax_wlsm-get-subject-teachers', array( 'WLSM_Staff_General', 'get_subject_teachers' ) );
+add_action( 'wp_ajax_wlsm-get-class-lecture', array( 'WLSM_Staff_General', 'get_class_lecture' ) );
+
 
 add_action( 'wp_ajax_wlsm-get-students-subjects', array( 'WLSM_Staff_General', 'get_students_subjects' ) );
 

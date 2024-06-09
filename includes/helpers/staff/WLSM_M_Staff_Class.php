@@ -689,6 +689,19 @@ class WLSM_M_Staff_Class
 		return $subjects;
 	}
 
+	public static function get_the_lessons($subject_id) {
+		global $wpdb;
+		$lectures = $wpdb->get_results($wpdb->prepare('
+			SELECT l.ID, l.title, l.code, l.attachment, l.url, l.link_to, l.created_at, c.label as class, s.label as subject, cp.title as chapter 
+			FROM ' . WLSM_LECTURE . ' as l 
+			JOIN ' . WLSM_CLASSES . ' as c ON l.class_id = c.ID
+			LEFT OUTER JOIN ' . WLSM_SUBJECTS . ' as s ON s.ID = l.subject_id  
+			LEFT OUTER JOIN ' . WLSM_CHAPTER . ' as cp ON cp.ID = l.chapter_id
+			WHERE l.subject_id = %d', $subject_id));
+		return $lectures;
+	}
+	
+
 	public static function get_lessons_wit_chapter_id( $class_id, $subject_id, $chapter_id) {
 		global $wpdb;
 		$subjects = $wpdb->get_results($wpdb->prepare('SELECT l.ID, l.title, l.attachment, l.url, l.link_to, l.created_at, c.label as class, s.label as `subject`, cp.title as chapter FROM ' . WLSM_LECTURE . ' as l 

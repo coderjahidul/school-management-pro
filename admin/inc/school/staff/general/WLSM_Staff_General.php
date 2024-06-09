@@ -276,6 +276,36 @@ class WLSM_Staff_General
 		}
 	}
 
+	public static function get_class_lecture() {
+		$current_user = WLSM_M_Role::can(array('manage_timetable', 'view_timetable', 'manage_live_classes'));
+
+		if (!$current_user) {
+			die();
+		}
+		try {
+			ob_start();
+			global $wpdb;
+
+			if (!wp_verify_nonce($_POST['nonce'], 'get-class-lecture')) {
+				die();
+			}
+
+			$subject_id = isset($_POST['subject_id']) ? absint($_POST['subject_id']) : 0;			
+
+			$lecture = WLSM_M_Staff_Class::get_the_lessons($subject_id);
+			
+			wp_send_json($lecture);
+		} catch (Exception $exception) {
+			$buffer = ob_get_clean();
+			if (!empty($buffer)) {
+				$response = $buffer;
+			} else {
+				$response = $exception->getMessage();
+			}
+			wp_send_json(array());
+		}
+	}
+
 	public static function get_class_subjects_exam() {
 		$current_user = WLSM_M_Role::can(array('manage_exams'));
 

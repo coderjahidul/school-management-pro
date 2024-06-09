@@ -7491,6 +7491,36 @@
 			}
 		});
 
+		// Get subject lecture.
+		$(document).on('change', '.wlsm_class_lecture', function() {
+			var subjectID = this.value;
+			var nonce = $(this).data('nonce-lecture');
+			var lecture = $('#wlsm_lecture');
+			$('div.text-danger').remove();
+			if(subjectID && nonce) {
+				var data = 'action=wlsm-get-class-lecture&nonce=' + nonce + '&subject_id=' + subjectID;
+				$.ajax({
+					data: data,
+					url: ajaxurl,
+					type: 'POST',
+					success: function(res) {
+						var options = [];
+						res.forEach(function(item) {
+							if (item) {
+								var option = '<option value="' + item.ID + '">' + item.code + '</option>';
+							options.push(option);
+							}
+						});
+						lecture.html(options);
+						lecture.selectpicker('refresh');
+					}
+				});
+			} else {
+				lecture.html([]);
+				lecture.selectpicker('refresh');
+			}
+		});
+
 
 		// add Result togather 
 		var originalSelectContent = $('#wlsm_calss_group').html();
