@@ -1459,6 +1459,7 @@ class WLSM_Database
 			description text DEFAULT NULL,
 			class_id bigint(20) UNSIGNED DEFAULT NULL,
 			subject_id bigint(20) UNSIGNED DEFAULT NULL,
+			lecture_ids text DEFAULT NULL,
 			created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at timestamp NULL DEFAULT NULL,
 			PRIMARY KEY (ID)

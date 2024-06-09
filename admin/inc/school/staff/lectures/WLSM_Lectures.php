@@ -734,6 +734,8 @@ class WLSM_Lecture {
 			$class_id    = isset($_POST['classes']) ? sanitize_text_field($_POST['classes']) : '';
 			$subject_id    = isset($_POST['subject']) ? sanitize_text_field($_POST['subject']) : '';
 			$description = isset($_POST['description']) ? sanitize_textarea_field($_POST['description']) : '';
+			$lecture_ids = isset($_POST['lecture']) ? array_map('sanitize_text_field', $_POST['lecture']) : array();
+
 
 			// Start validation.
 			$errors = array();
@@ -749,6 +751,9 @@ class WLSM_Lecture {
 			}
 			if(empty($description)){
 				$errors['description'] = esc_html__('Please provide area of expertise description.', 'school-management');
+			}
+			if(empty($lecture_ids)){
+				$errors['lecture_id'] = esc_html__('Please Select Subject PI Code.', 'school-management');
 			}
 
 
@@ -780,6 +785,7 @@ class WLSM_Lecture {
 					'class_id'    => $class_id,
 					'subject_id'  => $subject_id,
 					'description' => $description,
+					'lecture_ids' => implode(',', $lecture_ids),
 				);
 
 				if (!empty($attachment)) {

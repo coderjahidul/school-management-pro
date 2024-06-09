@@ -18,6 +18,7 @@ $description = '';
 $class_id    = '';
 $title       = '';
 $description = '';
+$lecture_id  = ''; 
 
 if ( isset( $_GET['id'] ) && ! empty( $_GET['id'] ) ) {
 	$id      = absint( $_GET['id'] );
@@ -28,8 +29,9 @@ if ( isset( $_GET['id'] ) && ! empty( $_GET['id'] ) ) {
 
 		$title       = $area_of_expertise->title;
 		$class_id    = $area_of_expertise->class_id;
-		$subject_id  = $area_of_expertise->subject_id;
+		$subject_id  = $area_of_expertise->subject_id ?? '';
 		$description = $area_of_expertise->description;
+		$lecture_id  = $area_of_expertise->lecture_id ?? '';
 	}
 }
 
@@ -136,8 +138,24 @@ $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 							<?php esc_html_e( 'Subject PI Code', 'school-management' ); ?>:
 						</label>
 
-						<select name="lecture" class="form-control selectpicker" id="wlsm_lecture" data-live-search="true" title="<?php esc_attr_e( 'Select Subject PI Code', 'school-management' ); ?>" data-actions-box="true" multiple>
+						<select name="lecture[]" class="form-control selectpicker" id="wlsm_lecture" data-live-search="true" title="<?php esc_attr_e( 'Select Subject PI Code', 'school-management' ); ?>" data-actions-box="true" multiple>
+							<?php if ( $lecture_id ) : ?>
+								<?php foreach ( $lectures as $lecture ) { ?>
+									<option value="<?php echo esc_attr( $lecture->ID ); ?>">
+										<?php if( $lecture_id == $lecture->ID ) : ?>
+											<?php echo esc_html( WLSM_M_Staff_Class::get_lecture_label_text( $lecture->label ) ); ?>
+										<?php endif ?>
+									</option>
+								<?php } ?>
+							<?php elseif ( ! $lecture_id ) : ?>
+								<?php foreach ( $lectures as $lecture ) { ?>
+									<option value="<?php echo esc_attr( $lecture->ID ); ?>" <?php echo 'selected'; ?>>
+										<?php echo esc_html( WLSM_M_Staff_Class::get_lecture_label_text( $lecture->label ) ); ?>
+									</option>
+								<?php } ?>
+							<?php endif ?>
 						</select>
+
 					</div>
 				</div>
 
