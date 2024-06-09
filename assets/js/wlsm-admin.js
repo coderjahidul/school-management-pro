@@ -2492,6 +2492,10 @@
 		var chapterTable = $('#wlsm-chapter-table');
 		wlsmInitializeTable(chapterTable, { action: 'wlsm-fetch-chapter' });
 
+		// Area Of Expertise Table.
+		var areaOfExpertiseTable = $('#wlsm-area-of-expertise-table');
+		wlsmInitializeTable(areaOfExpertiseTable, { action: 'wlsm-fetch-area-of-expertise' });
+		
 		// Staff: Save lecture.
 		var saveLectureFormId = '#wlsm-save-lecture-form';
 		var saveLectureForm = $(saveLectureFormId);
@@ -2560,6 +2564,42 @@
 			}
 		});
 
+		// Staff: Save Area of Expertise.
+		var saveAreaOfExpertiseId = '#wlsm-save-area-of-expertise-form';
+		var saveAreaOfExpertiseForm = $(saveAreaOfExpertiseId);
+		var saveAreaOfExpertiseBtn = $('#wlsm-save-area-of-expertise-btn');
+
+		saveAreaOfExpertiseForm.ajaxForm({
+			beforeSubmit: function(arr, $form, options) {
+				return wlsmBeforeSubmit(saveAreaOfExpertiseBtn);
+			},
+			success: function(response) {
+				if (response.success) {
+					wlsmShowSuccessAlert(response.data.message, saveAreaOfExpertiseId);
+					toastr.success(response.data.message);
+					if (response.data.hasOwnProperty('reset') && response.data.reset) {
+						saveAreaOfExpertiseForm[0].reset();
+						var selectPicker = $('.selectpicker');
+						selectPicker.selectpicker('refresh');
+						$('.wlsm-area-of-expertise-link').hide();
+						$('.wlsm-area-of-expertise-url').show();
+					} else {
+						$('.wlsm-attachment-box').load(location.href + " .wlsm-attachment-section");
+						$('.wlsm-section-heading-box').load(location.href + " .wlsm-section-heading");
+					}
+				} else {
+					wlsmDisplayFormErrors(response, saveAreaOfExpertiseId);
+				}
+			},
+			error: function(response) {
+				wlsmDisplayFormError(response, saveAreaOfExpertiseId, saveAreaOfExpertiseBtn);
+			},
+			complete: function() {
+				wlsmComplete(saveAreaOfExpertiseBtn);
+			}
+		});
+
+
 		// Staff: Delete notice.
 		$(document).on('click', '.wlsm-delete-notice', function(event) {
 			var noticeId = $(this).data('notice');
@@ -2590,6 +2630,17 @@
 			var data = "chapter_id=" + chapterId + "&delete-chapter-" + chapterId + "=" + nonce + "&action=wlsm-delete-chapter";
 			var performActions = function () {
 				chaptersTable.DataTable().ajax.reload(null, false);
+			}
+			wlsmAction(event, this, data, performActions);
+		});
+
+		// Staff: Delete Area of expertise.
+		$(document).on('click', '.wlsm-delete-area-of-expertise', function (event) {
+			var areaOfExpertiseID = $(this).data('area-of-expertise');
+			var nonce = $(this).data('nonce');
+			var data = "area_of_expertise_id=" + areaOfExpertiseID + "&delete-area-of-expertise-" + areaOfExpertiseID + "=" + nonce + "&action=wlsm-delete-area-of-expertise";
+			var performActions = function () {
+				areaOfExpertisesTable.DataTable().ajax.reload(null, false);
 			}
 			wlsmAction(event, this, data, performActions);
 		});

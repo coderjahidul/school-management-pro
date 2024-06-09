@@ -447,6 +447,9 @@ class WLSM_Menu {
 
 								$chapter = add_submenu_page( WLSM_LECTURE, esc_html__( 'Single Qualification', 'school-management' ), esc_html__( 'Single Qualification', 'school-management' ), 'read', WLSM_CHAPTER, array( 'WLSM_Menu', 'school_chapter' ) );
 								add_action( 'admin_print_styles-' . $chapter, array( 'WLSM_Menu', 'menu_page_assets' ) );
+
+								$area_of_expertise = add_submenu_page(WLSM_LECTURE, esc_html__( 'Area of Expertise', 'school-management' ), esc_html__( 'Area of Expertise', 'school-management' ), 'read', WLSM_AREA_OF_EXPERTISE, array( 'WLSM_Menu', 'school_area_of_expertise' ) );
+								add_action('admin_print_styles-' . $area_of_expertise, array('WLSM_Menu', 'menu_page_assets'));
 							}
 							
 						}
@@ -857,6 +860,11 @@ class WLSM_Menu {
 	// Chapter
 	public static function school_chapter() {
 		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/chapter/route.php';
+	}
+
+	// Area of Expertise
+	public static function school_area_of_expertise(){
+		require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/staff/area-of-expertise/route.php';
 	}
 
 	// New Curriculum

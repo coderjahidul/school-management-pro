@@ -66,6 +66,7 @@ define( 'WLSM_REMINDER', $wpdb->prefix . 'wlsm_reminder');
 define( 'WLSM_RATTING', $wpdb->prefix . 'wlsm_ratting');
 define( 'WLSM_LECTURE', $wpdb->prefix . 'wlsm_lecture');
 define( 'WLSM_CHAPTER', $wpdb->prefix . 'wlsm_chapter');
+define( 'WLSM_AREA_OF_EXPERTISE', $wpdb->prefix . 'wlsm_area_of_expertise');
 
 define( 'WLSM_HOSTELS', $wpdb->prefix . 'wlsm_hostels' );
 define( 'WLSM_ROOMS', $wpdb->prefix . 'wlsm_rooms' );
@@ -169,7 +170,7 @@ define( 'WLSM_MENU_STAFF_EXAMINATION', 'sm-staff-examination' );
 define( 'WLSM_MENU_STAFF_ACCOUNTING', 'sm-staff-accounting' );
 define( 'WLSM_MENU_STAFF_LIBRARY', 'sm-staff-library' );
 define( 'WLSM_MENU_STAFF_TRANSPORT', 'sm-staff-transport' );
-define('WLSM_MENU_STAFF_NEW_CURRICULUM', 'sm-staff-new-curriculum');
+define( 'WLSM_MENU_STAFF_NEW_CURRICULUM', 'sm-staff-new-curriculum');
 
 /* New Curriculum */
 define('WLSM_MENU_STAFF_STUDENT_ASSESSMENT', 'sm-staff-student-assessment');

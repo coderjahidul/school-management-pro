@@ -704,4 +704,320 @@ class WLSM_Lecture {
 		}
 	}
 
+	public static function save_area_of_expertise() {
+		try {
+			ob_start();
+			global $wpdb;
+
+			$area_of_expertise_id = isset( $_POST['area_of_expertise_id'] ) ? absint( $_POST['area_of_expertise_id'] ) : 0;
+
+			if ( $area_of_expertise_id ) {
+				if ( ! wp_verify_nonce( $_POST[ 'edit-area-of-expertise-' . $area_of_expertise_id ], 'edit-area-of-expertise-' . $area_of_expertise_id ) ) {
+					die();
+				}
+			} else {
+				if ( ! wp_verify_nonce( $_POST['add-area-of-expertise'], 'add-area-of-expertise' ) ) {
+					die();
+				}
+			}
+
+			// Checks if area of expertise exists.
+			if ( $area_of_expertise_id ) {
+				$area_of_expertise = WLSM_M_Staff_Lecture::get_area_of_expertise( $area_of_expertise_id );
+
+				if ( ! $area_of_expertise ) {
+					throw new Exception( esc_html__( 'Area of expertise not found.', 'school-management' ) );
+				}
+			}
+
+			$title       = isset($_POST['title']) ? sanitize_text_field($_POST['title']) : '';
+			$class_id    = isset($_POST['classes']) ? sanitize_text_field($_POST['classes']) : '';
+			$subject_id    = isset($_POST['subject']) ? sanitize_text_field($_POST['subject']) : '';
+
+			// Start validation.
+			$errors = array();
+
+			if (empty($title)) {
+				$errors['title'] = esc_html__('Please provide area of expertise title.', 'school-management');
+			}
+			if(empty($class_id)) {
+				$errors['class_id'] = esc_html__('Please Select Class.', 'school-management');
+			}
+			if(empty($subject_id)){
+				$errors['subject_id'] = esc_html__('Please Select Subject.', 'school-management');
+			}
+
+
+		} catch ( Exception $exception ) {
+			$buffer = ob_get_clean();
+			if ( ! empty( $buffer ) ) {
+				$response = $buffer;
+			} else {
+				$response = $exception->getMessage();
+			}
+			wp_send_json_error( $response );
+		}
+
+		if ( count( $errors ) < 1 ) {
+			try {
+				$wpdb->query( 'BEGIN;' );
+
+				if ( $area_of_expertise_id ) {
+					$message = esc_html__( 'Area of expertise updated successfully.', 'school-management' );
+					$reset   = false;
+				} else {
+					$message = esc_html__( 'Area of expertise added successfully.', 'school-management' );
+					$reset   = true;
+				}
+
+				// Area of expertise data.
+				$data = array(
+					'title'       => $title,
+					'class_id'    => $class_id,
+					'subject_id'  => $subject_id,
+				);
+
+				if (!empty($attachment)) {
+					$attachment = media_handle_upload('attachment', 0);
+					if (is_wp_error($attachment)) {
+						throw new Exception($attachment->get_error_message());
+					}
+					$data['attachment'] = $attachment;
+
+					if ($area_of_expertise_id && $area_of_expertise->attachment) {
+						$attachment_id_to_delete = $area_of_expertise->attachment;
+					}
+				}
+
+				if ( $area_of_expertise_id ) {
+					$data['updated_at'] = current_time( 'Y-m-d H:i:s' );
+
+					$success = $wpdb->update( WLSM_AREA_OF_EXPERTISE, $data, array( 'ID' => $area_of_expertise_id) );
+				} else {
+					$data['created_at'] = current_time( 'Y-m-d H:i:s' );
+
+					$success = $wpdb->insert( WLSM_AREA_OF_EXPERTISE, $data );
+				}
+
+				$buffer = ob_get_clean();
+				if ( ! empty( $buffer ) ) {
+					throw new Exception( $buffer );
+				}
+
+				if ( false === $success ) {
+					throw new Exception( $wpdb->last_error );
+				}
+
+				$wpdb->query( 'COMMIT;' );
+
+				wp_send_json_success( array( 'message' => $message, 'reset' => $reset ) );
+			} catch ( Exception $exception ) {
+				$wpdb->query( 'ROLLBACK;' );
+				wp_send_json_error( $exception->getMessage() );
+			}
+		}
+		wp_send_json_error( $errors );
+	}
+
+	public static function fetch_area_of_expertise() {
+
+		global $wpdb;
+
+		$page_url = WLSM_M_Staff_Lecture::get_area_of_expertise_page_url();
+
+		$query = WLSM_M_Staff_Lecture::fetch_area_of_expertise_query();
+
+		$query_filter = $query;
+
+		// Grouping.
+		$group_by = ' ' . WLSM_M_Staff_Lecture::fetch_area_of_expertise_query_group_by();
+
+		$query        .= $group_by;
+		$query_filter .= $group_by;
+
+		// Searching.
+		$condition = '';
+		if (isset($_POST['search']['value'])) {
+			$search_value = sanitize_text_field($_POST['search']['value']);
+			if ('' !== $search_value) {
+				$condition .= '' .
+					'(l.title LIKE "%' . $search_value . '%") OR ' .
+					'(l.link_to LIKE "%' . $search_value . '%") OR ' .
+
+				$search_value_lowercase = strtolower($search_value);
+				if (preg_match('/^none$/', $search_value_lowercase)) {
+					$link_to = '';
+				}
+
+				if (isset($link_to)) {
+					$condition .= ' OR (l.link_to = "' . $link_to . '")';
+				}
+
+				if (preg_match('/^inac(|t|ti|tiv|tive)$/', $search_value_lowercase)) {
+					$is_active = 0;
+				} else if (preg_match('/^acti(|v|ve)$/', $search_value_lowercase)) {
+					$is_active = 1;
+				}
+				$created_at = DateTime::createFromFormat(WLSM_Config::date_format(), $search_value);
+
+				if ($created_at) {
+					$format_created_at = 'Y-m-d';
+				} else {
+					if ('d-m-Y' === WLSM_Config::date_format()) {
+						if (!$created_at) {
+							$created_at        = DateTime::createFromFormat('m-Y', $search_value);
+							$format_created_at = 'Y-m';
+						}
+					} else if ('d/m/Y' === WLSM_Config::date_format()) {
+						if (!$created_at) {
+							$created_at        = DateTime::createFromFormat('m/Y', $search_value);
+							$format_created_at = 'Y-m';
+						}
+					} else if ('Y-m-d' === WLSM_Config::date_format()) {
+						if (!$created_at) {
+							$created_at        = DateTime::createFromFormat('Y-m', $search_value);
+							$format_created_at = 'Y-m';
+						}
+					} else if ('Y/m/d' === WLSM_Config::date_format()) {
+						if (!$created_at) {
+							$created_at        = DateTime::createFromFormat('Y/m', $search_value);
+							$format_created_at = 'Y-m';
+						}
+					}
+
+					if (!$created_at) {
+						$created_at        = DateTime::createFromFormat('Y', $search_value);
+						$format_created_at = 'Y';
+					}
+				}
+
+				if ($created_at && isset($format_created_at)) {
+					$created_at = $created_at->format($format_created_at);
+					$created_at = ' OR (l.created_at LIKE "%' . $created_at . '%")';
+
+					$condition .= $created_at;
+				}
+
+				$query_filter .= (' HAVING ' . $condition);
+			}
+		}
+
+		// Ordering.
+		$columns = array('l.title');
+		if (isset($_POST['order']) && isset($columns[$_POST['order']['0']['column']])) {
+			$order_by  = sanitize_text_field($columns[$_POST['order']['0']['column']]);
+			$order_dir = sanitize_text_field($_POST['order']['0']['dir']);
+
+			$query_filter .= ' ORDER BY ' . $order_by . ' ' . $order_dir;
+		} else {
+			$query_filter .= ' ORDER BY l.ID DESC';
+		}
+
+		// Limiting.
+		$limit = '';
+		if (-1 != $_POST['length']) {
+			$start  = absint($_POST['start']);
+			$length = absint($_POST['length']);
+
+			$limit  = ' LIMIT ' . $start . ', ' . $length;
+		}
+
+		// Total query.
+		$rows_query = WLSM_M_Staff_Lecture::fetch_area_of_expertise_query_count();
+
+		// Total rows count.
+		$total_rows_count = $wpdb->get_var($rows_query);
+
+		// Filtered rows count.
+		if ($condition) {
+			$filter_rows_count = $wpdb->get_var($rows_query . ' AND (' . $condition . ')');
+		} else {
+			$filter_rows_count = $total_rows_count;
+		}
+
+		// Filtered limit rows.
+		$filter_rows_limit = $wpdb->get_results($query_filter . $limit);
+
+		$data = array();
+
+		if (count($filter_rows_limit)) {
+			foreach ($filter_rows_limit as $row) {
+
+				// Table columns.
+				$data[] = array(
+					
+					esc_html(WLSM_Config::limit_string(WLSM_M_Staff_Class::get_name_text($row->title))),
+					esc_html($row->subject),
+					esc_html(WLSM_Config::get_date_text($row->created_at)),
+					'<a class="text-primary" href="' . esc_url($page_url . "&action=save&id=" . $row->ID) . '"><span class="dashicons dashicons-edit"></span></a>&nbsp;&nbsp;
+					<a class="text-danger wlsm-delete-area-of-expertise" data-nonce="' . esc_attr(wp_create_nonce('delete-area-of-expertise-' . $row->ID)) . '" data-area-of-expertise="' . esc_attr($row->ID) . '" href="#" data-message-title="' . esc_attr__('Please Confirm!', 'school-management') . '" data-message-content="' . esc_attr__('This will delete the area of expertise.', 'school-management') . '" data-cancel="' . esc_attr__('Cancel', 'school-management') . '" data-submit="' . esc_attr__('Confirm', 'school-management') . '"><span class="dashicons dashicons-trash"></span></a>'
+				);
+			}
+		}
+
+		$output = array(
+			'draw'            => intval($_POST['draw']),
+			'recordsTotal'    => $total_rows_count,
+			'recordsFiltered' => $filter_rows_count,
+			'data'            => $data,
+		);
+
+		echo json_encode($output);
+		die();
+	}
+
+	public static function delete_area_of_expertise() {
+		try {
+			ob_start();
+			global $wpdb;
+
+			$area_of_expertise_id = isset( $_POST['area_of_expertise_id'] ) ? absint( $_POST['area_of_expertise_id'] ) : 0;
+
+			if ( ! wp_verify_nonce( $_POST[ 'delete-area-of-expertise-' . $area_of_expertise_id ], 'delete-area-of-expertise-' . $area_of_expertise_id ) ) {
+				die();
+			}
+
+			// Checks if area of expertise exists.
+			$area_of_expertise = WLSM_M_Staff_Lecture::get_area_of_expertise( $area_of_expertise_id );
+
+			if ( ! $area_of_expertise ) {
+				throw new Exception( esc_html__( 'Transport area of expertise not found.', 'school-management' ) );
+			}
+
+		} catch ( Exception $exception ) {
+			$buffer = ob_get_clean();
+			if ( ! empty( $buffer ) ) {
+				$response = $buffer;
+			} else {
+				$response = $exception->getMessage();
+			}
+			wp_send_json_error( $response );
+		}
+
+		try {
+			$wpdb->query( 'BEGIN;' );
+
+			$success = $wpdb->delete( WLSM_AREA_OF_EXPERTISE, array( 'ID' => $area_of_expertise_id ) );
+			$message = esc_html__( 'Area of expertise deleted successfully.', 'school-management' );
+
+			$exception = ob_get_clean();
+			if ( ! empty( $exception ) ) {
+				throw new Exception( $exception );
+			}
+
+			if ( false === $success ) {
+				throw new Exception( $wpdb->last_error );
+			}
+
+			$wpdb->query( 'COMMIT;' );
+
+			wp_send_json_success( array( 'message' => $message ) );
+		} catch ( Exception $exception ) {
+			$wpdb->query( 'ROLLBACK;' );
+			wp_send_json_error( $exception->getMessage() );
+		}
+	}
+
 }
+
+

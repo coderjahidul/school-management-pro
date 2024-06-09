@@ -145,6 +145,10 @@ class WLSM_M_Staff_Transport {
 		return admin_url( 'admin.php?page=' . WLSM_CHAPTER );
 	}
 
+	public static function get_area_of_expertise_page_url(){
+		return admin_url('admin.php?page=' . WLSM_AREA_OF_EXPERTISE);
+	}
+
 
 	public static function get_rooms_page_url() {
 		return admin_url( 'admin.php?page=' . WLSM_MENU_STAFF_ROOMS );

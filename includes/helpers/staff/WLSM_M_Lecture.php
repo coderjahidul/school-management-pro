@@ -12,6 +12,10 @@ class WLSM_M_Staff_Lecture {
 		 return admin_url( 'admin.php?page=' . WLSM_CHAPTER );
 	}
 
+	public static function get_area_of_expertise_page_url(){
+		return admin_url('admin.php?page=' . WLSM_AREA_OF_EXPERTISE);
+	}
+
 	public static function fetch_lecture( $id ) {
 		global $wpdb;
 		$query = $wpdb->prepare(
@@ -83,5 +87,41 @@ class WLSM_M_Staff_Lecture {
 		global $wpdb;
 		$chapter = $wpdb->get_row( $wpdb->prepare( 'SELECT v.ID FROM ' . WLSM_CHAPTER . ' as v WHERE v.ID = %d', $id ) );
 		return $chapter;
+	}
+
+	public static function fetch_area_of_expertise_query() {
+		$query = 'SELECT l.ID, l.title, l.created_at, c.label as class, s.label as `subject`  FROM ' . WLSM_AREA_OF_EXPERTISE . ' as l 
+		JOIN ' . WLSM_CLASSES . ' as c ON l.class_id = c.ID
+		JOIN ' . WLSM_SUBJECTS . ' as s ON s.ID = l.subject_id  
+		';
+		return $query;
+	}
+
+	public static function fetch_area_of_expertise( $id ) {
+		global $wpdb;
+		$query = $wpdb->prepare(
+			'SELECT l.ID, l.title, l.created_at, c.ID as class_id, c.label as class, s.label as `subject_id`  FROM ' . WLSM_AREA_OF_EXPERTISE . ' as l 
+			JOIN ' . WLSM_CLASSES . ' as c ON l.class_id = c.ID
+			JOIN ' . WLSM_SUBJECTS . ' as s ON s.ID = l.subject_id  
+			WHERE l.id =%s',
+			$id
+		);
+		return $wpdb->get_row( $query );
+	}
+
+	public static function fetch_area_of_expertise_query_group_by() {
+		$group_by = 'GROUP BY l.ID';
+		return $group_by;
+	}
+
+	public static function fetch_area_of_expertise_query_count() {
+		$query = 'SELECT COUNT(DISTINCT l.ID) FROM ' . WLSM_AREA_OF_EXPERTISE . ' as l';
+		return $query;
+	}
+
+	public static function get_area_of_expertise( $id ) {
+		global $wpdb;
+		$area_of_expertise = $wpdb->get_row( $wpdb->prepare( 'SELECT v.ID FROM ' . WLSM_AREA_OF_EXPERTISE . ' as v WHERE v.ID = %d', $id ) );
+		return $area_of_expertise;
 	}
 }

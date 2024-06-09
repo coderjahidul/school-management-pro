@@ -418,6 +418,10 @@ add_action( 'wp_ajax_wlsm-fetch-chapter', array( 'WLSM_Lecture', 'fetch_chapter'
 add_action( 'wp_ajax_wlsm-save-chapter', array( 'WLSM_Lecture', 'save_chapter' ) );
 add_action( 'wp_ajax_wlsm-delete-chapter', array( 'WLSM_Lecture', 'delete_chapter' ) );
 
+add_action('wp_ajax_wlsm-fetch-area-of-expertise', array( 'WLSM_Lecture', 'fetch_area_of_expertise' ) );
+add_action('wp_ajax_wlsm-save-area-of-expertise', array( 'WLSM_Lecture', 'save_area_of_expertise' ) );
+add_action('wp_ajax_wlsm-delete-area-of-expertise', array( 'WLSM_Lecture', 'delete_area_of_expertise' ) );
+
 // Bulk Action.
 add_action( 'wp_ajax_wlsm-bulk-action', array( 'WLSM_Bulk_Action', 'bulk_action' ) );
 

@@ -1452,6 +1452,17 @@ class WLSM_Database
 				FOREIGN KEY (student_record_id) REFERENCES " . WLSM_STUDENT_RECORDS . " (ID) ON DELETE CASCADE
 				) ENGINE=InnoDB " . $charset_collate;
 		dbDelta($sql);
+		// Area Of Expertise table
+		$sql = "CREATE TABLE IF NOT EXISTS " . WLSM_AREA_OF_EXPERTISE . " (
+			ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			title varchar(191) DEFAULT NULL,
+			class_id bigint(20) UNSIGNED DEFAULT NULL,
+			subject_id bigint(20) UNSIGNED DEFAULT NULL,
+			created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at timestamp NULL DEFAULT NULL,
+			PRIMARY KEY (ID)
+		) ENGINE=InnoDB " . $charset_collate;
+		dbDelta($sql);
 
 		/* Chapter Table */
 		$sql = "CREATE TABLE IF NOT EXISTS " . WLSM_CHAPTER . " (
