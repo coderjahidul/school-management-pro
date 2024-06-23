@@ -529,77 +529,49 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 										$subject_label = $subject->label;?>
 
 											<h5 class="bg-light font-size-18 font-weight-500" style="padding: 10px 0; margin: 10px 0;"><?php echo esc_html($subject_label);?></h5>
-											<table style="margin-top: 0 !important;">
+											<table>
 												<tr>
-													<td style="padding: 0 !important;">
-														<table border="1" style="border-collapse: collapse; margin-top: 0 !important;">
-															<tr>
-																<td colspan="7" style="padding: 5px !important; text-align: center;">
-																	<?php echo esc_html("Contact", "school-management");?>
-																</td>
-															</tr>
-															<tr>
-																<td colspan="7" style="padding: 5px !important; text-align: center;">
-																	<?php echo esc_html("ব্যক্তির সাথে সম্পর্কের ধরন অনুযায়ী মর্যাদাপূর্ণ শারীরিক ভাষা প্রয়োগ করতে পারছে", "school-management");?>
-																</td>
-															</tr>
-															<tr>
-																<td style="padding: 5px !important; text-align: center;">1</td>
-																<td style="padding: 5px !important; text-align: center;">2</td>
-																<td style="padding: 5px !important; text-align: center;">3</td>
-																<td style="padding: 5px !important; text-align: center;">4</td>
-																<td style="padding: 5px !important; text-align: center;">5</td>
-																<td style="padding: 5px !important; text-align: center;">6</td>
-																<td style="padding: 5px !important; text-align: center;">7</td>
-															</tr>
-														</table>
-													</td>
-													<td style="padding: 0 !important;">
-														<table border="1" style="border-collapse: collapse; margin-top: 0 !important;">
-															<tr>
-																<td colspan="7" style="padding: 5px !important; text-align: center;">
-																	<?php echo esc_html("Contact", "school-management");?>
-																</td>
-															</tr>
-															<tr>
-																<td colspan="7" style="padding: 5px !important; text-align: center;">
-																	<?php echo esc_html("ব্যক্তির সাথে সম্পর্কের ধরন অনুযায়ী মর্যাদাপূর্ণ শারীরিক ভাষা প্রয়োগ করতে পারছে", "school-management");?>
-																</td>
-															</tr>
-															<tr>
-																<td style="padding: 5px !important; text-align: center;">1</td>
-																<td style="padding: 5px !important; text-align: center;">2</td>
-																<td style="padding: 5px !important; text-align: center;">3</td>
-																<td style="padding: 5px !important; text-align: center;">4</td>
-																<td style="padding: 5px !important; text-align: center;">5</td>
-																<td style="padding: 5px !important; text-align: center;">6</td>
-																<td style="padding: 5px !important; text-align: center;">7</td>
-															</tr>
-														</table>
-													</td>
-													<td style="padding: 0 !important;">
-														<table border="1" style="border-collapse: collapse; margin-top: 0 !important;">
-															<tr>
-																<td colspan="7" style="padding: 5px !important; text-align: center;">
-																	<?php echo esc_html("Contact", "school-management");?>
-																</td>
-															</tr>
-															<tr>
-																<td colspan="7" style="padding: 5px !important; text-align: center;">
-																	<?php echo esc_html("ব্যক্তির সাথে সম্পর্কের ধরন অনুযায়ী মর্যাদাপূর্ণ শারীরিক ভাষা প্রয়োগ করতে পারছে", "school-management");?>
-																</td>
-															</tr>
-															<tr>
-																<td style="padding: 5px !important; text-align: center;">1</td>
-																<td style="padding: 5px !important; text-align: center;">2</td>
-																<td style="padding: 5px !important; text-align: center;">3</td>
-																<td style="padding: 5px !important; text-align: center;">4</td>
-																<td style="padding: 5px !important; text-align: center;">5</td>
-																<td style="padding: 5px !important; text-align: center;">6</td>
-																<td style="padding: 5px !important; text-align: center;">7</td>
-															</tr>
-														</table>
-													</td>
+													<?php 
+													$get_area_of_expertise = $wpdb->get_results($wpdb->prepare("SELECT ID, title, description FROM {$wpdb->prefix}wlsm_area_of_expertise WHERE class_id = %d AND subject_id = %d", $class_id, $subject->ID));
+
+													$column_count = 0;
+
+													foreach ($get_area_of_expertise as $area_of_expertise) {
+														$area_of_expertise_title = $area_of_expertise->title;
+														$area_of_expertise_description = $area_of_expertise->description;
+
+														if ($column_count % 3 == 0 && $column_count != 0) {
+															echo '</tr><tr>';
+														}
+
+														$column_count++;
+														?>
+														<td style="padding: 0 !important;">
+															<table border="1" style="border-collapse: collapse; margin-top: 0 !important;">
+																<tr>
+																	<td colspan="7" style="padding: 5px !important; text-align: center;">
+																		<?php echo esc_html($area_of_expertise_title, "school-management");?>
+																	</td>
+																</tr>
+																<tr>
+																	<td colspan="7" style="padding: 5px !important; text-align: center;">
+																		<?php echo esc_html($area_of_expertise_description, "school-management");?>
+																	</td>
+																</tr>
+																<tr>
+																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
+																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
+																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
+																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
+																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">5</span></td>
+																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">6</span></td>
+																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">7</span></td>
+																</tr>
+															</table>
+														</td>
+														<?php
+													}
+													?>
 												</tr>
 											</table>
 
@@ -683,67 +655,67 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 							<td colspan="2" style="width: 40%;">
 								<table border="1" style="border-collapse: collapse; margin-top: 0 !important; width: 100%;">
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">4</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">5</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">6</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">7</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">4</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">5</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">6</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">7</span></td>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">4</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">5</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">6</td>
-										<td style="padding: 5px !important; text-align: center;">7</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">4</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">5</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">6</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">4</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">5</td>
-										<td style="padding: 5px !important; text-align: center;">6</td>
-										<td style="padding: 5px !important; text-align: center;">7</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">4</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">5</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">4</td>
-										<td style="padding: 5px !important; text-align: center;">5</td>
-										<td style="padding: 5px !important; text-align: center;">6</td>
-										<td style="padding: 5px !important; text-align: center;">7</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">4</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">5</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">3</td>
-										<td style="padding: 5px !important; text-align: center;">4</td>
-										<td style="padding: 5px !important; text-align: center;">5</td>
-										<td style="padding: 5px !important; text-align: center;">6</td>
-										<td style="padding: 5px !important; text-align: center;">7</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">4</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">5</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">2</td>
-										<td style="padding: 5px !important; text-align: center;">3</td>
-										<td style="padding: 5px !important; text-align: center;">4</td>
-										<td style="padding: 5px !important; text-align: center;">5</td>
-										<td style="padding: 5px !important; text-align: center;">6</td>
-										<td style="padding: 5px !important; text-align: center;">7</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">3</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">4</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">5</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;">1</td>
-										<td style="padding: 5px !important; text-align: center;">2</td>
-										<td style="padding: 5px !important; text-align: center;">3</td>
-										<td style="padding: 5px !important; text-align: center;">4</td>
-										<td style="padding: 5px !important; text-align: center;">5</td>
-										<td style="padding: 5px !important; text-align: center;">6</td>
-										<td style="padding: 5px !important; text-align: center;">7</td>
+										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">2</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">3</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">4</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">5</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
+										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
 									</tr>
 								</table>
 							</td>
