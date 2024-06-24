@@ -574,27 +574,6 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 																				echo $shapes . ",";
 																				echo "<br>";
 																				
-																					// Define the array of shapes
-																					// $shapes = array("circle", "triangle", "circle", "triangle", "square", "circle");
-
-																					// Initialize an associative array to store the counts
-																					$shape_counts = array(
-																						"circle" => 0,
-																						"triangle" => 0,
-																						"square" => 0
-																					);
-
-																					// Loop through each shape in the array and increment the appropriate count
-																					foreach($shapes as $shape) {
-																						if(array_key_exists($shape, $shape_counts)) {
-																							$shape_counts[$shape]++;
-																						}
-																					}
-
-																					// Output the counts
-																					echo "Total circles: " . $shape_counts["circle"] . "\n";
-																					echo "Total triangles: " . $shape_counts["triangle"] . "\n";
-																					echo "Total squares: " . $shape_counts["square"] . "\n";
 																				
 
 
