@@ -532,13 +532,15 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 											<table>
 												<tr>
 													<?php 
-													$get_area_of_expertise = $wpdb->get_results($wpdb->prepare("SELECT ID, title, description FROM {$wpdb->prefix}wlsm_area_of_expertise WHERE class_id = %d AND subject_id = %d", $class_id, $subject->ID));
+													$get_area_of_expertise = $wpdb->get_results($wpdb->prepare("SELECT ID, title, description, lecture_ids FROM {$wpdb->prefix}wlsm_area_of_expertise WHERE class_id = %d AND subject_id = %d", $class_id, $subject->ID));
 
 													$column_count = 0;
 
 													foreach ($get_area_of_expertise as $area_of_expertise) {
 														$area_of_expertise_title = $area_of_expertise->title;
 														$area_of_expertise_description = $area_of_expertise->description;
+														$lecture_ids = $area_of_expertise->lecture_ids;
+
 
 														if ($column_count % 3 == 0 && $column_count != 0) {
 															echo '</tr><tr>';
@@ -546,7 +548,7 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 
 														$column_count++;
 														?>
-														<td style="padding: 0 !important;">
+														<td style="padding: 0 !important; width: 33%;">
 															<table border="1" style="border-collapse: collapse; margin-top: 0 !important;">
 																<tr>
 																	<td colspan="7" style="padding: 5px !important; text-align: center;">
@@ -559,13 +561,57 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 																	</td>
 																</tr>
 																<tr>
+																	<?php 
+																		$lecture_ids = explode(",", $lecture_ids);
+																		$total_lectures = count($lecture_ids);
+																		$student_record_id = intval($student_record_id);
+
+																		foreach($lecture_ids as $lecture_id) {
+																			$new_curriculum_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", $student_record_id, $lecture_id));
+																		
+																			foreach($new_curriculum_results as $new_curriculum_result){
+																				$shapes = $new_curriculum_result->new_curriculum_marks;
+																				echo $shapes . ",";
+																				echo "<br>";
+																				
+																					// Define the array of shapes
+																					// $shapes = array("circle", "triangle", "circle", "triangle", "square", "circle");
+
+																					// Initialize an associative array to store the counts
+																					$shape_counts = array(
+																						"circle" => 0,
+																						"triangle" => 0,
+																						"square" => 0
+																					);
+
+																					// Loop through each shape in the array and increment the appropriate count
+																					foreach($shapes as $shape) {
+																						if(array_key_exists($shape, $shape_counts)) {
+																							$shape_counts[$shape]++;
+																						}
+																					}
+
+																					// Output the counts
+																					echo "Total circles: " . $shape_counts["circle"] . "\n";
+																					echo "Total triangles: " . $shape_counts["triangle"] . "\n";
+																					echo "Total squares: " . $shape_counts["square"] . "\n";
+																				
+
+
+																			}
+																			
+																		}
+																		
+
+																		
+																	?>
 																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
 																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
 																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
 																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
 																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">5</span></td>
 																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">6</span></td>
-																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">7</span></td>
+																	<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
 																</tr>
 															</table>
 														</td>
