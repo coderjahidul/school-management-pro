@@ -562,35 +562,147 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 																</tr>
 																<tr>
 																	<?php 
+																		// Get all exam results for the area of expertise
 																		$lecture_ids = explode(",", $lecture_ids);
 																		$total_lectures = count($lecture_ids);
 																		$student_record_id = intval($student_record_id);
 
-																		foreach($lecture_ids as $lecture_id) {
-																			$new_curriculum_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", $student_record_id, $lecture_id));
+																		// Initialize counters for each shape
+																		$total_squares = 0;
+																		$total_circles = 0;
+																		$total_triangles = 0;
 																		
-																			foreach($new_curriculum_results as $new_curriculum_result){
-																				$shapes = $new_curriculum_result->new_curriculum_marks;
-																				echo $shapes . ",";
-																				echo "<br>";
-																				
-																				
-
-
+																		foreach ($lecture_ids as $lecture_id) {
+																			$lesson_codes = $wpdb->get_results($wpdb->prepare(
+																				"SELECT code FROM {$wpdb->prefix}wlsm_lecture WHERE ID = %d", $lecture_id
+																			));
+																			// Loop through each lesson code
+																			foreach ($lesson_codes as $lesson_code) {
+																				$lecture_code = $lesson_code->code;
+																				$all_exam_results = $wpdb->get_results($wpdb->prepare(
+																					"SELECT * FROM {$wpdb->prefix}wlsm_lecture WHERE code = %s", $lecture_code
+																				));
+																				$square = $circle = $triangle = NULL;
+																				// Loop through each exam result
+																				foreach ($all_exam_results as $all_exam_result) {
+																					$all_exm_lecture_id = $all_exam_result->ID;
+																					$new_curriculum_results = $wpdb->get_results($wpdb->prepare(
+																						"SELECT * FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d",
+																						$student_record_id, $all_exm_lecture_id
+																					));
+																					// Loop through each new curriculum result
+																					foreach ($new_curriculum_results as $new_curriculum_result) {
+																						$result_shapes = $new_curriculum_result->new_curriculum_marks;
+																						if ($result_shapes == "square") {
+																							$square = "square";
+																						} elseif ($result_shapes == "circle") {
+																							$circle = "circle";
+																						} elseif ($result_shapes == "triangle") {
+																							$triangle = "triangle";
+																						}
+																					}
+																				}
+																				// Count the number of each shape
+																				if ($square && $circle && $triangle || $triangle) {
+																					$triangle = "triangle";
+																					$total_triangles++;
+																				} elseif ($square && $circle || $circle) {
+																					$circle = "circle";
+																					$total_circles++;
+																				} else {
+																					$square = "square";
+																					$total_squares++;
+																				}
 																			}
-																			
+																		}
+																		// Calculate the percentage of each shape
+																		$total_pi = $total_squares + $total_circles + $total_triangles;
+																		$sub_pi = $total_triangles - $total_squares;
+																		
+																		if($sub_pi == 0) {
+																			$mark = 0;
+																		}else{
+																			$mark = 100 * ($sub_pi / $total_pi);
+																		}
+																		$mark = round($mark);
+																		// echo "Mark: " . $mark;
+																		// Display the percentage of each shape
+																		if($mark >= 81 ) {
+																			?>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">5</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">6</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">7</span></td>
+																			<?php
+																		} elseif($mark >= 41) {
+																			?>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">5</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">6</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
+																			<?php
+																		} elseif($mark >= 21) {
+																			?>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">5</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
+																			<?php
+																		} elseif($mark >= 0) {
+																			?>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">5</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
+																			<?php
+																		} elseif( $mark >= -20) {
+																			?>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">4</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">5</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
+																			<?php
+																		} elseif($mark >= -40) {
+																			?>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">3</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">4</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">5</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
+																			<?php
+																		} else {
+																			?>
+																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">2</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">3</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">4</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">5</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
+																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
+																			<?php
 																		}
 																		
-
+																		
 																		
 																	?>
-																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
-																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
-																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
-																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
-																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">5</span></td>
-																	<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">6</span></td>
-																	<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
+																	
 																</tr>
 															</table>
 														</td>
