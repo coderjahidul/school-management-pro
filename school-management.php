@@ -549,14 +549,14 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 														$column_count++;
 														?>
 														<td style="padding: 0 !important; width: 33%;">
-															<table border="1" style="border-collapse: collapse; margin-top: 0 !important;">
+															<table border="1" style="height: 100%; border-collapse: collapse; margin-top: 0 !important;">
 																<tr>
 																	<td colspan="7" style="padding: 5px !important; text-align: center;">
 																		<?php echo esc_html($area_of_expertise_title, "school-management");?>
 																	</td>
 																</tr>
 																<tr>
-																	<td colspan="7" style="padding: 5px !important; text-align: center;">
+																	<td border="1"  colspan="7" style="border-collapse: collapse; padding: 5px !important; text-align: center;">
 																		<?php echo esc_html($area_of_expertise_description, "school-management");?>
 																	</td>
 																</tr>
@@ -628,79 +628,52 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 																		// echo "Mark: " . $mark;
 																		// Display the percentage of each shape
 																		if($mark >= 81 ) {
-																			?>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">5</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">6</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">7</span></td>
-																			<?php
+																			for ($i = 0; $i < 7; $i++) {
+																				echo '<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
 																		} elseif($mark >= 41) {
-																			?>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">5</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">6</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
-																			<?php
+																			for ($i = 0; $i < 6; $i++) {
+																				echo '<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
+																			for($i = 0; $i < 1; $i++) {
+																				echo '<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
 																		} elseif($mark >= 21) {
-																			?>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">5</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
-																			<?php
+																			for($i = 0; $i< 5; $i++) {
+																				echo '<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
+																			for($i = 0; $i < 2; $i++) {
+																				echo '<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
 																		} elseif($mark >= 0) {
-																			?>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">4</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">5</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
-																			<?php
+																			for($i = 0; $i <4; $i++){
+																				echo '<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
+																			for($i = 0; $i < 3; $i++) {
+																				echo '<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
 																		} elseif( $mark >= -20) {
-																			?>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">3</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">4</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">5</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
-																			<?php
+																			for($i = 0; $i < 3; $i++){
+																				echo '<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
+																			for($i = 0; $i < 4; $i++) {
+																				echo '<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
 																		} elseif($mark >= -40) {
-																			?>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">2</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">3</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">4</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">5</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
-																			<?php
+																			for($i = 0; $i < 2; $i++){
+																				echo '<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
+																			for($i = 0; $i < 5; $i++) {
+																				echo '<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
 																		} else {
-																			?>
-																			<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">1</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">2</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">3</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">4</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">5</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">6</span></td>
-																			<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">7</span></td>
-																			<?php
+																			for($i = 0; $i < 1; $i++){
+																				echo '<td style="padding: 5px !important; text-align: center; background: #454444;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
+																			for($i = 0; $i < 6; $i++) {
+																				echo '<td style="padding: 5px !important; text-align: center; background: #fff;"><span style="opacity: 0;">' . ($i + 1) . '</span></td>';
+																			}
 																		}
-																		
-																		
-																		
 																	?>
 																	
 																</tr>
@@ -792,67 +765,71 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 							<td colspan="2" style="width: 40%;">
 								<table border="1" style="border-collapse: collapse; margin-top: 0 !important; width: 100%;">
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">4</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">5</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">6</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">7</span></td>
+										<?php 
+											for($i = 0; $i < 7; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+										?>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">4</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">5</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">6</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
+										<?php 
+											for($i = 0; $i < 6; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+											for($i = 0; $i < 1; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #fff;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+										?>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">4</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">5</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
+										<?php 
+											for($i = 0; $i < 5; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+											for($i = 0; $i < 2; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #fff;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+										?>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">4</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">5</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
+										<?php 
+											for($i = 0; $i < 4; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+											for($i = 0; $i < 3; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #fff;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+										?>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">3</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">4</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">5</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
+										<?php 
+											for($i = 0; $i < 3; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+											for($i = 0; $i < 4; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #fff;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+										?>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">2</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">3</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">4</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">5</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
+										<?php 
+											for($i = 0; $i < 2; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+											for($i = 0; $i < 5; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #fff;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+										?>
 									</tr>
 									<tr>
-										<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">1</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">2</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">3</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">4</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">5</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">6</span></td>
-										<td style="padding: 5px !important; text-align: center;"><span style="opacity: 0;">7</span></td>
+										<?php 
+											for($i = 0; $i < 1; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+											for($i = 0; $i < 6; $i++) {
+												echo '<td style="padding: 5px !important; text-align: center; background-color: #fff;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+											}
+										?>
 									</tr>
 								</table>
 							</td>
