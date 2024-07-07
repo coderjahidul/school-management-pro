@@ -695,12 +695,19 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 								<h5 class="bg-light font-size-18 font-weight-500" style="padding: 10px 0; margin: 10px 0;"><?php echo esc_html("Behavioral indicators", "school-management");?></h5>
 								<table style="margin-top: 0 !important; width: 100%;">
 									<tr>
+										<?php 
+											$assessment_types = array('quarterly_behavioral_assessment','annual_summative_assessment' );
+											$get_chapter = $wpdb->get_results($wpdb->prepare(
+												"SELECT ID FROM {$wpdb->prefix}wlsm_chapter WHERE assessment_types = %s", $assessment_types
+											));
+											
+										?>
 										<td style="padding: 0 !important; width: 33.33%;">
 											<table border="1" style="border-collapse: collapse; margin-top: 0 !important; width: 100%;">
 												<!-- Your table content here -->
 												<tr>
 													<td colspan="7" style="padding: 5px !important; text-align: center;">
-														<?php echo esc_html("Contact", "school-management");?>
+														<?php echo esc_html("অংশগ্রহণ ও যোগাযোগ", "school-management");?>
 													</td>
 												</tr>
 												<tr>
@@ -719,7 +726,7 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 												<!-- Your table content here -->
 												<tr>
 													<td colspan="7" style="padding: 5px !important; text-align: center;">
-														<?php echo esc_html("Contact", "school-management");?>
+														<?php echo esc_html("নিষ্ঠা ও সততা", "school-management");?>
 													</td>
 												</tr>
 												<tr>
@@ -738,7 +745,7 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 												<!-- Your table content here -->
 												<tr>
 													<td colspan="7" style="padding: 5px !important; text-align: center;">
-														<?php echo esc_html("Contact", "school-management");?>
+														<?php echo esc_html("পারস্পরিক শ্রদ্ধা এবং সহযোগিতা", "school-management");?>
 													</td>
 												</tr>
 												<tr>
