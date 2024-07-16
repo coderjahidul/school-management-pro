@@ -21,6 +21,17 @@
     .modal-body table tr td .active{
         color: #007bff !important;
     }
+    /* .gap-row {
+        height: 20px; 
+        border: none; 
+    }
+    .gap-row tr {
+        border: none;
+    }
+
+    .gap-row td {
+        border: none; 
+    } */
     
 </style>
 <?php
@@ -70,6 +81,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                     </div>
                                 </div>
                                 <div class="form-row">
+                                    <!-- Select by class -->
                                     <div class="form-group col-md-4">
                                         <label for="wlsm_class" class="wlsm-font-bold">
                                             <span class="wlsm-important">*</span> <?php esc_html_e( 'Class', 'school-management' ); ?>:
@@ -83,6 +95,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                             <?php } ?>
                                         </select>
                                     </div>
+                                    <!-- Select by class group -->
                                     <div class="form-group col-md-4">
                                         <label for="wlsm_class_group" class="wlsm-font-bold">
                                             <?php esc_html_e( 'Class Group', 'school-management' ); ?>:
@@ -96,7 +109,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                             <option value="vocational">Vocational</option>
                                         </select>
                                     </div>
-
+                                    <!-- Select by Class Section -->
                                     <div class="form-group col-md-4">
                                         <label for="wlsm_section" class="wlsm-font-bold">
                                             <span class="wlsm-important">*</span> <?php esc_html_e( 'Section', 'school-management' ); ?>:
@@ -116,7 +129,7 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                 <div class="col-md-12">
                                     <button type="button" class="btn btn-sm btn-outline-primary" id="wlsm-print-transcript-btn">
                                         <i class="fas fa-print"></i>&nbsp;
-                                        <?php esc_html_e( 'Print Transcript', 'school-management' ); ?>
+                                        <?php esc_html_e( 'View Student Report Card', 'school-management' ); ?>
                                     </button>
                                 </div>
                             </div>
@@ -141,33 +154,63 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                     "SELECT * FROM $table_name WHERE note = %s AND section_id = %d order by roll_number", $class_group, $section_id
                                 ));
 
-
-                                // Display student names and IDs
+                                // Check if student records exist
                                 if ($get_student_records) {
-                                    echo '<div class="wlsm-student-list">';
-                                    foreach ($get_student_records as $student_record) {
-                                        $student_name = $student_record->name;
-                                        $student_roll = $student_record->roll_number;
-                                        $student_record_id = $student_record->ID;
-                                        $student_session_id = $student_record->session_id;
-
-                                        $student_session = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_sessions WHERE ID = %d", $student_session_id));
-                                        ?>
-                                            <div type="button" class="student-list" data-toggle="modal" data-target="#student_report_card<?php echo $student_record_id;?>"><?php echo esc_html($student_roll . '. ' . $student_name);?></div>
-
-                                            <div class="modal fade" id="student_report_card<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <?php 
-                                                $assessment_types = "assessment_during_learning";
-                                                $assessment_label = "Assessment During Learning";
-                                                $subject_woys_result = student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $assessment_types, $school_name, $school_logo, $class_label, $assessment_label);
-                                            ?>
+                                    echo '<div class="wlsm-student-list">'; ?>
+                                    <div class="modal-dialog modal-xl" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student Report Cards', 'school-management'); ?></h5>
+                                                <button type="button" class="btn btn-primary" id="print-report-cards"><?php echo esc_html__('Print Report Cards', 'school-management'); ?></button>
+                                            </div>
+                                            <div class="modal-body" id="report-content">
+                                                <!-- Display student report cards -->
+                                                <?php foreach ($get_student_records as $student_record) { ?>
+                                                    <table border="1" style="border-collapse: collapse; margin-bottom: 20px;">
+                                                        <tbody>
+                                                            <?php
+                                                            $student_name = $student_record->name;
+                                                            $student_roll = $student_record->roll_number;
+                                                            $student_record_id = $student_record->ID;
+                                                            $student_session_id = $student_record->session_id;
+                                
+                                                            $student_session = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_sessions WHERE ID = %d", $student_session_id));
+                                
+                                                            $assessment_types = "assessment_during_learning";
+                                                            $assessment_label = "Assessment During Learning";
+                                                            // Student Report Card Function
+                                                            $subject_woys_result = student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $assessment_types, $school_name, $school_logo, $class_label, $assessment_label);
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
+                                                <?php } ?>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <!-- <button type="button" class="btn btn-primary" id="print-report-cards"><?php //echo esc_html__('Print Report Cards', 'school-management'); ?></button> -->
+                                            </div>
+                                            <script>
+                                                // Print report cards script
+                                                jQuery(document).ready(function ($) {
+                                                    $("#print-report-cards").click(function(){
+                                                        let content = $("#report-content").html();
+                                                        let printWindow = window.open('', '', 'resizable=yes, scrollbars=yes');
+                                
+                                                        printWindow.document.write('<html><head><title><?php echo esc_html__('Print Report Cards'); ?></title></head><body>');
+                                                        printWindow.document.write(content);
+                                                        printWindow.document.write('</body></html>');
+                                                        printWindow.document.close();
+                                                        printWindow.print();
+                                                    });
+                                                });
+                                            </script>
                                         </div>
-                                        <?php
-                                    }
-                                    echo '</div>';
+                                    </div>
+                                </div>
+                                <?php
                                 } else {
-                                    echo '<p>!No students found.</p>';
+                                    echo '<p>No students found.</p>';
                                 }
+                                
                             }
                         ?>
                     </div>
