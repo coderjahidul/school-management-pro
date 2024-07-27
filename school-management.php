@@ -253,209 +253,192 @@ function chapters_function_template($get_subject_chapters, $wpdb){
 }
 
 // new curriculum subject woys result print function
-function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label) {?>
+function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label, $lecture_ids) {?>
 	<div class="modal-dialog modal-xl" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student Transcript', 'school-management');?></h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body" id="transcript-content<?php echo $assessment_types . $student_record_id;?>">
-					<?php 
-						global $wpdb; // Declare the global $wpdb object
-						$table_name = $wpdb->prefix . 'wlsm_schools';
-						$active_schools_id = $active_schools_id[0]->ID;
-						// Prepare and execute the SQL query to get the school's address and email by school ID
-						$school = $wpdb->get_row($wpdb->prepare("SELECT address, email FROM $table_name WHERE id = %d", $active_schools_id));
-						
-						// Extract the address from the result object and assign it to $school_address
-						$school_address = $school->address;
-						
-						// Extract the email from the result object and assign it to $school_email
-						$school_email = $school->email;
-					?>
-				<table border="1" style="border-collapse: collapse;">
-					<tbody>
-						<tr style="border: none;">
-							<th colspan="4" style="border: none;">
-								<div class="schools-info" style="display: flex; align-items: center;">
-									<div class="logo" style="text-align: right; padding-right: 20px;">
-										<img style="border-radius: 50%; width: 20%; align-items: center;" src="<?php echo esc_url(wp_get_attachment_url($school_logo));?>" alt="school logo">
-									</div>
-									<div class="info">
-										<h3><?php echo esc_html($school_name);?></h3>
-										<?php if(!empty($school_address)) { ?>
-											<h5><?php echo esc_html($school_address);?></h5>
-										<?php } ?>
-										<?php if(!empty($school_email)) { ?>
-											<p style="margin: 0; padding: 0;"><?php echo esc_html("Email: " . $school_email);?></p>
-										<?php } ?>
-									</div>
-								</div>
-							</th>
-						</tr>
+		
+		<?php 
+			global $wpdb; // Declare the global $wpdb object
+			$table_name = $wpdb->prefix . 'wlsm_schools';
+			$active_schools_id = $active_schools_id[0]->ID;
+			// Prepare and execute the SQL query to get the school's address and email by school ID
+			$school = $wpdb->get_row($wpdb->prepare("SELECT address, email FROM $table_name WHERE id = %d", $active_schools_id));
+			
+			// Extract the address from the result object and assign it to $school_address
+			$school_address = $school->address;
+			
+			// Extract the email from the result object and assign it to $school_email
+			$school_email = $school->email;
+		?>
+		<table border="1" style="border-collapse: collapse;">
+			<tbody>
+				<tr style="border: none;">
+					<th colspan="4" style="border: none;">
+						<div class="schools-info" style="display: flex; align-items: center;">
+							<div class="logo" style="text-align: right; padding-right: 20px;">
+								<img style="border-radius: 50%; width: 20%; align-items: center;" src="<?php echo esc_url(wp_get_attachment_url($school_logo));?>" alt="school logo">
+							</div>
+							<div class="info">
+								<h3><?php echo esc_html($school_name);?></h3>
+								<?php if(!empty($school_address)) { ?>
+									<h5><?php echo esc_html($school_address);?></h5>
+								<?php } ?>
+								<?php if(!empty($school_email)) { ?>
+									<p style="margin: 0; padding: 0;"><?php echo esc_html("Email: " . $school_email);?></p>
+								<?php } ?>
+							</div>
+						</div>
+					</th>
+				</tr>
 
 
-						<tr>
-							<th colspan="2" align="left" style="padding: 5px; text-align: left">
-								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__("Assessment Types: " . $assessment_label);?></span>
-								<br>
-								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Student Name: ' . $student_name); ?></span>
-								<br>
-								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Student Roll: ' . $student_roll); ?></span>
-							</th>
-							<th colspan="2" align="left" style="padding: 5px; text-align: left">
-								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Class: ' . $class_label); ?></span>
-								<br>
-								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Group: ' . $class_group); ?></span>
-								<br>
-								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Section: ' . $section_label); ?></span>
-								<br>
-								<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Subject: ' . $subject_label); ?></span>
-							</th>
-						</tr>
-						<tr>
-							<th colspan = "1" style="padding: 5px;"> 
-								<?php echo esc_html__('Proficiency index', 'school-management');?>
-							</th>
-							<th colspan = "3" style="padding: 5px;">
-								<?php echo esc_html__('Level of proficiency', 'school-management');?>
-							</th>
-						</tr>
-					</tbody>
-					<?php 
-						
-						$chapter_ids = $wpdb->get_results($wpdb->prepare(
-							"SELECT ID FROM {$wpdb->prefix}wlsm_chapter WHERE class_id = %d AND subject_id = %d AND assessment_types = %s", $class_id, $subject_id, $assessment_types
+				<tr>
+					<th colspan="2" align="left" style="padding: 5px; text-align: left">
+						<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__("Assessment Types: " . $assessment_label);?></span>
+						<br>
+						<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Student Name: ' . $student_name); ?></span>
+						<br>
+						<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Student Roll: ' . $student_roll); ?></span>
+					</th>
+					<th colspan="2" align="left" style="padding: 5px; text-align: left">
+						<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Class: ' . $class_label); ?></span>
+						<br>
+						<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Group: ' . $class_group); ?></span>
+						<br>
+						<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Section: ' . $section_label); ?></span>
+						<br>
+						<span style="font-width: bold; color: #3399ff;"><?php echo esc_html__('Subject: ' . $subject_label); ?></span>
+					</th>
+				</tr>
+				<tr>
+					<th colspan = "1" style="padding: 5px;"> 
+						<?php echo esc_html__('Proficiency index', 'school-management');?>
+					</th>
+					<th colspan = "3" style="padding: 5px;">
+						<?php echo esc_html__('Level of proficiency', 'school-management');?>
+					</th>
+				</tr>
+			</tbody>
+			<?php 
+				
+				$chapter_ids = $wpdb->get_results($wpdb->prepare(
+					"SELECT ID FROM {$wpdb->prefix}wlsm_chapter WHERE class_id = %d AND subject_id = %d AND assessment_types = %s", $class_id, $subject_id, $assessment_types
+				));
+				foreach($chapter_ids as $chapter_id) {
+					$chapter_id = $chapter_id->ID;
+					
+
+					foreach($lecture_ids as $lecture_id) {
+						$lecture_id = intval($lecture_id);
+						$get_subject_lesson = $wpdb->get_results($wpdb->prepare(
+							"SELECT * FROM {$wpdb->prefix}wlsm_lecture WHERE chapter_id = %d AND ID = %d", $chapter_id, $lecture_id
 						));
-						foreach($chapter_ids as $chapter_id) {
-							$chapter_id = $chapter_id->ID;
-							$get_subject_lesson = $wpdb->get_results($wpdb->prepare(
-								"SELECT * FROM {$wpdb->prefix}wlsm_lecture WHERE chapter_id = %d", $chapter_id
-							));
+
+						foreach ($get_subject_lesson as $subject_lesson) {
+							$lesson_id = $subject_lesson->ID;
+							$lesson_code = $subject_lesson->code;
+							$lesson_title = $subject_lesson->title;
+							$square_des = $subject_lesson->square_description;
+							$circle_des = $subject_lesson->circle_description;
+							$triangle_des = $subject_lesson->triangle_description;
+
 							
-							foreach ($get_subject_lesson as $subject_lesson) {
-								$lesson_id = $subject_lesson->ID;
-								$lesson_code = $subject_lesson->code;
-								$lesson_title = $subject_lesson->title;
-								$square_des = $subject_lesson->square_description;
-								$circle_des = $subject_lesson->circle_description;
-								$triangle_des = $subject_lesson->triangle_description;
-
-								
-								
-								?>
-									<tbody>
-											<?php 
-												// Fetch lesson IDs from the database
-												$results_lesson_id = $wpdb->get_results(
-													$wpdb->prepare("SELECT lecture_id FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", $student_record_id, $lesson_id)
-												);
-												
-												// Check if there are any results
-												if (!empty($results_lesson_id)) {
-													foreach ($results_lesson_id as $r_lesson_id) {
-														// Get the lesson ID from the current result
-														$rlesson_id = $r_lesson_id->lecture_id;
-													}
-												} else {
-													// Nothing to print
-												}
-											?>
-										<?php if($lesson_id == $rlesson_id) {?>
-										<td style="padding: 5px;">
-											
-											<p><?php echo $lesson_code . ' - ' . $lesson_title;?></p>
-										</td> 
-										<?php }?>
+							
+							?>
+								<tbody>
 										<?php 
-											$new_curriculum_results = $wpdb->get_results($wpdb->prepare(
-												"SELECT * FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", $student_record_id, $lesson_id
-											));
-											foreach($new_curriculum_results as $new_curriculum_result) {
-												$marks = $new_curriculum_result->new_curriculum_marks;
-												?>
-													<td style="padding: 5px;">
-														<div class="marking" style="display: flex;justify-content: left;">
-															<?php if($marks == "square"){?>
-																<span class="square-icon active" style=" padding-right: 10px;"><img style="width: 17px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/square-black.png');?>" alt=""></span>
-															<?php } else {
-																?>
-																	<span class="square-icon" style="padding-right: 10px;"><img style="width: 17px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/square-white.png');?>" alt=""></span>
-																<?php
-															}
-															echo $square_des;?>
-														</div>
-													</td>
-													<td style="padding: 5px;">
-														<div class="marking" style="display: flex;justify-content: left;">
-															<?php if($marks == "circle"){?>
-																<span class="circle-icon active" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/circle-black.png');?>" alt=""></span>
-															<?php } else {
-																?>
-																	<span class="circle-icon" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/circle-white.png');?>" alt=""></span>
-																<?php
-															}
-															echo $circle_des; ?>
-														</div>
-													</td>
-													<td style="padding: 5px;"> 
-														<div class="marking" style="display: flex;justify-content: left;">
-															<?php if($marks == "triangle"){?>
-																<span class="triangle-icon active" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/triangle-black.png');?>" alt=""></span>
-															<?php } else {
-																?>
-																	<span class="triangle-icon" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/triangle-white.png');?>" alt=""></span>
-																<?php
-															}
-															echo $triangle_des; ?>
-														</div>
-													</td>
-												<?php
+											// Fetch lesson IDs from the database
+											$results_lesson_id = $wpdb->get_results(
+												$wpdb->prepare("SELECT lecture_id FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", $student_record_id, $lesson_id)
+											);
+											
+											// Check if there are any results
+											if (!empty($results_lesson_id)) {
+												foreach ($results_lesson_id as $r_lesson_id) {
+													// Get the lesson ID from the current result
+													$rlesson_id = $r_lesson_id->lecture_id;
+												}
+											} else {
+												// Nothing to print
 											}
-										?> 
+										?>
+									<?php if($lesson_id == $rlesson_id) {?>
+									<td style="padding: 5px;">
 										
-									</tbody>
+										<p><?php echo $lesson_code . ' - ' . $lesson_title;?></p>
+									</td> 
+									<?php }?>
+									<?php 
+										$new_curriculum_results = $wpdb->get_results($wpdb->prepare(
+											"SELECT * FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", $student_record_id, $lesson_id
+										));
+										foreach($new_curriculum_results as $new_curriculum_result) {
+											$marks = $new_curriculum_result->new_curriculum_marks;
+											?>
+												<td style="padding: 5px;">
+													<div class="marking" style="display: flex;justify-content: left;">
+														<?php if($marks == "square"){?>
+															<span class="square-icon active" style=" padding-right: 10px;"><img style="width: 17px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/square-black.png');?>" alt=""></span>
+														<?php } else {
+															?>
+																<span class="square-icon" style="padding-right: 10px;"><img style="width: 17px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/square-white.png');?>" alt=""></span>
+															<?php
+														}
+														echo $square_des;?>
+													</div>
+												</td>
+												<td style="padding: 5px;">
+													<div class="marking" style="display: flex;justify-content: left;">
+														<?php if($marks == "circle"){?>
+															<span class="circle-icon active" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/circle-black.png');?>" alt=""></span>
+														<?php } else {
+															?>
+																<span class="circle-icon" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/circle-white.png');?>" alt=""></span>
+															<?php
+														}
+														echo $circle_des; ?>
+													</div>
+												</td>
+												<td style="padding: 5px;"> 
+													<div class="marking" style="display: flex;justify-content: left;">
+														<?php if($marks == "triangle"){?>
+															<span class="triangle-icon active" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/triangle-black.png');?>" alt=""></span>
+														<?php } else {
+															?>
+																<span class="triangle-icon" style="padding-right: 10px;"><img style="width: 15px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/triangle-white.png');?>" alt=""></span>
+															<?php
+														}
+														echo $triangle_des; ?>
+													</div>
+												</td>
+											<?php
+										}
+									?> 
+									
+								</tbody>
 
-								<?php
-							}
+							<?php
 						}
-						
-					?>
-					<td colspan="2" style="text-align: center !important; border: 0;">
-						<?php echo esc_html__('', 'school-management'); ?><br>
-						<?php echo esc_html__('____________________________', 'school-management'); ?><br>
-						<?php echo esc_html__('Subject Teacher', 'school-management'); ?>
-						</td>
-						<td colspan="2" style="text-align: center !important; border: 0;">
-						<?php echo esc_html__('', 'school-management'); ?><br>
-						<?php echo esc_html__('____________________________', 'school-management'); ?><br>
-						<?php echo esc_html__('Head Teacher', 'school-management'); ?>
-					</td>
+					}
+					
+					
+				}
+				
+			?>
+			<td colspan="2" style="text-align: center !important; border: 0;">
+				<?php echo esc_html__('', 'school-management'); ?><br>
+				<?php echo esc_html__('____________________________', 'school-management'); ?><br>
+				<?php echo esc_html__('Subject Teacher', 'school-management'); ?>
+				</td>
+				<td colspan="2" style="text-align: center !important; border: 0;">
+				<?php echo esc_html__('', 'school-management'); ?><br>
+				<?php echo esc_html__('____________________________', 'school-management'); ?><br>
+				<?php echo esc_html__('Head Teacher', 'school-management'); ?>
+			</td>
 
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="print-transcript<?php echo $assessment_types . $student_record_id;?>"><?php echo esc_html__('Print Transcript', 'school-management');?></button>
-			</div>
-			<script>
-				jQuery(document).ready(function ($) {
-					$("#print-transcript<?php echo $assessment_types . $student_record_id;?>").click(function(){
-						let content = $("#transcript-content<?php echo $assessment_types . $student_record_id;?>").html();
-						let printWindow = window.open('', '', 'resizable=yes, scrollbars=yes');
-
-						printWindow.document.write('<html><head><title><?php echo esc_html__('Print ' . $student_name . "-" . $assessment_label . 'Transcript'); ?></title></head><body>');
-						printWindow.document.write(content);
-						printWindow.document.write('</body></html>');
-						printWindow.document.close();
-						printWindow.print();
-					});
-				});
-			</script>
-		</div>
-	</div><?php
+		</table>
+			
+	</div>
+	<?php
 }
 
 // Student Report Card Function

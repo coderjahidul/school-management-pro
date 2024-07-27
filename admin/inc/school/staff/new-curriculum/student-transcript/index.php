@@ -1,4 +1,8 @@
 <style>
+    .wlsm-student-list {
+        display: flex;
+        justify-content: center;
+    }
     .wlsm-student-list .card {
         max-width: 100%;
         margin-top: 10px;
@@ -41,6 +45,7 @@
     }
     .modal .modal-content {
         margin-top: 50px;
+        width: 80% !important;
     }
     .student-info {
         display: flex;
@@ -72,6 +77,9 @@
     .modal-body table tr td .active{
         color: #007bff !important;
     }
+    .modal-content {
+        width: 75% !important;
+    }
     
 </style>
 <?php
@@ -83,6 +91,7 @@ $school_name = $current_school['name'];
 $settings_general = WLSM_M_Setting::get_settings_general($school_id);
 $school_logo = $settings_general['school_logo'];
 $assessment_types = '';
+$lecture_id  = ''; 
 
 $classes = WLSM_M_Staff_Class::fetch_classes( $school_id );
 $assessment_type_list = WLSM_Helper::assessment_type_list();
@@ -163,13 +172,50 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                             <span class="wlsm-important">*</span> <?php esc_html_e( 'Subject', 'school-management' ); ?>:
                                         </label>
 
-                                        <select name="subject_id" class="form-control selectpicker wlsm_class_chapter" data-nonce="<?php echo esc_attr( wp_create_nonce( 'get-class-chapter' ) ); ?>" data-nonce-chapter="<?php echo esc_attr( wp_create_nonce( 'get-class-chapter' ) ); ?>" id="wlsm_subject" data-live-search="true" title="<?php esc_attr_e( 'Select subject', 'school-management' ); ?>" data-actions-box="true">
+                                        <select name="subject_id" class="form-control selectpicker wlsm_class_lecture" data-nonce="<?php echo esc_attr( wp_create_nonce( 'get-class-lecture' ) ); ?>" data-nonce-lecture="<?php echo esc_attr( wp_create_nonce( 'get-class-lecture' ) ); ?>" id="wlsm_subject" data-live-search="true" title="<?php esc_attr_e( 'Select subject', 'school-management' ); ?>" data-actions-box="true">
                                             <?php foreach ( $subjects as $subject ) { ?>
                                                 <option value="<?php echo esc_attr( $subject->ID ); ?>">
                                                     <?php echo esc_html( WLSM_M_Class::get_label_text( $subject->label ) ); ?>
                                                 </option>
                                             <?php } ?>
                                         </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="wlsm_assessment" class="wlsm-font-bold">
+                                            <span class="wlsm-important">*</span> <?php esc_html_e( 'Assessment Types', 'school-management' ); ?>:
+                                        </label>
+                                        <select name="assessment_types" class="form-control selectpicker" id="wlsm_assessment" data-live-search="true">
+                                            <option value=""><?php esc_html_e( 'Select Assessment', 'school-management' ); ?></option>
+                                            <?php foreach ( $assessment_type_list as $key => $value ) { ?>
+                                                <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $key, $assessment_types, true ); ?>>
+                                                    <?php echo esc_html( $value ); ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="wlsm_lecture" class="wlsm-font-bold">
+                                            <?php esc_html_e( 'Subject PI Code', 'school-management' ); ?>:
+                                        </label>
+
+                                        <select name="lecture[]" class="form-control selectpicker" id="wlsm_lecture" data-live-search="true" title="<?php esc_attr_e( 'Select Subject PI Code', 'school-management' ); ?>" data-actions-box="true" multiple>
+                                            <?php if ( $lecture_id ) : ?>
+                                                <?php foreach ( $lectures as $lecture ) { ?>
+                                                    <option value="<?php echo esc_attr( $lecture->ID ); ?>">
+                                                        <?php if( $lecture_id == $lecture->ID ) : ?>
+                                                            <?php echo esc_html( WLSM_M_Staff_Class::get_lecture_label_text( $lecture->label ) ); ?>
+                                                        <?php endif ?>
+                                                    </option>
+                                                <?php } ?>
+                                            <?php elseif ( ! $lecture_id ) : ?>
+                                                <?php foreach ( $lectures as $lecture ) { ?>
+                                                    <option value="<?php echo esc_attr( $lecture->ID ); ?>" <?php echo 'selected'; ?>>
+                                                        <?php echo esc_html( WLSM_M_Staff_Class::get_lecture_label_text( $lecture->label ) ); ?>
+                                                    </option>
+                                                <?php } ?>
+                                            <?php endif ?>
+                                        </select>
+
                                     </div>
                                 </div>
                             </div>
@@ -193,6 +239,9 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                 $class_group = sanitize_text_field($_POST['class_group']);
                                 $section_id = absint($_POST['section_id']);
                                 $subject_id = absint($_POST['subject_id']);
+                                $assessment_types = sanitize_text_field($_POST['assessment_types']);
+                                // Show select all PI codes
+                                $lecture_ids = isset($_POST['lecture']) ? $_POST['lecture'] : '';
                                 $class_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_classes WHERE ID = %d", $class_id));
                                 $class_label = isset($class_label[0]->label) ? $class_label[0]->label : '';
 
@@ -207,102 +256,77 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                 $subject_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d", $subject_id));
                                 $subject_label = isset($subject_label[0]->label) ? $subject_label[0]->label : '';
 
+                                // Define Assessment Labels based on selected assessment types
+                                if( $assessment_types == "assessment_during_learning" ) {
+                                    $assessment_label = "Assessment During Learning";
+                                }elseif( $assessment_types == "quarterly_summative_assessment" ) {
+                                    $assessment_label = "Quarterly Summative Assessment";
+                                }elseif( $assessment_types == "annual_summative_assessment" ) {
+                                    $assessment_label = "Annual Summative Assessment";
+                                }elseif( $assessment_types == "quarterly_behavioral_assessment" ) {
+                                    $assessment_label = "Quarterly Behavioral Assessment";
+                                }elseif( $assessment_types == "annual_behavioral_assessment" ) {
+                                    $assessment_label = "Annual Behavioral Assessment";
+                                }
 
                                 // Display student names and IDs
                                 if ($get_student_records) {
-                                    echo '<div class="wlsm-student-list">';
-                                    foreach ($get_student_records as $student_record) {
-                                        $student_name = $student_record->name;
-                                        $student_roll = $student_record->roll_number;
-                                        $student_record_id = $student_record->ID;
-                                        ?>
-                                        <div id="accordion">
-                                            <!-- Accordion Item 1 -->
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h5 class="mb-0">
-                                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse<?php echo $student_record_id?>">
-                                                    <span class="student-name"><?php  echo esc_html__("Student Name: " . $student_name); ?></span>
-                                                    <br>
-                                                    <span class="student-roll"><?php echo esc_html__("Student Roll: " . $student_roll); ?></span>
-                                                    </button>
-                                                    </h5>
-                                                </div>
-                                                <div id="collapse<?php echo $student_record_id?>" class="collapse" data-parent="#accordion">
-                                                    <div class="card-body">
-                                                        <?php
-                                                                ?>
-                                                                <!-- Button trigger modal -->
-                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#assessment_during_learning<?php echo $student_record_id;?>">
-                                                                    <?php echo esc_html__('Assessment During Learning', 'school-management'); ?>
-                                                                </button>
-                                                                <br>
-                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#quarterly_summative_assessment<?php echo $student_record_id;?>">
-                                                                    <?php echo esc_html__('Quarterly Summative Assessment', 'school-management'); ?>
-                                                                </button>
-                                                                <br>
-                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#annual_summative_assessment<?php echo $student_record_id;?>">
-                                                                    <?php echo esc_html__('Annual Summative Assessment', 'school-management'); ?>
-                                                                </button>
-                                                                <br>
-                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#quarterly_behavioral_assessment<?php echo $student_record_id;?>">
-                                                                    <?php echo esc_html__('Quarterly Behavioral Assessment', 'school-management'); ?>
-                                                                </button>
-                                                                <br>
-                                                                <button type="button" class="btn btn-link " data-toggle="modal" data-target="#annual_behavioral_assessment<?php echo $student_record_id;?>">
-                                                                    <?php echo esc_html__('Annual Behavioral Assessment', 'school-management'); ?>
-                                                                </button>
-                                                                <br>
-
-
-                                                                <!-- Assessment During Learning Modal -->
-                                                                <div class="modal fade" id="assessment_during_learning<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                    <?php 
-                                                                        $assessment_types = "assessment_during_learning";
-                                                                        $assessment_label = "Assessment During Learning";
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
-                                                                    ?>
-                                                                </div>
-                                                                <!-- Quarterly Summative Assessment Modal -->
-                                                                <div class="modal fade" id="quarterly_summative_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                    <?php 
-                                                                        $assessment_types = "quarterly_summative_assessment"; 
-                                                                        $assessment_label = "Quarterly Summative Assessment";
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
-                                                                    ?>
-                                                                </div>
-                                                                <!-- Annual Summative Assessment Modal -->
-                                                                <div class="modal fade" id="annual_summative_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                    <?php 
-                                                                        $assessment_types = "annual_summative_assessment";
-                                                                        $assessment_label = "Annual Summative Assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
-                                                                    ?>
-                                                                </div>
-                                                                <!-- Quarterly Behavioral Assessment Modal -->
-                                                                <div class="modal fade" id="quarterly_behavioral_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                    <?php 
-                                                                        $assessment_types = "quarterly_behavioral_assessment";
-                                                                        $assessment_label = "Quarterly Behavioral Assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
-                                                                    ?>
-                                                                </div>
-                                                                <!-- Annual Behavioral Assessment Modal -->
-                                                                <div class="modal fade" id="annual_behavioral_assessment<?php echo $student_record_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                    <?php 
-                                                                        $assessment_types = "annual_behavioral_assessment";
-                                                                        $assessment_label = "Annual Behavioral Assessment"; 
-                                                                        $subject_woys_result = new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $student_roll, $student_name, $class_id, $class_group, $section_label, $subject_id, $subject_label, $assessment_types, $school_name, $school_logo, $active_schools_id, $class_label, $assessment_label);
-                                                                    ?>
-                                                                </div>
-                                                                <?php
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    echo '<div class="wlsm-student-list">';?>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel"><?php echo esc_html__('Student Transcript', 'school-management'); ?></h5>
+                                            <button type="button" class="btn btn-primary" id="print-transcript"><?php echo esc_html__('Print', 'school-management'); ?></button>
                                         </div>
+                                        <div class="modal-body" id="transcript-content">
+                                            <?php
+                                            foreach ($get_student_records as $student_record) {
+                                                $student_name = $student_record->name;
+                                                $student_roll = $student_record->roll_number;
+                                                $student_record_id = $student_record->ID;
+                                                $subject_woys_result = new_curriculum_subject_ways_result_print(
+                                                    $wpdb,
+                                                    $student_record_id,
+                                                    $student_roll,
+                                                    $student_name,
+                                                    $class_id,
+                                                    $class_group,
+                                                    $section_label,
+                                                    $subject_id,
+                                                    $subject_label,
+                                                    $assessment_types,
+                                                    $school_name,
+                                                    $school_logo,
+                                                    $active_schools_id,
+                                                    $class_label,
+                                                    $assessment_label,
+                                                    $lecture_ids
+                                                );
+                                                // Add the page-break class to the div wrapping the student record
+                                                echo '<div class="page-break">';
+                                                echo $subject_woys_result;
+                                                echo '</div>';
+                                            }
+                                            echo '</div>';
+                                            ?>
+                                        <script>
+                                            // Print Transcript Button Script
+                                            jQuery(document).ready(function ($) {
+                                                $("#print-transcript").click(function () {
+                                                    let content = $("#transcript-content").html();
+                                                    let printWindow = window.open('', '', 'resizable=yes, scrollbars=yes');
+
+                                                    printWindow.document.write('<html><head><title><?php echo esc_html__('Print ' .  $assessment_label . 'Transcript'); ?></title>');
+                                                    printWindow.document.write('<style>.page-break { page-break-before: always; }</style>');
+                                                    printWindow.document.write('</head><body>');
+                                                    printWindow.document.write(content);
+                                                    printWindow.document.write('</body></html>');
+                                                    printWindow.document.close();
+                                                    printWindow.print();
+                                                });
+                                            });
+                                        </script>
                                         <?php
-                                    }
+                                        echo '</div>';
                                     echo '</div>';
                                 } else {
                                     echo '<p>!No students found.</p>';
