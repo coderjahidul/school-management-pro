@@ -442,7 +442,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 }
 
 // Student Report Card Function
-function student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $assessment_types, $school_name, $school_logo, $class_label, $assessment_label) {?>
+function student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $school_name, $school_logo, $class_label) {?>
 	
 	<!-- <tbody id="report-content"> -->
 		<tr>
@@ -678,13 +678,11 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 									</td>
 								</tr>
 								<tr>
-									<td style="padding: 5px !important; text-align: center;">1</td>
-									<td style="padding: 5px !important; text-align: center;">2</td>
-									<td style="padding: 5px !important; text-align: center;">3</td>
-									<td style="padding: 5px !important; text-align: center;">4</td>
-									<td style="padding: 5px !important; text-align: center;">5</td>
-									<td style="padding: 5px !important; text-align: center;">6</td>
-									<td style="padding: 5px !important; text-align: center;">7</td>
+									<?php 
+										for($i = 0; $i < 7; $i++) {
+											echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+										}
+									?>
 								</tr>
 							</table>
 						</td>
@@ -697,13 +695,11 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 									</td>
 								</tr>
 								<tr>
-									<td style="padding: 5px !important; text-align: center;">1</td>
-									<td style="padding: 5px !important; text-align: center;">2</td>
-									<td style="padding: 5px !important; text-align: center;">3</td>
-									<td style="padding: 5px !important; text-align: center;">4</td>
-									<td style="padding: 5px !important; text-align: center;">5</td>
-									<td style="padding: 5px !important; text-align: center;">6</td>
-									<td style="padding: 5px !important; text-align: center;">7</td>
+									<?php 
+										for($i = 0; $i < 7; $i++) {
+											echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+										}
+									?>
 								</tr>
 							</table>
 						</td>
@@ -716,13 +712,11 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 									</td>
 								</tr>
 								<tr>
-									<td style="padding: 5px !important; text-align: center;">1</td>
-									<td style="padding: 5px !important; text-align: center;">2</td>
-									<td style="padding: 5px !important; text-align: center;">3</td>
-									<td style="padding: 5px !important; text-align: center;">4</td>
-									<td style="padding: 5px !important; text-align: center;">5</td>
-									<td style="padding: 5px !important; text-align: center;">6</td>
-									<td style="padding: 5px !important; text-align: center;">7</td>
+									<?php 
+										for($i = 0; $i < 7; $i++) {
+											echo '<td style="padding: 5px !important; text-align: center; background-color: #454444;"><span style="opacity: 0;">'.($i+1).'</span></td>';
+										}
+									?>
 								</tr>
 							</table>
 						</td>
