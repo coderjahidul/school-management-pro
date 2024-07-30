@@ -836,7 +836,7 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 			</td>
 			<td></td>
 			<td colspan="2" style="padding: 10px;">
-				<h5 class="font-size-18 font-weight-500" style="text-align: left;"><?php echo esc_html("শিক্ষার্থীর মন্তব্য:", "school-management");?></h5>
+				<h5 class="font-size-18 font-weight-500" style="text-align: left;"><?php echo esc_html("অভিভাবকের মন্তব্য:", "school-management");?></h5>
 				<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('যে কাজটি সবচেয়ে ভালোভাবে করতে পেরেছি:', 'school-management'); ?></p>
 				<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
 				<p style="text-align: left; font-size: 14px;"><?php echo esc_html__('..............................................................................................................................', 'school-management'); ?></p>
@@ -853,12 +853,12 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 			</td>
 			<td>
 				<p style="padding-top: 20px; margin-bottom: 0px;"><?php echo esc_html__('...............................................', 'school-management');?></p>
-				<p style="margin-bottom: 0px;"><?php echo esc_html__('শ্রেণী শিক্ষকের স্বাক্ষর', 'school-management');?></p>
+				<p style="margin-bottom: 0px;"><?php echo esc_html__('প্রধান শিক্ষকের স্বাক্ষর', 'school-management');?></p>
 				<p style="margin-bottom: 0px;"><?php echo esc_html__('তারিখ:', 'school-management');?></p>
 			</td>
 			<td colspan="2">
 				<p style="padding-top: 20px; margin-bottom: 0px;"><?php echo esc_html__('...............................................', 'school-management');?></p>
-				<p style="margin-bottom: 0px;"><?php echo esc_html__('শ্রেণী শিক্ষকের স্বাক্ষর', 'school-management');?></p>
+				<p style="margin-bottom: 0px;"><?php echo esc_html__('অভিভাবকের স্বাক্ষর', 'school-management');?></p>
 				<p style="margin-bottom: 0px;"><?php echo esc_html__('তারিখ:', 'school-management');?></p>
 			</td>
 		</tr>
