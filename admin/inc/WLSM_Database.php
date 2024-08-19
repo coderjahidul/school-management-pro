@@ -1493,7 +1493,7 @@ class WLSM_Database
 
 		$sql = "CREATE TABLE IF NOT EXISTS " . WLSM_LECTURE . " (
 			ID bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-			code varchar(10) DEFAULT NULL,
+			code varchar(20) DEFAULT NULL,
 			title varchar(191) DEFAULT NULL,
 			description text DEFAULT NULL,
 			square_description text DEFAULT NULL,
@@ -1525,7 +1525,7 @@ class WLSM_Database
 		
 		// If the code column does not exist, add it
 		if(!$code_column_exists){
-			$wpdb->query("ALTER TABLE " . WLSM_LECTURE . " ADD COLUMN code VARCHAR(10) DEFAULT NULL AFTER ID" );
+			$wpdb->query("ALTER TABLE " . WLSM_LECTURE . " ADD COLUMN code VARCHAR(20) DEFAULT NULL AFTER ID" );
 		}
 		if(!$square_description){
 			$wpdb->query("ALTER TABLE " . WLSM_LECTURE . " ADD COLUMN square_description text DEFAULT NULL AFTER description");
