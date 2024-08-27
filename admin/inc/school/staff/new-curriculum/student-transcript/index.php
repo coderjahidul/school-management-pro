@@ -253,8 +253,9 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                 $get_student_records = $wpdb->get_results($wpdb->prepare(
                                     "SELECT * FROM $table_name WHERE note = %s AND section_id = %d order by roll_number", $class_group, $section_id
                                 ));
-                                $subject_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d", $subject_id));
-                                $subject_label = isset($subject_label[0]->label) ? $subject_label[0]->label : '';
+                                $get_subject = $wpdb->get_results($wpdb->prepare("SELECT label, religion FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d", $subject_id));
+                                $subject_label = isset($get_subject[0]->label) ? $get_subject[0]->label : '';
+                                $subject_religion = isset($get_subject[0]->religion) ? $get_subject[0]->religion : '';
 
                                 // Define Assessment Labels based on selected assessment types
                                 if( $assessment_types == "assessment_during_learning" ) {
@@ -283,28 +284,32 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                 $student_name = $student_record->name;
                                                 $student_roll = $student_record->roll_number;
                                                 $student_record_id = $student_record->ID;
-                                                $subject_woys_result = new_curriculum_subject_ways_result_print(
-                                                    $wpdb,
-                                                    $student_record_id,
-                                                    $student_roll,
-                                                    $student_name,
-                                                    $class_id,
-                                                    $class_group,
-                                                    $section_label,
-                                                    $subject_id,
-                                                    $subject_label,
-                                                    $assessment_types,
-                                                    $school_name,
-                                                    $school_logo,
-                                                    $active_schools_id,
-                                                    $class_label,
-                                                    $assessment_label,
-                                                    $lecture_ids
-                                                );
-                                                // Add the page-break class to the div wrapping the student record
-                                                echo '<div class="page-break">';
-                                                echo $subject_woys_result;
-                                                echo '</div>';
+                                                $student_religion = $student_record->religion;
+                                                // if subject religion is same as student religion or subject religion is common then print transcript
+                                                if($subject_religion ==  $student_religion || $subject_religion == "common") {
+                                                    $subject_woys_result = new_curriculum_subject_ways_result_print(
+                                                        $wpdb,
+                                                        $student_record_id,
+                                                        $student_roll,
+                                                        $student_name,
+                                                        $class_id,
+                                                        $class_group,
+                                                        $section_label,
+                                                        $subject_id,
+                                                        $subject_label,
+                                                        $assessment_types,
+                                                        $school_name,
+                                                        $school_logo,
+                                                        $active_schools_id,
+                                                        $class_label,
+                                                        $assessment_label,
+                                                        $lecture_ids
+                                                    );
+                                                    // Add the page-break class to the div wrapping the student record
+                                                    echo '<div class="page-break">';
+                                                    echo $subject_woys_result;
+                                                    echo '</div>';
+                                                }
                                             }
                                             echo '</div>';
                                             ?>
