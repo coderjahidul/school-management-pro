@@ -446,7 +446,7 @@ function new_curriculum_subject_ways_result_print($wpdb, $student_record_id, $st
 }
 
 // Student Report Card Function
-function student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $school_name, $school_logo, $class_label) {?>
+function student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $student_religion, $class_id, $class_group, $section_label, $school_name, $school_logo, $class_label) {?>
 	
 	<!-- <tbody id="report-content"> -->
 		<tr>
@@ -488,12 +488,14 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 				<div align="left" class="subject-list text-left" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));">
 					<?php 
 						$class_school_id = $wpdb->get_results($wpdb->prepare("SELECT ID FROM {$wpdb->prefix}wlsm_class_school WHERE class_id = %d", $class_id));
-						$subject_list = $wpdb->get_results($wpdb->prepare("SELECT ID, label FROM {$wpdb->prefix}wlsm_subjects WHERE class_school_id = %d AND type IN ('subjective', 'practical')", $class_school_id[0]->ID));
+						$subject_list = $wpdb->get_results($wpdb->prepare("SELECT ID, label, religion FROM {$wpdb->prefix}wlsm_subjects WHERE class_school_id = %d AND type IN ('subjective', 'practical')", $class_school_id[0]->ID));
 						foreach($subject_list as $subject) {
-							$subject_label = $subject->label;
-							?>
-								<div class="subject"><img style="width: 35px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . "assets/images/new-curriculum.png"); ?>" alt=""><?php echo esc_html($subject_label);?></div>
-							<?php
+							if($subject->religion ==  $student_religion || $subject->religion == "common") {
+								$subject_label = $subject->label;
+								?>
+									<div class="subject"><img style="width: 35px;" src="<?php echo esc_url(WLSM_PLUGIN_URL . "assets/images/new-curriculum.png"); ?>" alt=""><?php echo esc_html($subject_label);?></div>
+								<?php
+							}
 						}
 					?>
 				</div>
@@ -504,7 +506,8 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 			<th colspan="5" align="center" style="padding: 5px; text-align: center">
 				<?php 
 					foreach($subject_list as $subject){
-						$subject_label = $subject->label;?>
+						if($subject->religion ==  $student_religion || $subject->religion == "common") {
+							$subject_label = $subject->label;?>
 
 							<h5 class="bg-light font-size-18 font-weight-500" style="padding: 10px 0; margin: 10px 0;"><?php echo esc_html($subject_label);?></h5>
 							<table>
@@ -664,6 +667,7 @@ function student_report_card($wpdb, $student_record_id, $student_roll, $student_
 							</table>
 
 						<?php
+						}
 					}
 				?>
 			</th>

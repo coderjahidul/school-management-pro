@@ -176,11 +176,12 @@ require_once WLSM_PLUGIN_DIR_PATH . 'admin/inc/school/global.php';
                                                                     $student_roll = $student_record->roll_number;
                                                                     $student_record_id = $student_record->ID;
                                                                     $student_session_id = $student_record->session_id;
+                                                                    $student_religion = $student_record->religion;
 
                                                                     $student_session = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_sessions WHERE ID = %d", $student_session_id));
                                                                     
                                                                     // Student Report Card Function
-                                                                    $subject_woys_result = student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $class_id, $class_group, $section_label, $school_name, $school_logo, $class_label);
+                                                                    $subject_woys_result = student_report_card($wpdb, $student_record_id, $student_roll, $student_name, $student_session, $student_religion, $class_id, $class_group, $section_label, $school_name, $school_logo, $class_label);
                                                                     ?>
                                                                 </tbody>
                                                             </table>
