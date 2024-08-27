@@ -65,7 +65,7 @@ if( file_exists(__DIR__ . '/metabox.php') ){
 
 
 // new curriculum marks template 
-function chapters_function_template($get_subject_chapters, $wpdb){
+function chapters_function_template($get_subject_chapters, $wpdb) {
 	// Submit student new curriculum results marks
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_ids'], $_POST['lesson_id'])) {
         global $wpdb;
@@ -139,7 +139,8 @@ function chapters_function_template($get_subject_chapters, $wpdb){
 
 	foreach($get_subject_chapters as $chapter){
 		$chapter_id = $chapter->ID;
-		$chapter_label = $chapter->title; ?>
+		$chapter_label = $chapter->title;
+		$chapter_subject_id = $chapter->subject_id; ?>
 		<div class="card">
 			<div class="card-header" id="heading<?php echo $chapter_id; ?>">
 				<h5 class="mb-0">
@@ -193,43 +194,55 @@ function chapters_function_template($get_subject_chapters, $wpdb){
 											));?>
 											<form action="" method="post"><?php
 												foreach($get_student_records as $student_record):
+													$student_religion = $student_record->religion;
 													$student_id = $student_record->ID;
-													$get_new_curriculum_results = $wpdb->get_results($wpdb->prepare(
-														"SELECT new_curriculum_marks FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", 
-														$student_record->ID,
-														$lesson_id
+													// get subject religion whre subject id = $chapter_subject_id
+													$get_subject_religion = $wpdb->get_results($wpdb->prepare(
+														"SELECT religion FROM {$wpdb->prefix}wlsm_subjects WHERE ID = %d",
+														$chapter_subject_id
 													));
-													$result = isset($get_new_curriculum_results[0]->new_curriculum_marks) ? $get_new_curriculum_results[0]->new_curriculum_marks : '';
-													?>
-													<div class="result-assessment">
-														<div class="student-list">
-															<img src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/user.png');?>" alt="student image">
-															<br>
-															<span><?php echo $student_record->name; ?></span>
-															<br>
-															<span><?php echo esc_html__("Roll No: " . $student_record->roll_number); ?></span>
-														</div>
-														<input type="hidden" name="student_ids[]" value="<?php echo $student_record->ID; ?>">
-														<input type="hidden" name="lesson_id" value="<?php echo $lesson_id; ?>">   
-														<div class="student-result" x-data="{ selected: '<?php echo $result;?>' }">
-															<label class="square-description">
-																<input @click="selected = 'square'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="square">
-																<span class="square-icon" x-bind:class="{ 'selected': selected === 'square' }">&#9634;</span>
-																<?php echo $square_des; ?>
-															</label>
-															<label class="circle-description">
-																<input @click="selected = 'circle'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="circle">
-																<span class="circle-icon" x-bind:class="{ 'selected': selected === 'circle' }">&#11096;</span>
-																<?php echo $circle_des; ?>
-															</label>
-															<label class="triangle-description">
-																<input @click="selected = 'triangle'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="triangle">
-																<span class="triangle-icon" x-bind:class="{ 'selected': selected === 'triangle' }">🛆</span>
-																<?php echo $triangle_des; ?>
-															</label>
-														</div>
-													</div>                                                                               
-													<?php
+													$subject_religion = isset($get_subject_religion[0]->religion) ? $get_subject_religion[0]->religion : '';
+													
+									
+													if($subject_religion ==  $student_religion || $subject_religion == "common") {
+														$get_new_curriculum_results = $wpdb->get_results($wpdb->prepare(
+															"SELECT new_curriculum_marks FROM {$wpdb->prefix}wlsm_new_curriculum_results WHERE student_record_id = %d AND lecture_id = %d", 
+															$student_record->ID,
+															$lesson_id
+														));
+														$result = isset($get_new_curriculum_results[0]->new_curriculum_marks) ? $get_new_curriculum_results[0]->new_curriculum_marks : '';
+														?>
+														<div class="result-assessment">
+															<div class="student-list">
+																<img src="<?php echo esc_url(WLSM_PLUGIN_URL . '/assets/images/user.png');?>" alt="student image">
+																<br>
+																<span><?php echo $student_record->name; ?></span>
+																<br>
+																<span><?php echo esc_html__("Roll No: " . $student_record->roll_number); ?></span>
+															</div>
+															<input type="hidden" name="student_ids[]" value="<?php echo $student_record->ID; ?>">
+															<input type="hidden" name="lesson_id" value="<?php echo $lesson_id; ?>">   
+															<div class="student-result" x-data="{ selected: '<?php echo $result;?>' }">
+																<label class="square-description">
+																	<input @click="selected = 'square'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="square">
+																	<span class="square-icon" x-bind:class="{ 'selected': selected === 'square' }">&#9634;</span>
+																	<?php echo $square_des; ?>
+																</label>
+																<label class="circle-description">
+																	<input @click="selected = 'circle'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="circle">
+																	<span class="circle-icon" x-bind:class="{ 'selected': selected === 'circle' }">&#11096;</span>
+																	<?php echo $circle_des; ?>
+																</label>
+																<label class="triangle-description">
+																	<input @click="selected = 'triangle'" style="display:none;" type="radio" name="mark_<?php echo $student_record->ID; ?>" value="triangle">
+																	<span class="triangle-icon" x-bind:class="{ 'selected': selected === 'triangle' }">🛆</span>
+																	<?php echo $triangle_des; ?>
+																</label>
+															</div>
+														</div>                                                                               
+														<?php
+													}
+													
 													// echo "Student Class: " .$student_class = $student_record->class_id;
 												endforeach;
 											?>
