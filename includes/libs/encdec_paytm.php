@@ -20,11 +20,12 @@ class WLSM_Paytm {
 	}
 
 	static function pkcs5_unpad_e($text) {
-		$pad = ord($text{strlen($text) - 1});
-		if ($pad > strlen($text))
+		$pad = ord($text[strlen($text) - 1]); // Use [] instead of {}
+		if ($pad > strlen($text)) {
 			return false;
+		}
 		return substr($text, 0, -1 * $pad);
-	}
+	}	
 
 	static function generateSalt_e($length) {
 		$random = "";
