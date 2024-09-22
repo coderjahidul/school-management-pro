@@ -222,7 +222,7 @@ class WLSM_M_Staff_Examination {
 		return $admit_cards;
 	}
 
-	public static function get_exam_admit_cards_for_bulk_print( $school_id, $exam_id, $class_id, $section_id = 0, $class_group ) {
+	public static function get_exam_admit_cards_for_bulk_print( $school_id, $exam_id, $class_id, $class_group, $section_id = 0 ) {
 		global $wpdb;
 		$admit_cards = $wpdb->get_results( $wpdb->prepare( 'SELECT ac.ID, ac.exam_id,  ac.roll_number, sr.roll_number as student_class_roll_number , ac.student_record_id as student_id, sr.name, sr.phone, sr.enrollment_number, sr.photo_id, sr.email, sr.note ,c.label as class_label, se.label as section_label, ss.label as session_label FROM ' . WLSM_ADMIT_CARDS . ' as ac
 			JOIN ' . WLSM_EXAMS . ' as ex ON ex.ID = ac.exam_id
