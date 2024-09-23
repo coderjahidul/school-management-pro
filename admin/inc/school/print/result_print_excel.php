@@ -37,7 +37,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 	);
 
 	$class_school_id = $wpdb->get_var($query);
-	$class_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM wpei_wlsm_classes WHERE ID = %d", $class_id));
+	$class_label = $wpdb->get_results($wpdb->prepare("SELECT label FROM {$wpdb->prefix}wlsm_classes WHERE ID = %d", $class_id));
 	$labelToInt = array(
 		"One" => 1,
 		"Two" => 2,
