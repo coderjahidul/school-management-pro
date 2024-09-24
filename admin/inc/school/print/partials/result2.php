@@ -669,8 +669,8 @@ $school_result_url      = $settings_url['result_url'];
 											$bangla_mcq_maximum_mark = $mcq_maximum_marks * 1;
 										}
 
-										$minimam_cq_fash_mark = round($bangla_cq_maximum_mark / 3);
-										$minimam_mcq_fash_mark = round($bangla_mcq_maximum_mark / 3);
+										$minimam_cq_fash_mark = floor($bangla_cq_maximum_mark / 3);
+										$minimam_mcq_fash_mark = floor($bangla_mcq_maximum_mark / 3);
 
 										if ($bangla_second_subjective_mark != null) {
 											$divide_bangla_mark = round($total_bangla_mark / 2);
