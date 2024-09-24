@@ -771,7 +771,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 												$bangla_total_cq_maxmarks = $bangla_first_cq_maxmarks;
 												$bangla_subject_maxmarks = $bangla_total_cq_maxmarks;
 	
-												$minimam_cq_fash_marks = round($bangla_total_cq_maxmarks / 3);
+												$minimam_cq_fash_marks = floor($bangla_total_cq_maxmarks / 3);
 	
 												$divide_bangla_mark = $total_bangla_mark / 1;
 												if ($bangla_first_cq_marks >= 1) {
@@ -1024,8 +1024,8 @@ $marks_grades = $grade_criteria['marks_grades'];
 													$bangla_total_mcq_maxmarks = $bangla_first_mcq_maxmarks + $bangla_second_mcq_maxmarks;
 													$bangla_subject_maxmarks = $bangla_total_cq_maxmarks + $bangla_total_mcq_maxmarks;
 		
-													$minimam_cq_fash_marks = round($bangla_total_cq_maxmarks / 3);
-													$minimam_mcq_fash_marks = round($bangla_total_mcq_maxmarks / 3);
+													$minimam_cq_fash_marks = floor($bangla_total_cq_maxmarks / 3);
+													$minimam_mcq_fash_marks = floor($bangla_total_mcq_maxmarks / 3);
 		
 													$divide_bangla_mark = round($total_bangla_mark / 2);
 													if ($bangla_first_cq_marks >= 1 && $bangla_second_cq_marks >= 1 && $bangla_first_mcq_marks >= 1 && $bangla_second_mcq_marks >= 1) {
@@ -1455,8 +1455,8 @@ $marks_grades = $grade_criteria['marks_grades'];
 													$bangla_total_mcq_maxmarks = $bangla_first_mcq_maxmarks;
 													$bangla_subject_maxmarks = $bangla_total_cq_maxmarks + $bangla_total_mcq_maxmarks;
 		
-													$minimam_cq_fash_marks = round($bangla_total_cq_maxmarks / 3);
-													$minimam_mcq_fash_marks = round($bangla_total_mcq_maxmarks / 3);
+													$minimam_cq_fash_marks = floor($bangla_total_cq_maxmarks / 3);
+													$minimam_mcq_fash_marks = floor($bangla_total_mcq_maxmarks / 3);
 		
 													$divide_bangla_mark = $total_bangla_mark / 1;
 													if ($bangla_first_cq_marks >= 1 && $bangla_first_mcq_marks >= 1) {
