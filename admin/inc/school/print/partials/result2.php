@@ -1107,9 +1107,11 @@ $school_result_url      = $settings_url['result_url'];
 							<td>
 								<?php 
 									if($written_mark >= $minimam_objective_cq_fash_mark && $mcq_mark >= $minimam_objective_mcq_fash_mark && $practical_mark >= $minimam_objective_practical_fash_mark){
-										echo number_format( WLSM_M_Setting::optional_calculateGPA( $letter_grade ), 2 );
+										$optional_gap = number_format( WLSM_M_Setting::optional_calculateGPA( $letter_grade ), 2 );
+										echo $optional_gap;
 									}else{
-										echo "0.00";
+										$optional_gap = "0.00";
+										echo $optional_gap;
 									}
 								?>
 							</td>
@@ -1129,9 +1131,9 @@ $school_result_url      = $settings_url['result_url'];
 						
 							// $optional_and_mainsubject_max_mark = $total_max_marks + $optional_max_mark;
 							if($optional_total_mcq_marks >= 1 && $optional_total_practical_marks >= 1 && $optional_total_obtained_marks >= 1){
-								$optional_and_mainsubject_totol_mark = $total_marks + $optional_subject_totla_mark;
+								$all_subject_total_marks = $total_marks + $optional_subject_totla_mark;
 							}else{
-								$optional_and_mainsubject_totol_mark = $total_marks;
+								$all_subject_total_marks = $total_marks;
 							}
 							
 						
@@ -1141,7 +1143,7 @@ $school_result_url      = $settings_url['result_url'];
 							<th colspan="3"><?php esc_html_e( 'Total', 'school-management' ); ?></th>
 							<!-- <th><?php //echo esc_html( $total_max_marks ); ?></th> -->
 							
-							<th colspan="3"><?php echo esc_html( $optional_and_mainsubject_totol_mark ); ?></th>
+							<th colspan="3"><?php echo esc_html( $all_subject_total_marks ); ?></th>
 							<?php if ( $show_marks_grades ) { ?>
 							
 							<?php } ?>
@@ -1154,15 +1156,31 @@ $school_result_url      = $settings_url['result_url'];
 								<?php 
 									$total_mark_percentage = esc_html( WLSM_Config::get_percentage_text( $total_max_marks, $total_marks ) ); 
 									// echo $total_mark_percentage;
+									// check less than total mark percentage less than 100
+									if($total_mark_percentage <= 100 && $optional_subject_totla_mark >= 40 && $optional_gap != "0.00"){
+										// less the 40 marks in optional subject
+										$optional_subject_totla_mark -= 40;
+										// add marks students main subject and optional subject mark
+										$total_student_marks = $total_marks + $optional_subject_totla_mark;
+									}else{
+										$total_student_marks = $total_marks;
+									}
 								?>
 							</td>
 							<td></td>
 							<th colspan = "3"><?php esc_html_e( 'GPA Without Ad. Sub', 'school-management' );?></th>
 							<?php if ( $show_marks_grades ) { ?>
+								<?php
+									if($total_failde_subject == 0){
+										$gpa_result = number_format( WLSM_M_Setting::calculatePreciseGPA( $total_mark_percentage ), 2 ); 
+									}else {
+										$gpa_result = "0.00";
+									}
+								?>
 							<td>
 								<?php
 									if($total_failde_subject == 0){
-										$final_grade = esc_html( WLSM_Helper::calculate_grade( $marks_grades, $total_mark_percentage ) );
+										$final_grade = esc_html( WLSM_M_Setting::calcuateGPAToLetterGrade($gpa_result ) );
 										echo $final_grade; 
 									}else {
 										echo "F";
@@ -1171,12 +1189,7 @@ $school_result_url      = $settings_url['result_url'];
 							</td>
 							<td>
 								<?php
-									if($total_failde_subject == 0){
-										$gpa_result = number_format( WLSM_M_Setting::calculateGPA( $final_grade ), 2 ); 
-										echo $gpa_result;
-									}else {
-										echo "0.00";
-									}
+									echo $gpa_result;
 								?>
 							</td>
 							<?php } ?>
@@ -1184,7 +1197,7 @@ $school_result_url      = $settings_url['result_url'];
 						<tr>
 							<th colspan="3"><?php //esc_html_e( 'Percentage', 'school-management' ); ?></th>
 							<th colspan="3"><?php 
-								$opti_and_main_sub_total_mark_percentage = esc_html( WLSM_Config::get_percentage_text( $total_max_marks, $optional_and_mainsubject_totol_mark ) ); 
+								$total_student_marks_percentage = esc_html( WLSM_Config::get_percentage_text( $total_max_marks, $total_student_marks ) ); 
 								// echo $opti_and_main_sub_total_mark_percentage;
 								esc_html_e( 'GPA', 'school-management' );
 							?>
@@ -1192,18 +1205,18 @@ $school_result_url      = $settings_url['result_url'];
 							<?php if ($show_marks_grades) { ?>
 								<?php 
 									if ($total_failde_subject == 0) {
-										$gpa_result = number_format(WLSM_M_Setting::calculatePreciseGPA($opti_and_main_sub_total_mark_percentage), 2);
+										$_gpa_result = number_format(WLSM_M_Setting::calculatePreciseGPA($total_student_marks_percentage), 2);
 										// echo $gpa_result;
 									} else {
 										// echo "0.00";
-										$gpa_result = "0.00";
+										$_gpa_result = "0.00";
 									}
 								?>
 								<th>
 									<?php
 									if ($total_failde_subject == 0) {
-										$final_grade = esc_html(WLSM_M_Setting::calcuateGPAToLetterGrade($gpa_result));
-										echo $final_grade;
+										$_final_grade = esc_html(WLSM_M_Setting::calcuateGPAToLetterGrade($_gpa_result));
+										echo $_final_grade;
 									} else {
 										echo "F";
 									}
@@ -1211,7 +1224,7 @@ $school_result_url      = $settings_url['result_url'];
 								</th>
 								<th>
 									<?php
-									echo $gpa_result;
+									echo $_gpa_result;
 									?>
 								</th>
 

@@ -1745,9 +1745,11 @@ $marks_grades = $grade_criteria['marks_grades'];
 													<?php
 													if ($objective_cq_marks >= 1 || $objective_mcq_marks >= 1 || $objective_practical_marks >= 1) {
 														if ($objective_cq_marks >= $minimam_objective_cq_fash_mark && $objective_mcq_marks >= $minimam_objective_mcq_fash_mark && $objective_practical_marks >= $minimam_objective_practical_fash_mark) {
-															echo number_format(WLSM_M_Setting::optional_calculateGPA($objective_letter_grade), 2);
+															$optional_gap = number_format(WLSM_M_Setting::optional_calculateGPA($objective_letter_grade), 2);
+															echo $optional_gap;
 														} else {
-															echo "0.00";
+															$optional_gap = "0.00";
+															echo $optional_gap;
 														}
 													} else {
 														//Nathing
@@ -1847,7 +1849,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 							<!-- Student Total Marks -->
 							<?php
 							$total_subject_marks = $total_bangla_mark + $english_total_marks + $group_subject_total_marks + $other_subject_total_marks;
-							$total_objective_and_subject_marks = $total_bangla_mark + $english_total_marks + $group_subject_total_marks + $other_subject_total_marks + $objective_total_marks;
+							$total_objective_and_subject_marks = $total_subject_marks + $objective_total_marks;
 							echo $total_objective_and_subject_marks;
 							?>
 						</td>
@@ -1863,8 +1865,25 @@ $marks_grades = $grade_criteria['marks_grades'];
 						
 							$without_objective_total_mark_percentage = esc_html(WLSM_Config::get_percentage_text($totla_subject_maxmarks, $total_subject_marks));
 
+							if($without_objective_total_mark_percentage <= 100 && $objective_total_marks >= 40 && $optional_gap != "0.00"){
+								// less the 40 marks in optional subject
+								$objective_total_marks -= 40;
+								// add marks students main subject and optional subject mark
+								$total_student_marks = $total_subject_marks + $objective_total_marks;
+							}else{
+								$total_student_marks = $total_subject_marks;
+							}
+
+							
 							if ($total_failde_subject == 0) {
-								$without_objective_letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $without_objective_total_mark_percentage));
+								$gpa_result = number_format(WLSM_M_Setting::calculatePreciseGPA($without_objective_total_mark_percentage), 2);
+							} else {
+								$gpa_result = "0.00";
+							}
+							
+
+							if ($total_failde_subject == 0) {
+								$without_objective_letter_grade = esc_html(WLSM_M_Setting::calcuateGPAToLetterGrade($gpa_result));
 								echo $without_objective_letter_grade;
 							} else {
 								echo "F";
@@ -1874,30 +1893,26 @@ $marks_grades = $grade_criteria['marks_grades'];
 						<td>
 							<!-- Student CGPA Without Ad. Sub -->
 							<?php
-							if ($total_failde_subject == 0) {
-								echo number_format(WLSM_M_Setting::calculateGPA($without_objective_letter_grade), 2);
-							} else {
-								echo "0.00";
-							}
+								echo $gpa_result;
 							?>
 						</td>
 						<td>
 							<?php
-								$total_mark_percentage = esc_html(WLSM_Config::get_percentage_text($totla_subject_maxmarks, $total_objective_and_subject_marks));
+								$total_mark_percentage = esc_html(WLSM_Config::get_percentage_text($totla_subject_maxmarks, $total_student_marks));
 								// Create CGPA function
 								if ($total_failde_subject == 0) {
-									$gpa_result = number_format(WLSM_M_Setting::calculatePreciseGPA($total_mark_percentage), 2);
+									$_gpa_result = number_format(WLSM_M_Setting::calculatePreciseGPA($total_mark_percentage), 2);
 									
 								} else {
-									$gpa_result = "0.00";
+									$_gpa_result = "0.00";
 								}
 							?>
 							<!-- Student LG -->
 							<?php
 
 							if ($total_failde_subject == 0) {
-								$final_grade = esc_html(WLSM_M_Setting::calcuateGPAToLetterGrade($gpa_result));
-								echo $final_grade;
+								$_final_grade = esc_html(WLSM_M_Setting::calcuateGPAToLetterGrade($_gpa_result));
+								echo $_final_grade;
 							} else {
 								echo "F";
 							}
@@ -1906,7 +1921,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 						<td>
 							<!-- show Student CGPA -->
 							<?php
-							echo $gpa_result;
+							echo $_gpa_result;
 							?>
 						</td>
 					</tr>
