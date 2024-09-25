@@ -1848,5 +1848,19 @@ class WLSM_M_Setting {
 			return 'N/A';
 		}
 	}
+	public static function calculatePreciseGPA($mark, $max_gpa = 5.00) {
+		// Ensure the mark is between 0 and 100
+		if ($mark < 0 || $mark > 100) {
+			return 'Invalid mark';
+		}
+	
+		// Calculate GPA using the formula
+		$gpa = ($mark / 100) * $max_gpa;
+	
+		// Round the GPA to two decimal places for precision
+		return round($gpa, 2);
+	}
+	
+	
 	
 }

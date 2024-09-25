@@ -881,7 +881,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 													$grades_percentage = 100 / $other_subject_maximam_marks;
 													$other_subject_marks *= $grades_percentage;
 	
-													$minimam_other_subject_cq_fash_mark = round($other_subject_cq_maxmarks / 3);
+													$minimam_other_subject_cq_fash_mark = floor($other_subject_cq_maxmarks / 3);
 	
 													if ($other_subject_cq_marks >= $minimam_other_subject_cq_fash_mark) {
 														$other_subject_letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $other_subject_marks));
@@ -1027,7 +1027,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 													$minimam_cq_fash_marks = floor($bangla_total_cq_maxmarks / 3);
 													$minimam_mcq_fash_marks = floor($bangla_total_mcq_maxmarks / 3);
 		
-													$divide_bangla_mark = round($total_bangla_mark / 2);
+													$divide_bangla_mark = floor($total_bangla_mark / 2);
 													if ($bangla_first_cq_marks >= 1 && $bangla_second_cq_marks >= 1 && $bangla_first_mcq_marks >= 1 && $bangla_second_mcq_marks >= 1) {
 														if ($bangla_total_cq_marks >= $minimam_cq_fash_marks && $bangla_total_mcq_marks >= $minimam_mcq_fash_marks) {
 															$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
@@ -1097,7 +1097,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 												<td>
 													<?php
 													$english_subject_maxmarks = $english_first_cq_maxmarks + $english_second_cq_maxmarks;
-													$divide_english_mark = round($english_total_marks / 2);
+													$divide_english_mark = floor($english_total_marks / 2);
 													if ($english_first_cq_marks >= 1 && $english_second_cq_marks >= 1) {
 														$letter_grade_english = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
 														echo $letter_grade_english;
@@ -1171,9 +1171,9 @@ $marks_grades = $grade_criteria['marks_grades'];
 														$grades_percentage = 100 / $group_subject_maximam_marks;
 														$group_subject_marks *= $grades_percentage;
 		
-														$minimam_group_subject_cq_fash_mark = round($group_subject_cq_maxmarks / 3);
-														$minimam_group_subject_mcq_fash_mark = round($group_subject_mcq_maxmarks / 3);
-														$minimam_group_subject_practical_fash_mark = round($group_subject_practical_maxmarks / 3);
+														$minimam_group_subject_cq_fash_mark = floor($group_subject_cq_maxmarks / 3);
+														$minimam_group_subject_mcq_fash_mark = floor($group_subject_mcq_maxmarks / 3);
+														$minimam_group_subject_practical_fash_mark = floor($group_subject_practical_maxmarks / 3);
 		
 														if ($group_subject_cq_marks >= $minimam_group_subject_cq_fash_mark && $group_subject_mcq_marks >= $minimam_group_subject_mcq_fash_mark && $group_subject_practical_marks >= $minimam_group_subject_practical_fash_mark) {
 															$group_subject_letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $group_subject_marks));
@@ -1266,9 +1266,9 @@ $marks_grades = $grade_criteria['marks_grades'];
 														$grades_percentage = 100 / $objective_maximam_marks;
 														$objective_marks *= $grades_percentage;
 		
-														$minimam_objective_cq_fash_mark = round($objective_cq_maxmarks / 3);
-														$minimam_objective_mcq_fash_mark = round($objective_mcq_maxmarks / 3);
-														$minimam_objective_practical_fash_mark = round($objective_practical_maxmarks / 3);
+														$minimam_objective_cq_fash_mark = floor($objective_cq_maxmarks / 3);
+														$minimam_objective_mcq_fash_mark = floor($objective_mcq_maxmarks / 3);
+														$minimam_objective_practical_fash_mark = floor($objective_practical_maxmarks / 3);
 		
 														if ($objective_cq_marks >= $minimam_objective_cq_fash_mark && $objective_mcq_marks >= $minimam_objective_mcq_fash_mark && $objective_practical_marks >= $minimam_objective_practical_fash_mark) {
 															$objective_letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $objective_marks));
@@ -1338,8 +1338,8 @@ $marks_grades = $grade_criteria['marks_grades'];
 														$grades_percentage = 100 / $other_subject_maximam_marks;
 														$other_subject_marks *= $grades_percentage;
 		
-														$minimam_other_subject_cq_fash_mark = round($other_subject_cq_maxmarks / 3);
-														$minimam_other_subject_mcq_fash_mark = round($other_subject_mcq_maxmarks / 3);
+														$minimam_other_subject_cq_fash_mark = floor($other_subject_cq_maxmarks / 3);
+														$minimam_other_subject_mcq_fash_mark = floor($other_subject_mcq_maxmarks / 3);
 		
 														if ($other_subject_cq_marks >= $minimam_other_subject_cq_fash_mark && $other_subject_mcq_marks >= $minimam_other_subject_mcq_fash_mark) {
 															$other_subject_letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $other_subject_marks));
@@ -1556,7 +1556,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 												<td>
 													<?php
 													$english_subject_maxmarks = $english_first_cq_maxmarks + $english_second_cq_maxmarks;
-													$divide_english_mark = round($english_total_marks / 2);
+													$divide_english_mark = floor($english_total_marks / 2);
 													if ($english_first_cq_marks >= 1 && $english_second_cq_marks >= 1) {
 														$letter_grade_english = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
 														echo $letter_grade_english;
@@ -1630,9 +1630,9 @@ $marks_grades = $grade_criteria['marks_grades'];
 														$grades_percentage = 100 / $group_subject_maximam_marks;
 														$group_subject_marks *= $grades_percentage;
 		
-														$minimam_group_subject_cq_fash_mark = round($group_subject_cq_maxmarks / 3);
-														$minimam_group_subject_mcq_fash_mark = round($group_subject_mcq_maxmarks / 3);
-														$minimam_group_subject_practical_fash_mark = round($group_subject_practical_maxmarks / 3);
+														$minimam_group_subject_cq_fash_mark = floor($group_subject_cq_maxmarks / 3);
+														$minimam_group_subject_mcq_fash_mark = floor($group_subject_mcq_maxmarks / 3);
+														$minimam_group_subject_practical_fash_mark = floor($group_subject_practical_maxmarks / 3);
 		
 														if ($group_subject_cq_marks >= $minimam_group_subject_cq_fash_mark && $group_subject_mcq_marks >= $minimam_group_subject_mcq_fash_mark && $group_subject_practical_marks >= $minimam_group_subject_practical_fash_mark) {
 															$group_subject_letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $group_subject_marks));
@@ -1725,9 +1725,9 @@ $marks_grades = $grade_criteria['marks_grades'];
 														$grades_percentage = 100 / $objective_maximam_marks;
 														$objective_marks *= $grades_percentage;
 		
-														$minimam_objective_cq_fash_mark = round($objective_cq_maxmarks / 3);
-														$minimam_objective_mcq_fash_mark = round($objective_mcq_maxmarks / 3);
-														$minimam_objective_practical_fash_mark = round($objective_practical_maxmarks / 3);
+														$minimam_objective_cq_fash_mark = floor($objective_cq_maxmarks / 3);
+														$minimam_objective_mcq_fash_mark = floor($objective_mcq_maxmarks / 3);
+														$minimam_objective_practical_fash_mark = floor($objective_practical_maxmarks / 3);
 		
 														if ($objective_cq_marks >= $minimam_objective_cq_fash_mark && $objective_mcq_marks >= $minimam_objective_mcq_fash_mark && $objective_practical_marks >= $minimam_objective_practical_fash_mark) {
 															$objective_letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $objective_marks));
@@ -1797,8 +1797,8 @@ $marks_grades = $grade_criteria['marks_grades'];
 														$grades_percentage = 100 / $other_subject_maximam_marks;
 														$other_subject_marks *= $grades_percentage;
 		
-														$minimam_other_subject_cq_fash_mark = round($other_subject_cq_maxmarks / 3);
-														$minimam_other_subject_mcq_fash_mark = round($other_subject_mcq_maxmarks / 3);
+														$minimam_other_subject_cq_fash_mark = floor($other_subject_cq_maxmarks / 3);
+														$minimam_other_subject_mcq_fash_mark = floor($other_subject_mcq_maxmarks / 3);
 		
 														if ($other_subject_cq_marks >= $minimam_other_subject_cq_fash_mark && $other_subject_mcq_marks >= $minimam_other_subject_mcq_fash_mark) {
 															$other_subject_letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $other_subject_marks));
@@ -1898,7 +1898,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 							<!-- Student CGPA -->
 							<?php
 							if ($total_failde_subject == 0) {
-								echo number_format(WLSM_M_Setting::calculateGPA($final_letter_grade), 2);
+								echo number_format(WLSM_M_Setting::calculatePreciseGPA($total_mark_percentage), 2);
 							} else {
 								echo "0.00";
 							}

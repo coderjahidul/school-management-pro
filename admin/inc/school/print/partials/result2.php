@@ -659,11 +659,11 @@ $school_result_url      = $settings_url['result_url'];
 								<?php
 									if($exam_paper[0]->paper_code == 101){
 										if ($maximum_marks == 50) {
-											$get_obtained_marks = round(($get_obtained_marks / $maximum_marks) * 100);
+											$get_obtained_marks = floor(($get_obtained_marks / $maximum_marks) * 100);
 										}
 										if ($bangla_second_subjective_mark != null) {
-											$bangla_cq_maximum_mark = round($maximum_marks * 2);
-											$bangla_mcq_maximum_mark = round($mcq_maximum_marks * 2);
+											$bangla_cq_maximum_mark = floor($maximum_marks * 2);
+											$bangla_mcq_maximum_mark = floor($mcq_maximum_marks * 2);
 										} else {
 											$bangla_cq_maximum_mark = $maximum_marks * 1;
 											$bangla_mcq_maximum_mark = $mcq_maximum_marks * 1;
@@ -673,7 +673,7 @@ $school_result_url      = $settings_url['result_url'];
 										$minimam_mcq_fash_mark = floor($bangla_mcq_maximum_mark / 3);
 
 										if ($bangla_second_subjective_mark != null) {
-											$divide_bangla_mark = round($total_bangla_mark / 2);
+											$divide_bangla_mark = floor($total_bangla_mark / 2);
 										} else {
 											$divide_bangla_mark = $total_bangla_mark / 1;
 										}
@@ -747,10 +747,10 @@ $school_result_url      = $settings_url['result_url'];
 
 									}elseif($exam_paper[0]->paper_code == 107){
 										if ($maximum_marks == 50) {
-											$get_obtained_marks = round(($get_obtained_marks / $maximum_marks) * 100);
+											$get_obtained_marks = floor(($get_obtained_marks / $maximum_marks) * 100);
 										}
 										if ($english_second_subjective_mark != null) {
-											$divide_english_mark = round($total_english_mark / 2);
+											$divide_english_mark = floor($total_english_mark / 2);
 										} else {
 											$divide_english_mark = $total_english_mark / 1;
 										}
@@ -822,11 +822,11 @@ $school_result_url      = $settings_url['result_url'];
 											
 											
 											if( $maximum_marks == 50  ){
-												$get_obtained_marks = round(( $get_obtained_marks / $maximum_marks ) * 100);
+												$get_obtained_marks = floor(( $get_obtained_marks / $maximum_marks ) * 100);
 											}	
-											$minimam_cq_fash_mark = round($maximum_marks / 3);
-											$minimam_mcq_fash_mark = round($mcq_maximum_marks / 3);
-											$minimam_practical_fash_mark = round($practical_maximum_marks / 3);
+											$minimam_cq_fash_mark = floor($maximum_marks / 3);
+											$minimam_mcq_fash_mark = floor($mcq_maximum_marks / 3);
+											$minimam_practical_fash_mark = floor($practical_maximum_marks / 3);
 											if($written_mark >= $minimam_cq_fash_mark && $mcq_mark >= $minimam_mcq_fash_mark && $practical_mark >= $minimam_practical_fash_mark){
 												$letter_grade = esc_html( WLSM_Helper::calculate_grade( $marks_grades, $subject_totla_marks ) );
 												echo $letter_grade;
@@ -1093,9 +1093,9 @@ $school_result_url      = $settings_url['result_url'];
 							<td>
 								<?php
 									
-									$minimam_objective_cq_fash_mark = round($maximum_marks / 3);
-									$minimam_objective_mcq_fash_mark = round($optional_total_mcq_maximum_marks / 3);
-									$minimam_objective_practical_fash_mark = round($optional_total_practical_maximum_marks / 3);
+									$minimam_objective_cq_fash_mark = floor($maximum_marks / 3);
+									$minimam_objective_mcq_fash_mark = floor($optional_total_mcq_maximum_marks / 3);
+									$minimam_objective_practical_fash_mark = floor($optional_total_practical_maximum_marks / 3);
 									if($written_mark >= $minimam_objective_cq_fash_mark && $mcq_mark >= $minimam_objective_mcq_fash_mark && $practical_mark >= $minimam_objective_practical_fash_mark){
 										$letter_grade = esc_html( WLSM_Helper::calculate_grade( $marks_grades, $subject_totla_marks ) );
 										echo $letter_grade;
@@ -1203,7 +1203,7 @@ $school_result_url      = $settings_url['result_url'];
 							<th>
 								<?php
 									if($total_failde_subject == 0){
-										$gpa_result = number_format( WLSM_M_Setting::calculateGPA( $final_grade ), 2 ); 
+										$gpa_result = number_format( WLSM_M_Setting::calculatePreciseGPA( $opti_and_main_sub_total_mark_percentage ), 2 ); 
 										echo $gpa_result;
 									}else {
 										echo "0.00";

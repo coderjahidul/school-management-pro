@@ -114,7 +114,8 @@ class WLSM_Config {
 
 		$percentage = ( $obtained * 100 ) / $total;
 
-		return number_format( $percentage, $decimal, '.', '' ) . ' %';
+		// return number_format( $percentage, $decimal, '.', '' ) . ' %';
+		return number_format( $percentage, $decimal, '.', '' );
 	}
 
 	public static function date_format() {
