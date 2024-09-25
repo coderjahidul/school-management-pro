@@ -1189,28 +1189,32 @@ $school_result_url      = $settings_url['result_url'];
 								esc_html_e( 'GPA', 'school-management' );
 							?>
 							</th>
-							<?php if ( $show_marks_grades ) { ?>
-							<th>
-								<?php
-									if($total_failde_subject == 0){
-										$final_grade = esc_html( WLSM_Helper::calculate_grade( $marks_grades, $opti_and_main_sub_total_mark_percentage ) );
-										echo $final_grade; 
-									}else {
+							<?php if ($show_marks_grades) { ?>
+								<?php 
+									if ($total_failde_subject == 0) {
+										$gpa_result = number_format(WLSM_M_Setting::calculatePreciseGPA($opti_and_main_sub_total_mark_percentage), 2);
+										// echo $gpa_result;
+									} else {
+										// echo "0.00";
+										$gpa_result = "0.00";
+									}
+								?>
+								<th>
+									<?php
+									if ($total_failde_subject == 0) {
+										$final_grade = esc_html(WLSM_M_Setting::calcuateGPAToLetterGrade($gpa_result));
+										echo $final_grade;
+									} else {
 										echo "F";
 									}
-								?>
-							</th>
-							<th>
-								<?php
-									if($total_failde_subject == 0){
-										$gpa_result = number_format( WLSM_M_Setting::calculatePreciseGPA( $opti_and_main_sub_total_mark_percentage ), 2 ); 
-										echo $gpa_result;
-									}else {
-										echo "0.00";
-									}
-								?>
-							</th>
-							
+									?>
+								</th>
+								<th>
+									<?php
+									echo $gpa_result;
+									?>
+								</th>
+
 							<?php } ?>
 						</tr>
 						<?php if ($show_rank === '1'){ ?>

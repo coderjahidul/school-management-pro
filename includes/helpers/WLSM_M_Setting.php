@@ -1860,7 +1860,25 @@ class WLSM_M_Setting {
 		// Round the GPA to two decimal places for precision
 		return round($gpa, 2);
 	}
-	
-	
-	
+
+	// calculate letter grade based on cgpa
+	public static function calcuateGPAToLetterGrade($gpa) {
+		if($gpa < 0 || $gpa > 5) {
+			return 'Invalid GPA';
+		}elseif($gpa >= 5) {
+			return 'A+';
+		}elseif($gpa >= 4) {
+			return 'A';
+		}elseif($gpa >= 3.5) {
+			return 'A-';
+		}elseif($gpa >= 3) {
+			return 'B';
+		}elseif($gpa >= 2) {
+			return 'C';
+		}elseif($gpa >= 1) {
+			return 'D';
+		}else {
+			return 'F';
+		}
+	}
 }

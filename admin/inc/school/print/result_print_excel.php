@@ -1882,26 +1882,31 @@ $marks_grades = $grade_criteria['marks_grades'];
 							?>
 						</td>
 						<td>
+							<?php
+								$total_mark_percentage = esc_html(WLSM_Config::get_percentage_text($totla_subject_maxmarks, $total_objective_and_subject_marks));
+								// Create CGPA function
+								if ($total_failde_subject == 0) {
+									$gpa_result = number_format(WLSM_M_Setting::calculatePreciseGPA($total_mark_percentage), 2);
+									
+								} else {
+									$gpa_result = "0.00";
+								}
+							?>
 							<!-- Student LG -->
 							<?php
-							$total_mark_percentage = esc_html(WLSM_Config::get_percentage_text($totla_subject_maxmarks, $total_objective_and_subject_marks));
 
 							if ($total_failde_subject == 0) {
-								$final_letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $total_mark_percentage));
-								echo $final_letter_grade;
+								$final_grade = esc_html(WLSM_M_Setting::calcuateGPAToLetterGrade($gpa_result));
+								echo $final_grade;
 							} else {
 								echo "F";
 							}
 							?>
 						</td>
 						<td>
-							<!-- Student CGPA -->
+							<!-- show Student CGPA -->
 							<?php
-							if ($total_failde_subject == 0) {
-								echo number_format(WLSM_M_Setting::calculatePreciseGPA($total_mark_percentage), 2);
-							} else {
-								echo "0.00";
-							}
+							echo $gpa_result;
 							?>
 						</td>
 					</tr>
