@@ -762,6 +762,7 @@ $marks_grades = $grade_criteria['marks_grades'];
 												<?php
 												$bangla_total_cq_marks = $bangla_first_cq_marks;
 												$bangla_total_mcq_marks = $bangla_first_mcq_marks;
+												$bangla_first_mcq_maxmarks = $subject_maximum_marks;
 												$total_bangla_mark = $bangla_total_cq_marks + $bangla_total_mcq_marks;
 												echo $total_bangla_mark;
 												?>
@@ -774,6 +775,11 @@ $marks_grades = $grade_criteria['marks_grades'];
 												$minimam_cq_fash_marks = floor($bangla_total_cq_maxmarks / 3);
 	
 												$divide_bangla_mark = $total_bangla_mark / 1;
+												// total marks to be divided by 100 to get percentage 
+												$bangla_maximam_marks = $bangla_first_cq_maxmarks + $bangla_first_mcq_maxmarks;
+												$subje_maximam_marks = $bangla_maximam_marks;
+												$grades_percentage = 100 / $subje_maximam_marks;
+												$divide_bangla_mark *= $grades_percentage;
 												if ($bangla_first_cq_marks >= 1) {
 													if ($bangla_total_cq_marks >= $minimam_cq_fash_marks) {
 														$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
@@ -827,6 +833,11 @@ $marks_grades = $grade_criteria['marks_grades'];
 												<?php
 												$english_subject_maxmarks = $english_first_cq_maxmarks;
 												$divide_english_mark = $english_total_marks / 1;
+												// total marks to be divided by 100 to get percentage 
+												$english_maximam_marks = $english_first_cq_maxmarks;
+												$grades_percentage = 100 / $english_maximam_marks;
+												$divide_english_mark *= $grades_percentage;
+
 												if ($english_first_cq_marks >= 1) {
 													$letter_grade_english = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
 													echo $letter_grade_english;
@@ -1028,6 +1039,12 @@ $marks_grades = $grade_criteria['marks_grades'];
 													$minimam_mcq_fash_marks = floor($bangla_total_mcq_maxmarks / 3);
 		
 													$divide_bangla_mark = floor($total_bangla_mark / 2);
+													// total marks to be divided by 100 to get percentage 
+													$bangla_maximam_marks = $bangla_first_cq_maxmarks + $bangla_first_mcq_maxmarks;
+													$subje_maximam_marks = $bangla_maximam_marks;
+													$grades_percentage = 100 / $subje_maximam_marks;
+													$divide_bangla_mark *= $grades_percentage;
+
 													if ($bangla_first_cq_marks >= 1 && $bangla_second_cq_marks >= 1 && $bangla_first_mcq_marks >= 1 && $bangla_second_mcq_marks >= 1) {
 														if ($bangla_total_cq_marks >= $minimam_cq_fash_marks && $bangla_total_mcq_marks >= $minimam_mcq_fash_marks) {
 															$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
@@ -1098,6 +1115,11 @@ $marks_grades = $grade_criteria['marks_grades'];
 													<?php
 													$english_subject_maxmarks = $english_first_cq_maxmarks + $english_second_cq_maxmarks;
 													$divide_english_mark = floor($english_total_marks / 2);
+													// total marks to be divided by 100 to get percentage 
+													$english_maximam_marks = $english_first_cq_maxmarks;
+													$grades_percentage = 100 / $english_maximam_marks;
+													$divide_english_mark *= $grades_percentage;
+
 													if ($english_first_cq_marks >= 1 && $english_second_cq_marks >= 1) {
 														$letter_grade_english = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
 														echo $letter_grade_english;
@@ -1459,6 +1481,11 @@ $marks_grades = $grade_criteria['marks_grades'];
 													$minimam_mcq_fash_marks = floor($bangla_total_mcq_maxmarks / 3);
 		
 													$divide_bangla_mark = $total_bangla_mark / 1;
+													// total marks to be divided by 100 to get percentage 
+													$bangla_maximam_marks = $bangla_first_cq_maxmarks + $bangla_first_mcq_maxmarks;
+													$subje_maximam_marks = $bangla_maximam_marks;
+													$grades_percentage = 100 / $subje_maximam_marks;
+													$divide_bangla_mark *= $grades_percentage;
 													if ($bangla_first_cq_marks >= 1 && $bangla_first_mcq_marks >= 1) {
 														if ($bangla_total_cq_marks >= $minimam_cq_fash_marks && $bangla_total_mcq_marks >= $minimam_mcq_fash_marks) {
 															$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
@@ -1513,6 +1540,11 @@ $marks_grades = $grade_criteria['marks_grades'];
 													<?php
 													$english_subject_maxmarks = $english_first_cq_maxmarks;
 													$divide_english_mark = $english_total_marks / 1;
+													// total marks to be divided by 100 to get percentage 
+													$english_maximam_marks = $english_first_cq_maxmarks;
+													$grades_percentage = 100 / $english_maximam_marks;
+													$divide_english_mark *= $grades_percentage;
+
 													if ($english_first_cq_marks >= 1) {
 														$letter_grade_english = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
 														echo $letter_grade_english;
@@ -1557,6 +1589,10 @@ $marks_grades = $grade_criteria['marks_grades'];
 													<?php
 													$english_subject_maxmarks = $english_first_cq_maxmarks + $english_second_cq_maxmarks;
 													$divide_english_mark = floor($english_total_marks / 2);
+													// total marks to be divided by 100 to get percentage 
+													$english_maximam_marks = $english_first_cq_maxmarks;
+													$grades_percentage = 100 / $english_maximam_marks;
+													$divide_english_mark *= $grades_percentage;
 													if ($english_first_cq_marks >= 1 && $english_second_cq_marks >= 1) {
 														$letter_grade_english = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
 														echo $letter_grade_english;

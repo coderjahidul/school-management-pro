@@ -820,6 +820,11 @@ $school_result_url = $settings_url['result_url'];
 											} else {
 												$divide_bangla_mark = $total_bangla_mark / 1;
 											}
+											// total marks to be divided by 100 to get percentage 
+											$bangla_maximam_marks = $maximum_marks + $mcq_maximum_marks;
+											$subje_maximam_marks = $bangla_maximam_marks;
+											$grades_percentage = 100 / $subje_maximam_marks;
+											$divide_bangla_mark *= $grades_percentage;
 
 
 											if ($bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
@@ -897,6 +902,11 @@ $school_result_url = $settings_url['result_url'];
 											} else {
 												$divide_english_mark = floor($total_english_mark / 1);
 											}
+
+											// total marks to be divided by 100 to get percentage 
+											$english_maximam_marks = $maximum_marks;
+											$grades_percentage = 100 / $english_maximam_marks;
+											$divide_english_mark *= $grades_percentage;
 											if ($english_second_subjective_mark == NULL) {
 												echo '<td>';
 											} else {
@@ -1259,6 +1269,11 @@ $school_result_url = $settings_url['result_url'];
 									$minimam_objective_cq_fash_mark = floor($maximum_marks / 3);
 									$minimam_objective_mcq_fash_mark = floor($optional_total_mcq_maximum_marks / 3);
 									$minimam_objective_practical_fash_mark = floor($optional_total_practical_maximum_marks / 3);
+
+									// total marks to be divided by 100 to get percentage 
+									$optional_maximam_marks = $maximum_marks + $optional_total_mcq_maximum_marks + $optional_total_practical_maximum_marks;
+									$grades_percentage = 100 / $optional_maximam_marks;
+									$subject_totla_marks *= $grades_percentage;
 									if ($written_mark >= $minimam_objective_cq_fash_mark && $mcq_mark >= $minimam_objective_mcq_fash_mark && $practical_mark >= $minimam_objective_practical_fash_mark) {
 										$letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $subject_totla_marks));
 										echo $letter_grade;
