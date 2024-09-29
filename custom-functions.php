@@ -45,7 +45,7 @@ function get_mark_by_paper_code_shortcode(){
 
 
 
-
+// get mark by paper code
 function get_mark_by_paper_code($exam_id, $paper_code, $subject_type, $admission_number, $section_id){
 
 	global $wpdb;
@@ -85,6 +85,26 @@ function get_mark_by_paper_code($exam_id, $paper_code, $subject_type, $admission
     
     return $exam_ontained_mark;
 
+}
+
+// get subject maximum mark by paper code 
+function get_subject_maximum_mark_by_paper_code($exam_id, $paper_code, $subject_type){
+
+	global $wpdb;
+
+	$exam_paper_id = $wpdb->get_var($wpdb->prepare(
+		"SELECT ID FROM {$wpdb->prefix}wlsm_exam_papers WHERE exam_id = %d AND paper_code = %d AND subject_type = %s",
+		$exam_id,
+		$paper_code,
+		$subject_type
+	));
+
+	$maximum_marks = $wpdb->get_var( $wpdb->prepare(	
+		"SELECT maximum_marks  FROM {$wpdb->prefix}wlsm_exam_papers WHERE ID = %d ",
+		$exam_paper_id
+	));
+
+	return $maximum_marks;
 }
 
 

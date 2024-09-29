@@ -623,6 +623,14 @@ $school_result_url      = $settings_url['result_url'];
 
 											$total_bangla_mark = $total_subjective_mark + $total_mcq_mark;
 
+											// subjective maximum marks difference
+											$bangla_first_cq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $first_paper_code, "subjective");
+											$bangla_second_cq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $second_paper_code, "subjective");
+
+											// mcq maximum marks difference
+											$bangla_first_mcq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $first_paper_code, "mcq");
+											$bangla_second_mcq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $second_paper_code, "mcq");
+
 											echo '<td rowspan="2" style="vertical-align: middle !important;"
 											>';
 											echo $total_bangla_mark;
@@ -641,6 +649,10 @@ $school_result_url      = $settings_url['result_url'];
 											$english_second_subjective_mark = get_mark_by_paper_code($exam_id, $second_paper_code, "subjective", $admission_number, $section_id);
 
 											$total_english_mark = $english_first_subjective_mark + $english_second_subjective_mark;
+
+											// subjective maximum marks difference
+											$english_first_cq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $first_paper_code, "subjective");
+											$english_second_cq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $second_paper_code, "subjective");
 
 											
 
@@ -662,11 +674,11 @@ $school_result_url      = $settings_url['result_url'];
 											$get_obtained_marks = floor(($get_obtained_marks / $maximum_marks) * 100);
 										}
 										if ($bangla_second_subjective_mark != null) {
-											$bangla_cq_maximum_mark = floor($maximum_marks * 2);
-											$bangla_mcq_maximum_mark = floor($mcq_maximum_marks * 2);
+											$bangla_cq_maximum_mark = $bangla_first_cq_maximum_mark + $bangla_second_cq_maximum_mark;
+											$bangla_mcq_maximum_mark = $bangla_first_mcq_maximum_mark + $bangla_second_mcq_maximum_mark;
 										} else {
-											$bangla_cq_maximum_mark = $maximum_marks * 1;
-											$bangla_mcq_maximum_mark = $mcq_maximum_marks * 1;
+											$bangla_cq_maximum_mark = $bangla_first_cq_maximum_mark;
+											$bangla_mcq_maximum_mark = $bangla_first_mcq_maximum_mark;
 										}
 
 										$minimam_cq_fash_mark = floor($bangla_cq_maximum_mark / 3);
@@ -674,11 +686,17 @@ $school_result_url      = $settings_url['result_url'];
 
 										if ($bangla_second_subjective_mark != null) {
 											$divide_bangla_mark = floor($total_bangla_mark / 2);
+											// divide bangla maximum mark by 2 to get percentage
+											$divide_bangla_cq_maximum_mark = floor($bangla_cq_maximum_mark / 2);
+											$divide_bangla_mcq_maximum_mark = floor($bangla_mcq_maximum_mark / 2);
 										} else {
 											$divide_bangla_mark = $total_bangla_mark / 1;
+											// divide bangla maximum mark by 1 to get percentage
+											$divide_bangla_cq_maximum_mark = floor($bangla_cq_maximum_mark / 1);
+											$divide_bangla_mcq_maximum_mark = floor($bangla_mcq_maximum_mark / 1);
 										}
 										// total marks to be divided by 100 to get percentage 
-										$bangla_maximam_marks = $maximum_marks + $mcq_maximum_marks;
+										$bangla_maximam_marks = $divide_bangla_cq_maximum_mark + $divide_bangla_mcq_maximum_mark;
 										$subje_maximam_marks = $bangla_maximam_marks;
 										$grades_percentage = 100 / $subje_maximam_marks;
 										$divide_bangla_mark *= $grades_percentage;
@@ -755,12 +773,23 @@ $school_result_url      = $settings_url['result_url'];
 											$get_obtained_marks = floor(($get_obtained_marks / $maximum_marks) * 100);
 										}
 										if ($english_second_subjective_mark != null) {
-											$divide_english_mark = floor($total_english_mark / 2);
+											$english_cq_maximum_mark = $english_first_cq_maximum_mark + $english_second_cq_maximum_mark;
 										} else {
-											$divide_english_mark = $total_english_mark / 1;
+											$english_cq_maximum_mark = $english_first_cq_maximum_mark + $english_second_cq_maximum_mark;
 										}
+
+										if ($english_second_subjective_mark != null) {
+											$divide_english_mark = floor($total_english_mark / 2);
+											// divide bangla maximum mark by 2 to get percentage
+											$divide_english_cq_maximum_mark = floor($english_cq_maximum_mark / 2);
+										} else {
+											$divide_english_mark = floor($total_english_mark / 1);
+											// divide bangla maximum mark by 1 to get percentage
+											$divide_english_cq_maximum_mark = floor($english_cq_maximum_mark / 1);
+										}
+
 										// total marks to be divided by 100 to get percentage 
-										$english_maximam_marks = $maximum_marks;
+										$english_maximam_marks = $divide_english_cq_maximum_mark;
 										$grades_percentage = 100 / $english_maximam_marks;
 										$divide_english_mark *= $grades_percentage;
 										if ($english_second_subjective_mark == NULL) {
