@@ -1229,6 +1229,9 @@ $school_result_url = $settings_url['result_url'];
 										echo esc_html($get_obtained_marks);
 										$total_fail = $get_obtained_marks == 0 ? true : false;
 										$optional_total_obtained_marks += WLSM_Config::sanitize_marks($get_obtained_marks);
+										if($written_mark == NULL){
+											$written_mark = 0;
+										}
 
 
 									// }

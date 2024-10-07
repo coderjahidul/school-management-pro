@@ -122,3 +122,26 @@ function get_section_id($enrollment_number, $admission_number, $session_id){
 }
 
 // add_shortcode('jahidul', 'subject_list');
+
+function put_program_logs( $data ) {
+
+	// Ensure the directory for logs exists
+	$directory = plugin_dir_path( __FILE__ ) . '/program_logs/';
+	if ( !file_exists( $directory ) ) {
+		mkdir( $directory, 0777, true );
+	}
+
+	// Construct the log file path
+	$file_name = $directory . 'program_logs.log';
+
+	// Append the current datetime to the log entry
+	$current_datetime = date( 'Y-m-d H:i:s' );
+	$data             = $data . ' - ' . $current_datetime;
+
+	// Write the log entry to the file
+	if ( file_put_contents( $file_name, var_dump( $data ) . "\n\n", FILE_APPEND | LOCK_EX ) !== false ) {
+		return "Data appended to file successfully.";
+	} else {
+		return "Failed to append data to file.";
+	}
+}

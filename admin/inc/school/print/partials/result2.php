@@ -1148,7 +1148,8 @@ $school_result_url      = $settings_url['result_url'];
 								?>
 							</td>
 							<td>
-								<?php 
+								<?php
+									$written_mark = 0;
 									if($written_mark >= $minimam_objective_cq_fash_mark && $mcq_mark >= $minimam_objective_mcq_fash_mark && $practical_mark >= $minimam_objective_practical_fash_mark){
 										$optional_gap = number_format( WLSM_M_Setting::optional_calculateGPA( $letter_grade ), 2 );
 										echo $optional_gap;
