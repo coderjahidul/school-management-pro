@@ -1,0 +1,1599 @@
+<?php
+
+if ($i != 0) {
+	echo '<div class="page-break"></div>';
+}
+?>
+
+<?php
+defined('ABSPATH') || die();
+
+require_once WLSM_PLUGIN_DIR_PATH . 'includes/helpers/WLSM_M_Setting.php';
+
+if (isset($from_front)) {
+	$print_button_classes = 'button btn-sm btn-success';
+} else {
+	$print_button_classes = 'btn btn-sm btn-success';
+}
+
+$grade_criteria = WLSM_Config::sanitize_grade_criteria($exam->grade_criteria);
+
+$enable_overall_grade = $grade_criteria['enable_overall_grade'];
+$marks_grades = $grade_criteria['marks_grades'];
+
+$settings_dashboard = WLSM_M_Setting::get_settings_dashboard($school_id);
+$school_enrollment_number = $settings_dashboard['school_enrollment_number'];
+$school_admission_number = $settings_dashboard['school_admission_number'];
+
+$settings_url = WLSM_M_Setting::get_settings_certificate_qcode_url($school_id);
+$school_result_url = $settings_url['result_url'];
+
+
+// function subject_total_mark(){
+// 	$subject_totla_marks = $written_mark + $mcq_mark + $practical_mark;
+// 	echo $subject_totla_marks;
+// }
+
+
+
+?>
+
+<!-- Print exam results section. -->
+<style type="text/css">
+	.wlsm-print-exam-results-container {
+		padding: 40px;
+		border-image-repeat: round;
+		border-image-slice: 160;
+		border-image-width: 60px;
+	}
+</style>
+
+<div class="wlsm-container wlsm" id="wlsm-print-exam-results">
+	<div class="wlsm-print-exam-results-container"
+		style="border-image-source:url('<?php echo WLSM_PLUGIN_URL . "assets/images/result-border.png"; ?>');">
+
+
+		<?php
+
+		// school header section. ---------------------------------------
+		$school = WLSM_M_School::fetch_school($school_id);
+		$settings_general = WLSM_M_Setting::get_settings_general($school_id);
+		$school_logo = $settings_general['school_logo'];
+		$school_signature = $settings_general['school_signature'];
+		?>
+
+		<!-- School header -->
+		<div class="container-fluid">
+			<div class="row wlsm-school-header justify-content-center">
+				<div class="col-3 text-right">
+					<?php if (!empty($school_logo)) { ?>
+					<img src="<?php echo esc_url(wp_get_attachment_url($school_logo)); ?>"
+						class="wlsm-print-school-logo">
+					<?php } ?>
+				</div>
+				<div class="col-6">
+					<div class="wlsm-print-school-label">
+						<?php echo esc_html(WLSM_M_School::get_label_text($school->label)); ?>
+					</div>
+					<div class="wlsm-print-school-contact">
+						<?php if ($school->phone) { ?>
+						<span class="wlsm-print-school-phone">
+							<span class="wlsm-font-bold">
+								<?php esc_html_e('Phone:', 'school-management'); ?>
+							</span>
+							<span>
+								<?php echo esc_html(WLSM_M_School::get_label_text($school->phone)); ?>
+							</span>
+						</span>
+						<?php } ?>
+						<?php if ($school->email) { ?>
+						<span class="wlsm-print-school-email">
+							<span class="wlsm-font-bold">
+								|
+								<?php esc_html_e('Email:', 'school-management'); ?>
+							</span>
+							<span>
+								<?php echo esc_html(WLSM_M_School::get_phone_text($school->email)); ?>
+							</span>
+						</span>
+						<br>
+						<?php } ?>
+						<?php if ($school->address) { ?>
+						<span class="wlsm-print-school-address">
+							<span class="wlsm-font-bold">
+								<?php esc_html_e('Address:', 'school-management'); ?>
+							</span>
+							<span>
+								<?php echo esc_html(WLSM_M_School::get_email_text($school->address)); ?>
+							</span>
+						</span>
+						<?php } ?>
+					</div>
+				</div>
+				<div class="col-3 text-right">
+					<?php if (!empty($school_result_url)) { ?>
+					<?php
+						$qr_code_url = $school_result_url . '?exam_roll_number=' . WLSM_M_Staff_Class::get_roll_no_text($result->roll_number) . '&id=' . $result->exam_id;
+						$field_output = esc_url('https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . urlencode($qr_code_url) . '&choe=UTF-8');
+						?>
+					<?php if ($school_result_url): ?>
+					<img src="<?php echo esc_url($field_output); ?>" width="120px">
+					<?php endif ?>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="wlsm-heading wlsm-exam-results-heading h5 wlsm-text-center">
+			<div class="wlsm-exam-results-table-heading">
+				<?php
+				// echo "<pre>";
+				// print_r($new_common_subject);
+				// echo "</pre>";
+				// printf(
+				// 	wp_kses(
+				// 		/* translators: 1: exam title, 2: start date, 3: end date */
+				// 		__( '<span class="wlsm-font-bold">Exam: </span> %1$s (%2$s - %3$s)', 'school-management' ),
+				// 		array(
+				// 			'span' => array( 'class' => array() )
+				// 		)
+				// 	),
+				// 	esc_html( WLSM_M_Staff_Examination::get_exam_label_text( $exam_title ) ),
+				// 	esc_html( WLSM_Config::get_date_text( $start_date ) ),
+				// 	esc_html( WLSM_Config::get_date_text( $end_date ) )
+				// );
+				?>
+			</div>
+		</div>
+
+		<div class="row wlsm-student-details">
+			<div class="col-md-6" style="width: 70%">
+				<ul class="wlsm-list-group">
+					<li>
+
+						<span class="wlsm-font-bold">
+							<?php esc_html_e('Student Name', 'school-management'); ?>:
+						</span>
+						<span class="wlsm-font-bold">
+							<?php echo esc_html(WLSM_M_Staff_Class::get_name_text($result->name)); ?>
+						</span>
+					</li>
+					<?php if ($school_enrollment_number): ?>
+					<!-- <li>
+							<span class="wlsm-font-bold"><?php // esc_html_e( 'Enrollment Number', 'school-management' ); ?>:</span>
+							<span><?php //echo esc_html( WLSM_M_Staff_Class::get_roll_no_text( $result->enrollment_number ) ); ?></span>
+						</li> -->
+					<?php endif ?>
+					<?php if ($school_admission_number): ?>
+					<li>
+						<span class="wlsm-font-bold">
+							<?php esc_html_e('Admission Number', 'school-management'); ?>:
+						</span>
+						<span class="wlsm-font-bold">
+							<?php echo esc_html(WLSM_M_Staff_Class::get_roll_no_text($result->admission_number)); ?>
+						</span>
+					</li>
+					<?php endif ?>
+					<li>
+						<span class="wlsm-pr-3 pr-3">
+							<span class="wlsm-font-bold">
+								<?php esc_html_e('Session', 'school-management'); ?>:
+							</span>
+							<span class="wlsm-font-bold">
+								<?php
+								$session_id = $result->session_id;
+								global $wpdb;
+								$table_name = WLSM_SESSIONS;
+								$session_label = $wpdb->get_var($wpdb->prepare("SELECT label FROM {$table_name} WHERE ID =%d", $session_id));
+								echo $session_label;
+								// echo esc_html( WLSM_M_Session::get_label_text( ) );
+								?>
+							</span>
+						</span>
+						<span class="wlsm-pr-3 pr-3">
+							<span class="wlsm-font-bold">
+								<?php esc_html_e('Group', 'school-management'); ?>:
+							</span>
+							<span class="wlsm-font-bold">
+								<?php
+									echo $result->note;
+								?>
+							</span>
+						</span>
+					</li>
+					<li>
+						<span class="wlsm-pr-3 pr-3">
+							<span class="wlsm-font-bold">
+								<?php esc_html_e('Class', 'school-management'); ?>:
+							</span>
+							<span class="wlsm-font-bold">
+								<?php echo esc_html(WLSM_M_Class::get_label_text($result->class_label)); ?>
+							</span>
+						</span>
+						<span class="wlsm-pl-3 pl-3">
+							<span class="wlsm-font-bold">
+								<?php esc_html_e('Section', 'school-management'); ?>:
+							</span>
+							<span class="wlsm-font-bold">
+								<?php echo esc_html(WLSM_M_Class::get_label_text($result->section_label)); ?>
+							</span>
+						</span>
+					</li>
+					<li>
+						<span class="wlsm-pr-3 pr-3">
+							<span class="wlsm-font-bold">
+								<?php esc_html_e('Class Roll', 'school-management'); ?>:
+							</span>
+							<span class="wlsm-font-bold">
+								<?php echo esc_html(WLSM_M_Staff_Class::get_roll_no_text($result->roll_number)); ?>
+							</span>
+						</span>
+						<!-- <span class="wlsm-pr-3 pr-3">
+							<span class="wlsm-font-bold"><?php esc_html_e('Father\'s Name', 'school-management'); ?>:</span>
+							<span><?php echo esc_html($result->father_name); ?></span>
+						</span> -->
+					</li>
+				</ul>
+			</div>
+			<?php
+			$optional_subject = WLSM_M_Staff_Class::optional_subject_code($admission_number = $result->admission_number);
+			$optional_subject_code = $optional_subject[0]->optional_subject_code;
+			?>
+			<div class="col-md-6" style="width: 30%">
+				<style>
+					.marks-distribution {
+						margin-top: 0;
+					}
+
+					.marks-distribution span {
+						font-size: 10px !important;
+					}
+
+					.marks-distribution td,
+					.marks-distribution th {
+						font-size: 10px !important;
+					}
+
+					.marks-distribution td,
+					.marks-distribution th {
+						padding: 0 !important;
+					}
+				</style>
+				<table class="marks-distribution" border="1"
+					style="font-size: 12px !important;  text-align: left !important;">
+					<tr align="center">
+						<th style="padding: 5px !important;"><span>
+								<?php esc_html_e('Class Interval', 'school-management'); ?>
+							</span></th>
+						<th style="padding: 5px !important;"><span>
+								<?php esc_html_e('Letter Grade', 'school-management'); ?>
+							</span></th>
+						<th style="padding: 5px !important;"><span>
+								<?php esc_html_e('Grade Point', 'school-management'); ?>
+							</span></th>
+					</tr>
+					<tr align="center">
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('80-100', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('A+', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('5', 'school-management'); ?>
+							</span></td>
+					</tr>
+					<tr align="center">
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('70-79', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('A', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('4', 'school-management'); ?>
+							</span></td>
+					</tr>
+					<tr align="center">
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('60-69', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('A-', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('3.5', 'school-management'); ?>
+							</span></td>
+					</tr>
+					<tr align="center">
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('50-59', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('B', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('3', 'school-management'); ?>
+							</span></td>
+					</tr>
+					<tr align="center">
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('40-49', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('C', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('2', 'school-management'); ?>
+							</span></td>
+					</tr>
+					<tr align="center">
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('33-39', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('D', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('1', 'school-management'); ?>
+							</span></td>
+					</tr>
+					<tr align="center">
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('0-32', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('F', 'school-management'); ?>
+							</span></td>
+						<td style="padding: 3px !important;"><span>
+								<?php esc_html_e('0', 'school-management'); ?>
+							</span></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<?php
+			// get exam class label (string)
+			$class_label = $result->class_label;
+
+			// Convert class label to integer
+			$labelToInt = array(
+				"One" => 1,
+				"Two" => 2,
+				"Three" => 3,
+				"Four" => 4,
+				"Five" => 5,
+				"Six" => 6,
+				"Seven" => 7,
+				"Eight" => 8,
+				"Nine" => 9,
+				"Ten" => 10,
+				"Eleven" => 11,
+				"Twelve" => 12
+			);
+
+			$class = null;
+
+			if (isset($labelToInt[$class_label])) {
+				$class = $labelToInt[$class_label];
+			}
+		?>
+
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="wlsm-exam-results-table-heading">
+					<?php
+					// printf(
+					// 	wp_kses(
+					// 		/* translators: 1: exam title, 2: start date, 3: end date */
+					// 		__( '<span class="wlsm-font-bold">Exam Result:</span> %1$s (%2$s - %3$s)', 'school-management' ),
+					// 		array(
+					// 			'span' => array( 'class' => array() )
+					// 		)
+					// 	),
+					// 	esc_html( WLSM_M_Staff_Examination::get_exam_label_text( $exam_title ) ),
+					// 	esc_html( WLSM_Config::get_date_text( $start_date ) ),
+					// 	esc_html( WLSM_Config::get_date_text( $end_date ) )
+					// );
+					?>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="table-responsive w-100">
+					<table class="table table-bordered wlsm-view-exam-results-table">
+						<?php
+						$show_marks_grades = count($marks_grades);
+
+
+						?>
+						<thead>
+							<tr>
+								<th>
+									<?php esc_html_e('NO', 'school-management'); ?>
+								</th>
+								<th>
+									<?php esc_html_e('Subject Name', 'school-management'); ?>
+								</th>
+								<!-- <th><?php //esc_html_e( 'Subject Type', 'school-management' ); ?></th> -->
+								<!-- <th><?php //esc_html_e( 'Maximum Marks', 'school-management' ); ?></th> -->
+								<th>
+									<?php esc_html_e('CQ', 'school-management'); ?>
+								</th>
+								<th>
+									<?php esc_html_e('MCQ', 'school-management'); ?>
+								</th>
+								<th>
+									<?php esc_html_e('Practical', 'school-management'); ?>
+								</th>
+								<th>
+									<?php esc_html_e('Total', 'school-management'); ?>
+								</th>
+								<!-- <th><?php //esc_html_e( 'Total', 'school-management' ); ?></th> -->
+								<?php if ($show_marks_grades) { ?>
+								<th>
+									<?php esc_html_e('LG', 'school-management'); ?>
+								</th>
+								<?php } ?>
+								<th>
+									<?php esc_html_e('GP', 'school-management'); ?>
+								</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							$serial_number = 1;
+							$total_maximum_marks = 0;
+							$total_mcq_maximum_marks = 0;
+							$total_practical_maximum_marks = 0;
+							$total_obtained_marks = 0;
+							$total_mcq_marks = 0;
+							$total_practical_marks = 0;
+							$count_letter_grade_f = 0;
+							$count_letter_grade_bangla_f = 0;
+							$count_letter_grade_english_f = 0;
+							$letter_grade_bangla_fail = 0;
+							$maximum_marks = 0;
+							$optional_total_practical_maximum_marks = 0;
+							$optional_total_mcq_maximum_marks = 0;
+							$optional_total_obtained_marks = 0;
+							$optional_total_mcq_marks = 0;
+							$optional_total_practical_marks = 0;
+							$gpa_count = 0;
+							$additional_gpa_count = 0;
+							$main_subject_count = 0;
+
+							$new_all_subject_array = array();
+							$sub_subject_parent_ids = array();
+							$parent_sub_ids = array();
+							foreach ($exam_papers as $key => $single_paper) {
+								$parent_subject = $single_paper->parent_subject;
+								$sub_subject_parent_ids[$single_paper->ID] = $parent_subject;
+
+								if ($parent_subject == false) {
+									$parent_sub_ids[$single_paper->ID] = $single_paper->subject_id;
+								}
+
+							}
+
+							$all_subject_ids = array_filter(array_merge(array_unique($sub_subject_parent_ids), $parent_sub_ids));
+
+							$all_subject_info_array = array();
+							if (!empty($all_subject_ids)) {
+								$subject_ids_placeholder = implode(', ', array_fill(0, count($all_subject_ids), '%d'));
+								$query = $wpdb->prepare(
+									"SELECT ID as subject_id, label as subject_label , code as paper_code, `type` as subject_type FROM {$wpdb->prefix}wlsm_subjects WHERE ID IN ($subject_ids_placeholder)",
+									...$all_subject_ids
+								);
+								$subjects_results = $wpdb->get_results($query);
+								foreach ($subjects_results as $subject_result) {
+									$all_subject_info_array[] = array($subject_result);
+								}
+							}
+
+							$array_unique = array_merge($all_subject_info_array, $exam_papers);
+
+							$all_filter_subject = array();
+
+							$student_optional_subject = $all_subject_info_array;
+							if (!isset($exam_ontained_mark) || $exam_ontained_mark == "" || $exam_ontained_mark != 0) {
+								$filtered_subjects = array_filter($student_optional_subject, function ($subject) {
+									return $subject[0]->subject_type !== "subjective";
+								});
+
+								foreach ($filtered_subjects as $subject) {
+									if ($optional_subject_code == $subject[0]->paper_code) {
+										break;
+									}
+								}
+							}
+
+							foreach ($all_subject_info_array as $sub_info) {
+								if ($sub_info[0]->subject_type != "objective") {
+									$all_filter_subject[] = $sub_info;
+								}
+							}
+
+
+
+							// $student_rank = WLSM_M_Staff_Examination::calculate_exam_ranks($school_id, $exam_id, $total_failde_subject, array(), $result->admit_card_id , $result->note);
+							
+							if (isset($rankedStudents) && !empty($rankedStudents)) {
+								$students_ranks = array_filter($rankedStudents, function ($subArray) use ($result) {
+									return $subArray['id'] == $result->admit_card_id;
+								});
+								$students_rank = reset($students_ranks);
+							} else {
+								$students_rank = false;
+							}
+
+
+							$is_fail = false;
+							$previous_code = null;
+							
+							$class_school_id = $wpdb->get_var($wpdb->prepare(
+								"SELECT class_school_id  FROM {$wpdb->prefix}wlsm_class_school_exam WHERE exam_id=%d",
+								$exam_id
+							));
+
+							foreach ($all_filter_subject as $key => $exam_paper) {
+								$total_fail = false;
+								$written_mark = 0;
+								$practical_mark = 0;
+								$mcq_mark = 0;
+								$subje_maximam_marks = 0;
+								$practical_maximum_marks = 0;
+								$mcq_maximum_marks = 0;
+
+								$subj_id_for_remarks = null;
+								$found_for_remarks = array_filter($exam_papers, function ($obj) use ($exam_paper) {
+									return $obj->paper_code == $exam_paper[0]->paper_code && $obj->subject_label == $exam_paper[0]->subject_label;
+								});
+								if (!empty($found_for_remarks)) {
+									$subj_id_for_remarks = reset($found_for_remarks)->ID;
+								}
+
+								if ($result && isset($exam_results[$subj_id_for_remarks])) {
+									$exam_result = $exam_results[$subj_id_for_remarks];
+									$obtained_marks = $exam_result->obtained_marks;
+
+								} else {
+									$obtained_marks = '';
+								}
+
+								$teacher_remark = $exam_result->teacher_remark;
+								$school_remark = $exam_result->school_remark;
+								$p_scale = $exam_result->scale;
+
+								$new_code = $exam_paper[0]->paper_code;
+
+								if ($previous_code == $new_code) {
+									continue;
+								} else {
+									$previous_code = $new_code;
+								}
+
+
+								$main_paper_code = $exam_paper[0]->paper_code;
+
+								?>
+
+							<tr>
+								<td>
+									<?php
+										$papers_codes = esc_html($exam_paper[0]->paper_code);
+										// echo $papers_codes;
+										echo $serial_number ++;
+
+										?>
+								</td>
+								<td calspan=><?php echo esc_html($exam_paper[0]->subject_label); ?></td>
+								<!-- <td><?php //echo esc_html( WLSM_Helper::get_subject_type_text( $exam_paper[0]->subject_type ) ); ?></td> -->
+								<td>
+									<?php
+										$maximum_marks = null;
+										$get_obtained_marks = null;
+										if($exam_paper[0]->subject_type == "subjective"){
+											$main_exam_paper_subj = array_filter($exam_papers, function ($obj) use ($main_paper_code, $exam_paper) {
+												return $obj->paper_code == $main_paper_code && $obj->subject_label == $exam_paper[0]->subject_label && $obj->subject_type == 'subjective';
+											});
+											if (!empty($main_exam_paper_subj)) {
+												$foundSubjObject = reset($main_exam_paper_subj);
+												$subj_id = $foundSubjObject->ID;
+												$maximum_marks = $foundSubjObject->maximum_marks;
+												$get_obtained_marks = isset($exam_results[$subj_id]->obtained_marks) ? $exam_results[$subj_id]->obtained_marks : '';
+											}
+										}
+										$written_mark = $get_obtained_marks;
+										echo esc_html($get_obtained_marks);
+										$total_fail = $get_obtained_marks == 0 ? true : false;
+										$total_obtained_marks += WLSM_Config::sanitize_marks($get_obtained_marks);
+
+										?>
+								</td>
+
+								<td>
+									<?php
+
+										$main_exam_paper = array_filter($exam_papers, function ($obj) use ($main_paper_code) {
+											return $obj->paper_code == $main_paper_code && $obj->subject_type == 'mcq';
+										});
+
+										if (!empty($main_exam_paper)) {
+											$foundObject = reset($main_exam_paper); // Get the first matching object
+									
+											$subject_id = reset($main_exam_paper)->ID;
+
+											$mcq_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null; // comment uthaisi
+									
+											$mcq_maximum_marks = $foundObject->maximum_marks;
+
+											$total_mcq_marks += (float) $mcq_mark;
+											$total_mcq_maximum_marks += (float) $mcq_maximum_marks;
+
+											echo $mcq_mark;
+											$total_fail = $mcq_mark == 0 ? true : false;
+
+										} else {
+											// do nothing
+										}
+
+										?>
+								</td>
+								<td>
+									<?php
+										$main_exam_paper = array_filter($exam_papers, function ($obj) use ($main_paper_code) {
+											return $obj->paper_code == $main_paper_code && $obj->subject_type == 'practical';
+										});
+
+										if (!empty($main_exam_paper)) {
+											$foundObject = reset($main_exam_paper); // Get the first matching object
+									
+											$subject_id = reset($main_exam_paper)->ID;
+
+											// $practical_mark = $exam_results[$subject_id]->obtained_marks; // commend uthaisi 
+											$practical_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null;
+											$practical_maximum_marks = $foundObject->maximum_marks;
+
+											$total_practical_marks += (float) $practical_mark;
+											$total_practical_maximum_marks += (float) $practical_maximum_marks;
+
+											echo $practical_mark;
+
+											$total_fail = $practical_mark == 0 ? true : false;
+
+										} else {
+											// do nothing
+										}
+
+										?>
+								</td>
+								<?php if ($show_marks_grades) { ?>
+								<?php
+										// Normalize marks for PHP 8+ arithmetic (empty string / null-safe).
+										$written_mark   = ( $written_mark === null || $written_mark === '' ) ? 0.0 : (float) $written_mark;
+										$mcq_mark       = ( $mcq_mark === null || $mcq_mark === '' ) ? null : (float) $mcq_mark;
+										$practical_mark = ( $practical_mark === null || $practical_mark === '' ) ? null : (float) $practical_mark;
+										$get_obtained_marks = is_numeric( $get_obtained_marks ) ? (float) $get_obtained_marks : 0.0;
+										$maximum_marks = (float) $maximum_marks;
+										$mcq_maximum_marks = (float) $mcq_maximum_marks;
+										$practical_maximum_marks = (float) $practical_maximum_marks;
+
+										$subject_totla_marks = $written_mark + (float) $mcq_mark + (float) $practical_mark;
+
+										if ($exam_paper[0]->paper_code == 101) {
+											$exam_id = $result->exam_id;
+											$first_paper_code = $main_paper_code;
+											$second_paper_code = $first_paper_code + 1;
+
+											$enrollment_number = $result->enrollment_number;
+											$admission_number = $result->admission_number;
+											$session_id = $result->session_id;
+											$section_id = get_section_id($enrollment_number, $admission_number, $session_id);
+											$mark_admit_card_id = ! empty( $result->admit_card_id ) ? $result->admit_card_id : ( isset( $admit_card_id ) ? $admit_card_id : null );
+											$bangla_first_subjective_mark = get_mark_by_paper_code($exam_id, $first_paper_code, "subjective", $admission_number, $section_id, $mark_admit_card_id);
+											$bangla_second_subjective_mark = get_mark_by_paper_code($exam_id, $second_paper_code, "subjective", $admission_number, $section_id, $mark_admit_card_id);
+
+											$first_mcq_mark = get_mark_by_paper_code($exam_id, $first_paper_code, "mcq", $admission_number, $section_id, $mark_admit_card_id);
+											$second_mcq_mark = get_mark_by_paper_code($exam_id, $second_paper_code, "mcq", $admission_number, $section_id, $mark_admit_card_id);
+
+											$total_subjective_mark = (float) $bangla_first_subjective_mark + (float) $bangla_second_subjective_mark;
+											$total_mcq_mark = (float) $first_mcq_mark + (float) $second_mcq_mark;
+
+											$total_bangla_mark = $total_subjective_mark + $total_mcq_mark;
+
+											// subjective maximum marks difference
+											$bangla_first_cq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $first_paper_code, "subjective");
+											$bangla_second_cq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $second_paper_code, "subjective");
+
+											// mcq maximum marks difference
+											$bangla_first_mcq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $first_paper_code, "mcq");
+											$bangla_second_mcq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $second_paper_code, "mcq");
+
+
+
+											if ($bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
+												echo '<td>';
+											} else {
+												echo '<td rowspan="2" style="vertical-align: middle !important;"
+											>';
+											}
+
+											echo $total_bangla_mark;
+
+											echo '</td>';
+										} elseif ($exam_paper[0]->paper_code == 107) {
+											$exam_id = $result->exam_id;
+											$first_paper_code = $main_paper_code;
+											$second_paper_code = $first_paper_code + 1;
+
+											$enrollment_number = $result->enrollment_number;
+											$admission_number = $result->admission_number;
+											$session_id = $result->session_id;
+											$section_id = get_section_id($enrollment_number, $admission_number, $session_id);
+											$mark_admit_card_id = ! empty( $result->admit_card_id ) ? $result->admit_card_id : ( isset( $admit_card_id ) ? $admit_card_id : null );
+											$english_first_subjective_mark = get_mark_by_paper_code($exam_id, $first_paper_code, "subjective", $admission_number, $section_id, $mark_admit_card_id);
+											$english_second_subjective_mark = get_mark_by_paper_code($exam_id, $second_paper_code, "subjective", $admission_number, $section_id, $mark_admit_card_id);
+
+											$total_english_mark = (float) $english_first_subjective_mark + (float) $english_second_subjective_mark;
+
+											// subjective maximum marks difference
+											$english_first_cq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $first_paper_code, "subjective");
+											$english_second_cq_maximum_mark = get_subject_maximum_mark_by_paper_code($exam_id, $second_paper_code, "subjective");
+
+
+											if ( $english_second_subjective_mark == NULL) {
+												echo '<td>';
+											} else {
+												echo '<td rowspan="2" style="vertical-align: middle !important;">';
+											}
+											echo $total_english_mark;
+											echo '</td>';
+										} elseif ($exam_paper[0]->paper_code == 102 || $exam_paper[0]->paper_code == 108) {
+
+										} else {
+											echo '<td>';
+											$subject_totla_marks = (float) $written_mark + (float) $mcq_mark + (float) $practical_mark;
+											echo $subject_totla_marks;
+											echo '</td>';
+										}
+
+										if ($exam_paper[0]->paper_code == 101) {
+											if ($maximum_marks == 50) {
+												$get_obtained_marks = floor(($get_obtained_marks / $maximum_marks) * 100);
+											}
+											if ($bangla_second_subjective_mark != null) {
+												$bangla_cq_maximum_mark = (float) $bangla_first_cq_maximum_mark + (float) $bangla_second_cq_maximum_mark;
+												$bangla_mcq_maximum_mark = (float) $bangla_first_mcq_maximum_mark + (float) $bangla_second_mcq_maximum_mark;
+											} else {
+												$bangla_cq_maximum_mark = (float) $bangla_first_cq_maximum_mark;
+												$bangla_mcq_maximum_mark = (float) $bangla_first_mcq_maximum_mark;
+											}
+
+											$minimam_cq_fash_mark = floor($bangla_cq_maximum_mark / 3);
+											$minimam_mcq_fash_mark = floor($bangla_mcq_maximum_mark / 3);
+
+											if ($bangla_second_subjective_mark != null) {
+												$divide_bangla_mark = floor($total_bangla_mark / 2);
+												// divide bangla maximum mark by 2 to get percentage
+												$divide_bangla_cq_maximum_mark = floor($bangla_cq_maximum_mark / 2);
+												$divide_bangla_mcq_maximum_mark = floor($bangla_mcq_maximum_mark / 2);
+											} else {
+												$divide_bangla_mark = $total_bangla_mark / 1;
+												// divide bangla maximum mark by 1 to get percentage
+												$divide_bangla_cq_maximum_mark = floor($bangla_cq_maximum_mark / 1);
+												$divide_bangla_mcq_maximum_mark = floor($bangla_mcq_maximum_mark / 1);
+											}
+											// total marks to be divided by 100 to get percentage 
+											$bangla_maximam_marks = $divide_bangla_cq_maximum_mark + $divide_bangla_mcq_maximum_mark;
+											$subje_maximam_marks = $bangla_maximam_marks;
+											if ($subje_maximam_marks > 0) {
+												$grades_percentage = 100 / $subje_maximam_marks;
+												$divide_bangla_mark *= $grades_percentage;
+											} else {
+												$grades_percentage = 0;
+											}
+
+
+											if ($bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
+												echo '<td>';
+											} else {
+												echo '<td rowspan="2" style="vertical-align: middle !important;">';
+											}
+
+											if ($bangla_second_subjective_mark != null || $second_mcq_mark != null) {
+												if ($bangla_first_subjective_mark >= 1 && $bangla_second_subjective_mark >= 1 && $first_mcq_mark >= 1 && $second_mcq_mark >= 1) {
+													if($class >= 6 && $class <= 8){
+														$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
+														echo $letter_grade_bangla;
+													}else{
+														if ($total_subjective_mark >= $minimam_cq_fash_mark && $total_mcq_mark >= $minimam_mcq_fash_mark) {
+															$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
+															echo $letter_grade_bangla;
+
+														} else {
+															echo $letter_grade_bangla = "F";
+														}
+													}
+												} elseif ($bangla_first_subjective_mark >= 1 && $bangla_second_subjective_mark >= 1 && $first_mcq_mark >= 1) {
+													if($class >= 6 && $class <= 8){
+														$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
+														echo $letter_grade_bangla;
+													}else{
+														if ($total_subjective_mark >= $minimam_cq_fash_mark && $total_mcq_mark >= $minimam_mcq_fash_mark) {
+															$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
+															echo $letter_grade_bangla;
+
+														} else {
+															echo $letter_grade_bangla = "F";
+														}
+													}
+												} else {
+													echo $letter_grade_bangla = "F";
+												}
+											} else {
+												
+												if($class >= 6 && $class <= 8){
+													$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
+													echo $letter_grade_bangla;
+												}else{
+													if ($bangla_first_subjective_mark >= $minimam_cq_fash_mark && $first_mcq_mark >= $minimam_mcq_fash_mark) {
+														$letter_grade_bangla = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_bangla_mark));
+														echo $letter_grade_bangla;
+
+													} else {
+														echo $letter_grade_bangla = "F";
+													}
+												}
+											}
+
+
+											if ($letter_grade_bangla === 'F') {
+												$count_letter_grade_bangla_f++;
+											}
+											echo "</td>";
+
+
+											$cq_percentage = WLSM_Config::sanitize_percentage($maximum_marks, $written_mark) . ",";
+											// echo $cq_percentage;
+											$mcq_percentage = WLSM_Config::sanitize_percentage($mcq_maximum_marks, $mcq_mark) . ",";
+											// echo $mcq_percentage;
+											$practical_percentage = WLSM_Config::sanitize_percentage($practical_maximum_marks, $practical_mark) . "," . "<br>";
+											// echo $practical_percentage;
+								
+											$overall_fail = 0;
+
+											if ((int) $cq_percentage < 33) {
+												$overall_fail = 1;
+											}
+
+											if ((int) $mcq_percentage < 33 && $mcq_mark != null) {
+												$overall_fail = 1;
+											}
+
+
+
+											$percentage = WLSM_Config::sanitize_percentage($maximum_marks, WLSM_Config::sanitize_marks($get_obtained_marks));
+											// newly added code 
+											if ($is_fail == false) {
+												if (esc_html(WLSM_Helper::calculate_grade($marks_grades, $get_obtained_marks)) == "F" && $exam_paper[0]->subject_type != "objective") {
+													$is_fail = true;
+												} else {
+													$is_fail = false;
+												}
+											}
+
+
+										} elseif ($exam_paper[0]->paper_code == 107) {
+											if ($maximum_marks == 50) {
+												$get_obtained_marks = floor(($get_obtained_marks / $maximum_marks) * 100);
+											}
+
+											if ($english_second_subjective_mark != null) {
+												$english_cq_maximum_mark = (float) $english_first_cq_maximum_mark + (float) $english_second_cq_maximum_mark;
+											} else {
+												$english_cq_maximum_mark = (float) $english_first_cq_maximum_mark + (float) $english_second_cq_maximum_mark;
+											}
+
+											if ($english_second_subjective_mark != null) {
+												$divide_english_mark = floor($total_english_mark / 2);
+												// divide bangla maximum mark by 2 to get percentage
+												$divide_english_cq_maximum_mark = floor($english_cq_maximum_mark / 2);
+											} else {
+												$divide_english_mark = floor($total_english_mark / 1);
+												// divide bangla maximum mark by 1 to get percentage
+												$divide_english_cq_maximum_mark = floor($english_cq_maximum_mark / 1);
+											}
+
+											// total marks to be divided by 100 to get percentage 
+											$english_maximam_marks = $divide_english_cq_maximum_mark;
+											if ($english_maximam_marks > 0) {
+												$grades_percentage = 100 / $english_maximam_marks;
+												$divide_english_mark *= $grades_percentage;
+											} else {
+												$grades_percentage = 0;
+											}
+											if ($english_second_subjective_mark == NULL) {
+												echo '<td>';
+											} else {
+												echo '<td rowspan="2" style="vertical-align: middle !important;">';
+											}
+											if ($english_second_subjective_mark != null) {
+												if ($class >= 6 && $class <= 8) {
+													$letter_grade_eng = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
+													echo $letter_grade_eng;
+												} else if ($english_first_subjective_mark >= 1 && $english_second_subjective_mark >= 1) {
+													$letter_grade_eng = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
+													echo $letter_grade_eng;
+
+												} else {
+													echo $letter_grade_eng = "F";
+												}
+											} else {
+												$letter_grade_eng = esc_html(WLSM_Helper::calculate_grade($marks_grades, $divide_english_mark));
+												echo $letter_grade_eng;
+											}
+
+											if ($letter_grade_eng === 'F') {
+												$count_letter_grade_english_f++;
+											}
+
+											echo '</td>';
+
+											$cq_percentage = WLSM_Config::sanitize_percentage($maximum_marks, $written_mark) . ",";
+											// echo $cq_percentage;
+											$mcq_percentage = WLSM_Config::sanitize_percentage($mcq_maximum_marks, $mcq_mark) . ",";
+											// echo $mcq_percentage;
+											$practical_percentage = WLSM_Config::sanitize_percentage($practical_maximum_marks, $practical_mark) . "," . "<br>";
+											// echo $practical_percentage;
+								
+											$overall_fail = 0;
+
+											if ((int) $cq_percentage < 33) {
+												$overall_fail = 1;
+											}
+
+											if ((int) $mcq_percentage < 33 && $mcq_mark != null) {
+												$overall_fail = 1;
+											}
+
+
+
+											$percentage = WLSM_Config::sanitize_percentage($maximum_marks, WLSM_Config::sanitize_marks($get_obtained_marks));
+											// newly added code 
+											if ($is_fail == false) {
+												if (esc_html(WLSM_Helper::calculate_grade($marks_grades, $get_obtained_marks)) == "F" && $exam_paper[0]->subject_type != "objective") {
+													$is_fail = true;
+												} else {
+													$is_fail = false;
+												}
+											}
+
+										} elseif ($exam_paper[0]->paper_code == 102 || $exam_paper[0]->paper_code == 108) {
+
+										} else {
+											echo "<td>";
+											// if ($get_obtained_marks == 0) {
+
+											// } else {
+												$subje_maximam_marks = $maximum_marks + $mcq_maximum_marks + $practical_maximum_marks;
+												if ($subje_maximam_marks > 0) {
+													$grades_percentage = 100 / $subje_maximam_marks;
+													$subject_totla_marks *= $grades_percentage;
+												} else {
+													$grades_percentage = 0;
+												}
+												// print_r($maximum_marks);
+
+
+
+												if ($maximum_marks == 50) {
+													$get_obtained_marks = floor(($get_obtained_marks / $maximum_marks) * 100);
+												}
+												// echo "CQ Max: " . $maximum_marks . "<br>";
+												// echo "MCQ Max: " . $mcq_maximum_marks . "<br>";
+												// echo "Practical Max: " . $practical_maximum_marks . "<br>";
+												$minimam_cq_fash_mark = floor($maximum_marks / 3);
+												$minimam_mcq_fash_mark = floor($mcq_maximum_marks / 3);
+												$minimam_practical_fash_mark = floor($practical_maximum_marks / 3);
+												
+												$is_ict_subject = (stripos($exam_paper[0]->subject_label, 'Information & Communication') !== false || stripos($exam_paper[0]->subject_label, 'Information and Communication') !== false || stripos($exam_paper[0]->subject_label, 'ICT') !== false);
+
+												if($mcq_maximum_marks != 0){
+													if($class >= 6 && $class <= 8 || $is_ict_subject){
+														$letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $subject_totla_marks));
+														echo $letter_grade;
+													}else{
+														if ($written_mark >= $minimam_cq_fash_mark && $mcq_mark >= $minimam_mcq_fash_mark && $practical_mark >= $minimam_practical_fash_mark) {
+															$letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $subject_totla_marks));
+															echo $letter_grade;
+														} else {
+															echo $letter_grade = "F";
+														}
+													}
+												}else{
+													if ($class >= 6 && $class <= 8 || $is_ict_subject) {
+														$letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $subject_totla_marks));
+														echo $letter_grade;
+													} else if ($written_mark >= $minimam_cq_fash_mark && $practical_mark >= $minimam_practical_fash_mark) {
+														$letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $subject_totla_marks));
+														echo $letter_grade;
+													} else {
+														echo $letter_grade = "F";
+													}
+												}
+												
+
+												$cq_percentage = WLSM_Config::sanitize_percentage($maximum_marks, $written_mark) . ",";
+												// echo $cq_percentage;
+												$mcq_percentage = WLSM_Config::sanitize_percentage($mcq_maximum_marks, $mcq_mark) . ",";
+												// echo $mcq_percentage;
+												$practical_percentage = WLSM_Config::sanitize_percentage($practical_maximum_marks, $practical_mark) . "," . "<br>";
+												// echo $practical_percentage;
+								
+												$overall_fail = 0;
+
+												if ((int) $cq_percentage < 33) {
+													$overall_fail = 1;
+												}
+
+												if ((int) $mcq_percentage < 33 && $mcq_mark != null) {
+													$overall_fail = 1;
+												}
+
+												$percentage = WLSM_Config::sanitize_percentage($maximum_marks, WLSM_Config::sanitize_marks($get_obtained_marks));
+
+
+												// newly added code 
+												if ($is_fail == false) {
+													if (esc_html(WLSM_Helper::calculate_grade($marks_grades, $get_obtained_marks)) == "F" && $exam_paper[0]->subject_type != "objective") {
+														$is_fail = true;
+													} else {
+														$is_fail = false;
+													}
+												}
+
+											// }
+											if ($letter_grade === 'F') {
+												$count_letter_grade_f++;
+											}
+											echo "</td>";
+
+										}
+										// echo $maximum_marks + $mcq_maximum_marks + $practical_maximum_marks;
+										$total_maximum_marks += $maximum_marks;
+										?>
+								<?php } ?>
+								<?php
+									if ($exam_paper[0]->paper_code == 101) {
+
+										if ($bangla_second_subjective_mark == NULL && $second_mcq_mark == NULL) {
+											echo '<td>';
+										} else {
+											echo '<td rowspan="2" style="vertical-align: middle !important;"
+										>';
+										}
+										$subject_gpa = number_format(WLSM_M_Setting::calculateGPA($letter_grade_bangla), 2);
+										echo $subject_gpa;
+										$gpa_count += $subject_gpa;
+										$main_subject_count += 1;
+
+										echo '</td>';
+									} elseif ($exam_paper[0]->paper_code == 107) {
+										if ($english_second_subjective_mark == NULL) {
+											echo '<td>';
+										} else {
+											echo '<td rowspan="2" style="vertical-align: middle !important;">';
+										}
+
+										$subject_gpa = number_format(WLSM_M_Setting::calculateGPA($letter_grade_eng), 2);
+										echo $subject_gpa;
+										$gpa_count += $subject_gpa;
+										$main_subject_count += 1;
+
+										echo '</td>';
+
+									} elseif ($exam_paper[0]->paper_code == 102 || $exam_paper[0]->paper_code == 108) {
+
+									} else {
+										echo '<td>';
+										if($class >=6 && $class <=8 || isset($is_ict_subject) && $is_ict_subject){
+											$subject_gpa = number_format(WLSM_M_Setting::calculateGPA($letter_grade), 2);
+											echo $subject_gpa;
+											$gpa_count += $subject_gpa;
+											$main_subject_count += 1;
+										}else{
+											if ($written_mark >= $minimam_cq_fash_mark && $mcq_mark >= $minimam_mcq_fash_mark && $practical_mark >= $minimam_practical_fash_mark) {
+												$subject_gpa = number_format(WLSM_M_Setting::calculateGPA($letter_grade), 2);
+												echo $subject_gpa;
+												$gpa_count += $subject_gpa;
+												$main_subject_count += 1;
+											} else {
+												$subject_gpa = "0.00";
+												$gpa_count += $subject_gpa;
+												$main_subject_count += 1;
+											}
+										}
+										echo '</td>';
+
+									}
+									?>
+
+							</tr>
+							<?php
+
+
+							}
+
+
+
+							?>
+							<?php
+							$optional_gap = "0.00";
+							if (isset($subject[0]) && $subject[0]->subject_type == 'objective') {
+							?>
+							<tr>
+								<th colspan="8">
+									<?php esc_html_e('4th Subject (Above 2)', "school-management"); ?>
+								</th>
+							</tr>
+							<tr>
+								<td>
+									<?php $optional_papre_code = esc_html($subject[0]->paper_code);
+									// echo $optional_papre_code;
+									echo $serial_number ++;
+									?>
+								</td>
+								<td>
+									<?php echo esc_html($subject[0]->subject_label); ?>
+								</td>
+								<td>
+									<?php
+
+									$maximum_marks = null;
+									$get_obtained_marks = null;
+
+									$main_exam_paper_optional = array_filter($exam_papers, function ($obj) use ($optional_papre_code, $subject) {
+										return $obj->paper_code == $optional_papre_code && $obj->subject_label == $subject[0]->subject_label && $obj->subject_type == $subject[0]->subject_type;
+									});
+
+									if (!empty($main_exam_paper_optional)) {
+										$foundSubjObject = reset($main_exam_paper_optional);
+										$subj_id = $foundSubjObject->ID;
+										$maximum_marks = $foundSubjObject->maximum_marks;
+										$get_obtained_marks = isset($exam_results[$subj_id]->obtained_marks) ? $exam_results[$subj_id]->obtained_marks : '';
+									} else {
+										// Fallback if not directly found in the cached array mapping
+										$maximum_marks = $wpdb->get_var($wpdb->prepare(
+											"SELECT maximum_marks  FROM {$wpdb->prefix}wlsm_exam_papers WHERE paper_code = %d AND subject_label = %s AND exam_id=%d",
+											$subject[0]->paper_code,
+											$subject[0]->subject_label,
+											$exam_id
+										));
+
+										if ($maximum_marks == null) {
+											$sub_subjects = $wpdb->get_results($wpdb->prepare(
+												"SELECT label , code  FROM {$wpdb->prefix}wlsm_subjects WHERE parent_subject = %d AND class_school_id=%d",
+												$subject[0]->subject_id,
+												$class_school_id
+											));
+											$max_mark = 0;
+											foreach ($sub_subjects as $sub_subject) {
+												$get_sub_maximum_marks = $wpdb->get_var($wpdb->prepare(
+													"SELECT maximum_marks  FROM {$wpdb->prefix}wlsm_exam_papers WHERE subject_label =%s AND paper_code = %d AND exam_id = %d",
+													$sub_subject->label,
+													$sub_subject->code,
+													$exam_id
+												));
+												$max_mark = $max_mark + $get_sub_maximum_marks;
+											}
+											if (count($sub_subjects) > 0) {
+												$maximum_marks = $max_mark / count($sub_subjects);
+											}
+										}
+										
+										$exam_paper_id = $wpdb->get_var($wpdb->prepare(
+											"SELECT ID  FROM {$wpdb->prefix}wlsm_exam_papers WHERE paper_code = %s AND subject_label = %s AND subject_type = %s AND exam_id=%d",
+											$subject[0]->paper_code,
+											$subject[0]->subject_label,
+											$subject[0]->subject_type,
+											$exam_id
+										));
+
+										$get_obtained_marks = $wpdb->get_var($wpdb->prepare(
+											"SELECT obtained_marks  FROM {$wpdb->prefix}wlsm_exam_results WHERE exam_paper_id = %d AND admit_card_id = %d ",
+											$exam_paper_id,
+											$admit_card_id
+										));
+									}
+
+										$written_mark = $get_obtained_marks;
+										echo esc_html($get_obtained_marks);
+										$total_fail = $get_obtained_marks == 0 ? true : false;
+										$optional_total_obtained_marks += WLSM_Config::sanitize_marks($get_obtained_marks);
+										if($written_mark == NULL){
+											$written_mark = 0;
+										}
+
+									?>
+								</td>
+								<td>
+									<?php
+									$main_exam_paper = array_filter($exam_papers, function ($obj) use ($optional_papre_code) {
+										return $obj->paper_code == $optional_papre_code && $obj->subject_type == 'mcq';
+									});
+
+									if (!empty($main_exam_paper)) {
+										$foundObject = reset($main_exam_paper); // Get the first matching object
+									
+										$subject_id = reset($main_exam_paper)->ID;
+
+										$mcq_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null; // comment uthaisi
+									
+										$mcq_maximum_marks = $foundObject->maximum_marks;
+
+										$optional_total_mcq_marks += $mcq_mark;
+										$optional_total_mcq_maximum_marks += $mcq_maximum_marks;
+
+										echo $mcq_mark;
+										$total_fail = $mcq_mark == 0 ? true : false;
+
+									} else {
+										// do nothing
+									}
+									?>
+								</td>
+								<td>
+									<?php
+									$main_exam_paper = array_filter($exam_papers, function ($obj) use ($optional_papre_code) {
+										return $obj->paper_code == $optional_papre_code && $obj->subject_type == 'practical';
+									});
+
+									if (!empty($main_exam_paper)) {
+										$foundObject = reset($main_exam_paper); // Get the first matching object
+									
+										$subject_id = reset($main_exam_paper)->ID;
+
+										// $practical_mark = $exam_results[$subject_id]->obtained_marks; // commend uthaisi 
+										$practical_mark = isset($exam_results[$subject_id]->obtained_marks) && $exam_results[$subject_id]->obtained_marks != null && $exam_results[$subject_id]->obtained_marks != "" ? $exam_results[$subject_id]->obtained_marks : null;
+										$practical_maximum_marks = $foundObject->maximum_marks;
+
+										$optional_total_practical_marks += $practical_mark;
+										$optional_total_practical_maximum_marks += $practical_maximum_marks;
+
+										echo $practical_mark;
+
+										$total_fail = $practical_mark == 0 ? true : false;
+
+									} else {
+										// do nothing
+									}
+									?>
+								</td>
+								<td>
+									<?php
+									$subject_totla_marks = (float) $written_mark + (float) $mcq_mark + (float) $practical_mark;
+									echo $subject_totla_marks;
+									?>
+								</td>
+								<td>
+									<?php
+
+									$minimam_objective_cq_fash_mark = floor($maximum_marks / 3);
+									$minimam_objective_mcq_fash_mark = floor($optional_total_mcq_maximum_marks / 3);
+									$minimam_objective_practical_fash_mark = floor($optional_total_practical_maximum_marks / 3);
+
+									// total marks to be divided by 100 to get percentage 
+									$optional_maximam_marks = $maximum_marks + $optional_total_mcq_maximum_marks + $optional_total_practical_maximum_marks;
+									if ($optional_maximam_marks > 0) {
+										$grades_percentage = 100 / $optional_maximam_marks;
+										$subject_totla_marks *= $grades_percentage;
+									} else {
+										$grades_percentage = 0;
+									}
+									
+									$is_optional_ict = (stripos($subject[0]->subject_label, 'Information & Communication') !== false || stripos($subject[0]->subject_label, 'Information and Communication') !== false || stripos($subject[0]->subject_label, 'ICT') !== false);
+
+									if($class >=6 && $class <=8 || $is_optional_ict){
+										$letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $subject_totla_marks));
+										echo $letter_grade;
+									}else{
+										if ($written_mark >= $minimam_objective_cq_fash_mark && $mcq_mark >= $minimam_objective_mcq_fash_mark && $practical_mark >= $minimam_objective_practical_fash_mark) {
+											$letter_grade = esc_html(WLSM_Helper::calculate_grade($marks_grades, $subject_totla_marks));
+											echo $letter_grade;
+										} else {
+											echo "F";
+										}
+									}
+									?>
+								</td>
+								<td>
+									<?php
+									if($class >=6 && $class <=8 || isset($is_optional_ict) && $is_optional_ict){
+										$optional_gap = number_format(WLSM_M_Setting::optional_calculateGPA($letter_grade), 2);
+										echo $optional_gap;
+										$additional_gpa_count += $optional_gap;
+									}else{
+										if ($written_mark >= $minimam_objective_cq_fash_mark && $mcq_mark >= $minimam_objective_mcq_fash_mark && $practical_mark >= $minimam_objective_practical_fash_mark) {
+											$optional_gap = number_format(WLSM_M_Setting::optional_calculateGPA($letter_grade), 2);
+											echo $optional_gap;
+											$additional_gpa_count += $optional_gap;
+										} else {
+											$optional_gap = "0.00";
+											echo $optional_gap;
+											$additional_gpa_count += $optional_gap;
+										}
+									}
+									?>
+								</td>
+							</tr>
+							<?php
+							}
+							// $total_percentage = WLSM_Config::sanitize_percentage( $total_maximum_marks, $total_obtained_marks );
+							//poblem jahidul
+							// $p_scale = unserialize($p_scale);
+							$total_marks = $total_obtained_marks + $total_mcq_marks + $total_practical_marks;
+							// echo $total_maximum_marks . "<br>";
+							$total_max_marks = $total_maximum_marks + $total_practical_maximum_marks + $total_mcq_maximum_marks;
+							$optional_max_mark = $maximum_marks + $optional_total_mcq_maximum_marks + $optional_total_practical_maximum_marks;
+
+
+							$optional_subject_totla_mark = $optional_total_obtained_marks + $optional_total_mcq_marks + $optional_total_practical_marks;
+
+
+							// $optional_and_mainsubject_max_mark = $total_max_marks + $optional_max_mark;
+							$all_subject_total_marks = $total_marks + $optional_subject_totla_mark;
+
+							// echo $total_max_marks;
+							$total_failde_subject = $count_letter_grade_f + $count_letter_grade_bangla_f + $count_letter_grade_english_f;
+							?>
+							<tr>
+								<th colspan="3">
+									<?php esc_html_e('Total', 'school-management'); ?>
+								</th>
+								<!-- <th><?php //echo esc_html( $total_max_marks ); ?></th> -->
+
+								<th colspan="3">
+									<?php echo esc_html($all_subject_total_marks); ?>
+								</th>
+								<?php if ($show_marks_grades) { ?>
+
+								<?php } ?>
+								<th></th>
+								<th></th>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<?php
+									$total_mark_percentage = esc_html(WLSM_Config::get_percentage_text($total_max_marks, $total_marks));
+									// echo $total_mark_percentage;
+									// check less than total mark percentage less than 100 and optional_subject_totla_mark is up to 40 and optional gap is not zero
+									if($total_mark_percentage <= 100 && $optional_subject_totla_mark >= 40 && $optional_gap != "0.00"){
+										// less the 40 marks in optional subject
+										$optional_subject_totla_mark -= 40;
+										// add marks students main subject and optional subject mark
+										$total_student_marks = $total_marks + $optional_subject_totla_mark;
+									}else{
+										$total_student_marks = $total_marks;
+									}
+									?>
+								</td>
+								<td></td>
+								<th colspan="3">
+									<?php esc_html_e('GPA Without Ad. Sub', 'school-management'); ?>
+								</th>
+								<?php if ($show_marks_grades) { ?>
+								<?php
+										if ($total_failde_subject == 0) {
+											$gpa_result = number_format(WLSM_M_Setting::calculatePreciseGPA($total_mark_percentage), 2);
+											$_gpa_result = number_format($gpa_count / $main_subject_count, 2);
+										} else {
+											// $gpa_result = "0.00";
+											$_gpa_result = "0.00";
+										}
+									?>
+								<td>
+									<?php
+										if ($total_failde_subject == 0) {
+											$final_grade = esc_html(WLSM_M_Setting::calcuateGPAToLetterGrade($_gpa_result));
+											echo $final_grade;
+										} else {
+											echo "F";
+										}
+										?>
+								</td>
+								<td>
+									<?php
+											// echo $gpa_result;
+											echo $_gpa_result;
+										?>
+								</td>
+								<?php } ?>
+							</tr>
+							<tr>
+								<th colspan="3">
+									<?php //esc_html_e( 'Percentage', 'school-management' ); ?>
+								</th>
+								<th colspan="3">
+									<?php
+									$total_student_marks_percentage = esc_html(WLSM_Config::get_percentage_text($total_max_marks, $total_student_marks));
+									// echo $opti_and_main_sub_total_mark_percentage;
+									esc_html_e('GPA', 'school-management');
+									?>
+								</th>
+								<?php if ($show_marks_grades) { ?>
+								<?php 
+										if ($total_failde_subject == 0) {
+											$gro_gpa = number_format(WLSM_M_Setting::calculatePreciseGPA($total_student_marks_percentage), 2);
+											$gap_and_additional_gpa = $gpa_count + $additional_gpa_count;
+											$_gro_gpa = number_format($gap_and_additional_gpa / $main_subject_count, 2);
+											if($_gro_gpa > 5.00){
+												$_gro_gpa = number_format(5.00, 2);
+											}
+											// echo $gpa_result;
+										} else {
+											// echo "0.00";
+											// $gro_gpa = "0.00";
+											$_gro_gpa = "0.00";
+										}
+									?>
+								<th>
+									<?php
+										if ($total_failde_subject == 0) {
+											$_final_grade = esc_html(WLSM_M_Setting::calcuateGPAToLetterGrade($_gro_gpa));
+											echo $_final_grade;
+										} else {
+											echo "F";
+										}
+										?>
+								</th>
+								<th>
+									<?php
+										// echo $gro_gpa;
+										echo $_gro_gpa;
+										?>
+								</th>
+
+								<?php } ?>
+							</tr>
+							<?php if ($show_rank === '1') { ?>
+							<tr>
+								<th colspan="2" style="text-align:left;">
+									<?php esc_html_e('Rank', 'school-management'); ?>
+								</th>
+								<?php
+
+									?>
+								<th colspan="<?php echo esc_html($show_marks_grades ? '1' : '1'); ?>">
+									<?php
+										if ($students_rank) {
+											echo $students_rank['rank'];
+										}
+										?>
+								</th>
+
+								<th colspan="3" style="text-align:left;">
+									<?php esc_html_e('Failed of Subject', 'school-management'); ?>
+								</th>
+								<th colspan="2">
+									<?php
+										echo $total_failde_subject;
+									?>
+								</th>
+							</tr>
+							<?php } ?>
+
+							<?php if ($show_eremark === '1') { ?>
+							<tr>
+								<td colspan="2" style="text-align:left;"><strong>
+										<?php esc_html_e('Headteacher :', 'school-management'); ?>
+									</strong>
+									<?php echo $teacher_remark; ?>
+								</td>
+
+								<td colspan="2"></td>
+
+								<td colspan="5" style="text-align:left;"><strong>
+										<?php esc_html_e('Principal :', 'school-management'); ?>
+									</strong>
+									<?php echo $school_remark; ?>
+								</td>
+							</tr>
+
+							<tr>
+								<td colspan="2" style="text-align:left;">
+									<?php esc_html_e('Class Teacher:', 'school-management'); ?>
+								</td>
+
+								<td colspan="2" style="text-align:left;"></td>
+
+								<td colspan="5" style="text-align:left;">
+									<?php esc_html_e('Professor:', 'school-management'); ?>
+								</td>
+							</tr>
+
+							<?php } ?>
+
+							<?php if ($psychomotor_enable === '1'): ?>
+
+							<table class="table table-bordered wlsm-view-exam-results-table">
+								<thead>
+									<!-- <tr>
+										<td colspan="2">
+											<?php //esc_html_e('Psychomotor Analysis', 'school-management'); ?>
+										</td>
+									</tr> -->
+								</thead>
+
+								<tbody>
+									<tr>
+										<?php foreach ($psychomotor['psych'] as $key => $value): ?>
+										<td>
+											<?php echo $value; ?>
+										</td>
+										<?php endforeach ?>
+									</tr>
+									<tr>
+										<?php foreach ($p_scale as $value): ?>
+										<td>
+											<?php echo $value; ?>
+										</td>
+										<?php endforeach ?>
+									</tr>
+								</tbody>
+							</table>
+
+							<?php endif ?>
+						</tbody>
+					</table>
+					<?php if ($psychomotor_enable === '1'): ?>
+					<table class="table table-bordered wlsm-view-exam-results-table">
+						<thead>
+							<tr>
+								<th scope="col" style="text-align:left;">
+									<?php esc_html_e('Scale', 'school-management'); ?>
+								</th>
+								<th scope="col" style="text-align:left;">
+									<?php esc_html_e('Defination', 'school-management'); ?>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $s = 1; ?>
+							<?php foreach ($psychomotor['def'] as $key => $value): ?>
+							<tr>
+								<th scope="row">
+									<?php echo $s++; ?>
+								</th>
+								<td>
+									<?php echo $value; ?>
+								</td>
+							</tr>
+							<?php endforeach ?>
+
+						</tbody>
+					</table>
+					<?php endif ?>
+
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<?php
+	$new_result_array[] = [
+		'id' => $admit_card_id,
+		'total_marks' => $all_subject_total_marks,
+		'total_failed_subjects' => $total_failde_subject
+	];
+
+$i++;
+?>
